@@ -1,4 +1,4 @@
-﻿namespace PlanetsideApi
+﻿namespace PsApp
 {
     public class FacilityControlChangedEventArgs
     {

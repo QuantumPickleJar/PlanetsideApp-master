@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Planetside2App"
+             x:Class="PsApp.MainPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!--for debugging purposes the button will output text to the listview.  
+        Remember the goal is to create push notifications and not have to be in the app to view it-->
+        <Button x:Name="startSubscription" Text="subscribe" Clicked="startSubscription_Clicked" />
+        
+        <Button x:Name="navCharacters" Text="Profiles" Clicked="navCharacters_Clicked"/>
+    </Grid>
+
+</ContentPage>

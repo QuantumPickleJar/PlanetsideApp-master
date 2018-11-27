@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PsApp.FacilityPage">
+    
+        <ListView 
+                x:Name="resultListView"
+                ItemsSource="{Binding }"
+                x:FieldModifier="Public"
+                SeparatorColor="CornflowerBlue">
+            <!--Array of subscribed events turned into strings from Newtonsoft-->
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <!--define how to display the data-->
+                        <!--<ImageCell Text="{Binding }" ImageSource="{Binding }}}" /> images to display the controlling faction's icon -->
+
+                        <TextCell 
+                                Text="{Binding facility}" />
+
+                        <!--captured by {Binding newOwner}-->
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+</ContentPage>

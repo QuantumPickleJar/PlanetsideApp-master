@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace PlanetsideApi
+namespace PsApp
 {
     public class CharacterQueryResult
     {
@@ -10,5 +10,7 @@ namespace PlanetsideApi
 
         [JsonProperty("returned")]
         public int Returned { get; set; }
+
+        public List<Name> returnedNames { get; set;}
     }
 }

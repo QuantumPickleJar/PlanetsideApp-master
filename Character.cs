@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
-
-namespace PlanetsideApi
+namespace PsApp
 {
     public class Character
     {
