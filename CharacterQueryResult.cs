@@ -10,7 +10,6 @@ namespace PsApp
 
         [JsonProperty("returned")]
         public int Returned { get; set; }
-
-        public List<Name> returnedNames { get; set;}
+        
     }
 }

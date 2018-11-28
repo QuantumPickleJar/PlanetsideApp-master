@@ -5,37 +5,23 @@
     
     
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+       
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
-
-        <Grid> <!--grid for upper search bar and search button-->
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="3*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-    
-            <SearchBar 
+        <SearchBar 
                 x:Name="charSearch"
                 Grid.Column="0" 
                 Grid.Row="0" 
                 Placeholder="Enter player name..."
                 SearchButtonPressed="charSearch_SearchButtonPressed"
                 />
-        </Grid>
-        <ListView 
+        <ListView  Grid.Row="1"
                 x:Name="resultListView"
-                ItemsSource=""
+                ItemsSource="{Binding Characters}"
                 x:FieldModifier="Public"
+                   Unfocused="resultListView_Unfocused"
                 SeparatorColor="CornflowerBlue">
             <!--Array of subscribed events turned into strings from Newtonsoft-->
             <ListView.ItemTemplate>
@@ -44,7 +30,7 @@
                     <!--<ImageCell Text="{Binding }" ImageSource="{Binding }}}" /> character's faction icon -->
 
                     <TextCell 
-                            Text="{Binding name}">
+                            Text="{Binding Name.First}">
                         
                     </TextCell>
 

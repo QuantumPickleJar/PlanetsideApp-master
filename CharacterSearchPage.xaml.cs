@@ -12,7 +12,6 @@ namespace PsApp
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CharacterSearchPage : ContentPage
 	{
-        private string query;
         public string ServiceId { get; }
 
         public CharacterSearchPage(string serviceId)
@@ -21,10 +20,9 @@ namespace PsApp
             this.ServiceId = serviceId;
         }
 
-        private void charSearch_SearchButtonPressed(object sender, EventArgs e)
+        private async void charSearch_SearchButtonPressed(object sender, EventArgs e)
         {
-            PlanetsideService service = new PlanetsideService("PS2mobile2018");
-            service.GetCharacter(query);
+            await GetSearchResultsAsync();
 
         }
 
@@ -38,7 +36,12 @@ namespace PsApp
         {
             PlanetsideService pService = new PlanetsideService(ServiceId);
             //pService.GetCharacter(PlanetsideService.characterId);
-            this.BindingContext = pService.GetMultipleCharacters(query);
+            this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+        }
+
+        private void resultListView_Unfocused(object sender, FocusEventArgs e)
+        {
+            this.resultListView.SelectedItem = null;
         }
     }
 }

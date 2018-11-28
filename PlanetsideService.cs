@@ -89,13 +89,15 @@ namespace PsApp
 
 
 
-        public async Task GetMultipleCharacters(string lowQuery)
+        public async Task<CharacterQueryResult> GetMultipleCharacters(string lowQuery)
         {
             string json;
 
             using (var client = new WebClient())
             {
-                json = await client.DownloadStringTaskAsync($"https://census.daybreakgames.com/s:PS2mobile2018/get/ps2/character/?name.first_lower={lowQuery}");
+                string url = $"https://census.daybreakgames.com/s:PS2mobile2018/get/ps2/character/?name.first_lower={lowQuery}";
+
+                json = await client.DownloadStringTaskAsync(url);
             }
 
             CharacterQueryResult resultClass = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);
@@ -106,7 +108,8 @@ namespace PsApp
             //{
             //    Console.WriteLine(c.Name);
             //}
-            
+
+            return resultClass;
         }
 
         public async Task StartAsync()
