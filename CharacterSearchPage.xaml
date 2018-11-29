@@ -5,27 +5,37 @@
     
     
     <Grid>
-       
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <SearchBar 
+
+
+        <Grid> <!--grid for upper search bar and search button-->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+    
+            <SearchBar 
                 x:Name="charSearch"
                 Grid.Column="0" 
                 Grid.Row="0" 
                 Placeholder="Enter player name..."
                 SearchButtonPressed="charSearch_SearchButtonPressed"
                 />
-        <Button x:Name="debugButton"
-                Clicked="debugButton_Clicked"
-                Grid.Row="2"/>
-        <ListView  Grid.Row="1"
+        </Grid>
+        <ListView 
                 x:Name="resultListView"
-                ItemsSource="{Binding Characters}"
+                ItemsSource=""
                 x:FieldModifier="Public"
-                   Unfocused="resultListView_Unfocused"
                 SeparatorColor="CornflowerBlue">
             <!--Array of subscribed events turned into strings from Newtonsoft-->
             <ListView.ItemTemplate>
@@ -34,10 +44,10 @@
                     <!--<ImageCell Text="{Binding }" ImageSource="{Binding }}}" /> character's faction icon -->
 
                     <TextCell 
-                            Text="{Binding Name.First}">
+                            Text="{Binding name}">
                         
                     </TextCell>
-    
+
                     <!--captured by {Binding newOwner}-->
                 </DataTemplate>
             </ListView.ItemTemplate>

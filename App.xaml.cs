@@ -11,7 +11,7 @@ namespace PsApp
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage();
         }
 
         protected override void OnStart()
