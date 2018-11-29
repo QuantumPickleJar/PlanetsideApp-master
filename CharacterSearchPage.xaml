@@ -9,6 +9,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <SearchBar 
                 x:Name="charSearch"
@@ -17,6 +18,9 @@
                 Placeholder="Enter player name..."
                 SearchButtonPressed="charSearch_SearchButtonPressed"
                 />
+        <Button x:Name="debugButton"
+                Clicked="debugButton_Clicked"
+                Grid.Row="2"/>
         <ListView  Grid.Row="1"
                 x:Name="resultListView"
                 ItemsSource="{Binding Characters}"
@@ -33,7 +37,7 @@
                             Text="{Binding Name.First}">
                         
                     </TextCell>
-
+    
                     <!--captured by {Binding newOwner}-->
                 </DataTemplate>
             </ListView.ItemTemplate>
