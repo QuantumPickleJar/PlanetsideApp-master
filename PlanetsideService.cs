@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using PsApp.Events;
@@ -11,11 +10,6 @@ namespace PsApp
     public class PlanetsideService : IDisposable
     {
         public string ServiceId { get; }
-        //private string subMessage = { {"service":"event","action":"subscribe","worlds":[],"eventNames":["FacilityControl","MetagameEvent"]}"};
-        public int selectedWorld;
-        //public int selectedWorld = null;  have a method that gets called in the constructor that, if selectedWorld is null, asks the user to set a default world 
-
-        public bool IsStarted { get; private set; }
 
         public PlanetsideService(string serviceId)
         {
@@ -23,7 +17,16 @@ namespace PsApp
             this.ClientWebSocket = new ClientWebSocket();
         }
 
-        
+
+
+        //public string FacilityChanged()
+        //{
+
+        //}
+
+        ////
+        //public event EventHandler<FacilityControlChangedEventArgs> FacilityControlChanged
+
 
         public ClientWebSocket ClientWebSocket { get; private set; }
 
@@ -50,9 +53,6 @@ namespace PsApp
         }
 
 
-        //public void AssignRegionNameById(string name, string id);
-
-
         public Character GetCharacter(long characterId)
         {
             string json;
@@ -66,8 +66,6 @@ namespace PsApp
 
             return result.Characters.SingleOrDefault();
         }
-
-
 
         public Character GetCharacter(string lowQuery)
         {
@@ -97,7 +95,7 @@ namespace PsApp
 
             using (var client = new WebClient())
             {
-                string url = $"https://census.daybreakgames.com/s:PS2mobile2018/get/ps2:v2/character_name/?name.first_lower=^{lowQuery}&c:limit=1000&c:show=name.first&c:sort=name.first_lower";
+                string url = $"https://census.daybreakgames.com/s:PS2mobile2018/get/ps2/character/?name.first_lower={lowQuery}";
 
                 json = await client.DownloadStringTaskAsync(url);
             }
@@ -114,105 +112,23 @@ namespace PsApp
             return resultClass;
         }
 
-        
-
-        
-
-        
-        //event
-        public event EventHandler<FacilityControlChangedEventArgs> FacilityControlChanged;
-
-        protected void OnFaciltyControlChanged(FacilityControlChangedEventArgs e)
+        public async Task StartAsync()
         {
-            if (FacilityControlChanged != null)
-                FacilityControlChanged(this, e);
-            //console output to see if this is working how I think it does 
-        }
-
-        async void ListenToWebSocketStuff()
-        {
-
             Uri serverUri = new Uri($"wss://push.planetside2.com/streaming?environment=ps2&service-id=s:{ServiceId}");
 
             await ClientWebSocket.ConnectAsync(serverUri, CancellationToken.None);
 
             ArraySegment<byte> buffer = new ArraySegment<byte>();
-            
-            //while (true)
-            //{
-            //    var result = await ClientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
 
-            //    if (result.EndOfMessage)
-            //    {
-            //        Console.WriteLine("endofmessageloop"); 
-            //    }
-            //}
-
-            // tell the socket to subscribe to the messages we want
-            CancellationToken cancellationToken = CancellationToken.None;
-            await ClientWebSocket.SendAsync(buffer, WebSocketMessageType.Text, false, cancellationToken);
-
-            WebSocketReceiveResult result;
-
-            while (IsStarted)
+            while (true)
             {
-                result = await ClientWebSocket.ReceiveAsync(buffer, cancellationToken);
+                var result = await ClientWebSocket.ReceiveAsync(buffer, CancellationToken.None);
 
                 if (result.EndOfMessage)
                 {
-                    //start decoding the buffer (byte)array which will be converted into a json string
-                    
-                    //decode
-                    string resultString = buffer.ToString();
-                       
-                    //serialize 
-
-
-                    //then deserialize them into a json string 
-
+                    Console.WriteLine("endofmessageloop"); 
                 }
-
-                //await ClientWebSocket.ReceiveAsync(something something something)
-
-                // inspect the message
-
-                // if end of message
-
-                // see if it is a facility control change
-
-                // raise the facility control change (on othe thread)
-
-                OnFaciltyControlChanged(new FacilityControlChangedEventArgs
-                {
-                    // Facility Id
-                    //facilityresolver
-                    // Faction id
-                });
-
             }
-
-           
-
-        }
-
-        public async Task StartAsync()
-        {
-            // create a new thread
-            Thread thread = new Thread(ListenToWebSocketStuff);
-            thread.Start();
-
-            // have the new thread call ListenToWebSocketStuff()
-
-            IsStarted = true;
-        }
-        
-
-        public async Task StopAsync(Thread thread)
-        {
-            IsStarted = false;
-
-            // perform any cleanup??
-            thread.Abort();
         }
 
         public void Dispose()

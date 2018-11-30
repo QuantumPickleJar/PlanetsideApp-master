@@ -18,45 +18,9 @@
 
         <!--for debugging purposes the button will output text to the listview.  
         Remember the goal is to create push notifications and not have to be in the app to view it-->
+        <Button x:Name="startSubscription" Text="subscribe" Clicked="startSubscription_Clicked" />
         
-        
-        <Button 
-            Grid.Row="1"
-            x:Name="startSubscription" 
-            Text="subscribe" 
-            Clicked="startSubscription_Clicked" 
-            HorizontalOptions="Center"
-            VerticalOptions="Start"/>
-        
-        <Button 
-            Grid.Row="2"
-            x:Name="navCharacters" 
-            Text="Profiles" 
-            Clicked="navCharacters_Clicked"
-            HorizontalOptions="Center"/>
-
-        <!--<ListView 
-                Grid.Row="0"
-                x:Name="socketView"
-                ItemsSource="{Binding Region}"
-                x:FieldModifier="Public"
-                Unfocused="resultListView_Unfocused"
-                SeparatorColor="CornflowerBlue">
-            --><!--Array of subscribed events turned into strings from Newtonsoft--><!--
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    --><!--define how to display the data-->
-                    <!--<ImageCell Text="{Binding }" ImageSource="{Binding }}}" /> character's faction icon --><!--
-
-                    <TextCell 
-                            Text="{Binding Name.en}">
-
-                    </TextCell>
-
-                    --><!--captured by {Binding newOwner}--><!--
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>-->
+        <Button x:Name="navCharacters" Text="Profiles" Clicked="navCharacters_Clicked"/>
     </Grid>
 
 </ContentPage>
