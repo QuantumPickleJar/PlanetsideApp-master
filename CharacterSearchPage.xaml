@@ -22,23 +22,15 @@
                 Grid.Row="1"
                 x:Name="resultListView"
                 x:FieldModifier="Public"
-                SeparatorColor="CornflowerBlue">                
-            <!--ItemsSource="{Binding Characters}"-->
-
-            <!--Array of subscribed events turned into strings from Newtonsoft-->
-            <!--<ListView.ItemTemplate>
-                <DataTemplate>-->
-                    <!--define how to display the data-->
-                    <!--<ImageCell Text="{Binding }" ImageSource="{Binding }}}" /> character's faction icon -->
-
-                    <!--<TextCell 
+                SeparatorColor="CornflowerBlue"                
+                ItemsSource="{Binding Characters}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell 
                             Text="{Binding Name.First}">
-                        
-                    </TextCell>-->
-
-                    <!--captured by {Binding newOwner}-->
-                <!--</DataTemplate>
-            </ListView.ItemTemplate>-->
+                    </TextCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
     </Grid>

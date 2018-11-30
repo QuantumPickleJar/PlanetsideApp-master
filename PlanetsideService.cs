@@ -41,15 +41,6 @@ namespace PsApp
 
             //verify
             string query = "Dreadnaut";
-
-            //if (Equals(character.Name.First, "Dreadnaut"))
-            //{
-            //    //create new passable entry that can be read by the ListView
-            //    MainPage.resultListView
-            //}
-            //Assert.IsNotNull(character.Name);
-            //Assert.IsNotNull(character.Name.First);
-            //Assert.AreEqual("Dreadnaut", character.Name.First);
         }
 
 
@@ -63,7 +54,6 @@ namespace PsApp
             }
 
             CharacterQueryResult result = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);
-
             return result.Characters.SingleOrDefault();
         }
 
@@ -77,12 +67,6 @@ namespace PsApp
             }
 
             CharacterQueryResult resultClass = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);
-            //returns array of character objects 
-            //for each 
-            foreach (Character c in resultClass.Characters)
-            {
-                Console.WriteLine(c.Name);
-            }
             return resultClass.Characters.SingleOrDefault();
         }
 
@@ -95,7 +79,7 @@ namespace PsApp
 
             using (var client = new WebClient())
             {
-                json = await client.DownloadStringTaskAsync($"https://census.daybreakgames.com/s:PS2mobile2018/get/ps2/character/?name.first_lower={lowQuery}");
+                json = await client.DownloadStringTaskAsync($"https://census.daybreakgames.com/s:PS2mobile2018/get/ps2/character/?name.first_lower=^{lowQuery}&c:limit=100&c:sort=name.first_lower");
             }
 
             CharacterQueryResult resultClass = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);

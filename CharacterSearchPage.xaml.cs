@@ -51,9 +51,9 @@ namespace PsApp
         {
             PlanetsideService pService = new PlanetsideService(ServiceId);
             //this.BindingContext = pService.GetMultipleCharacters(query);
-            //this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            PopulateListView(cqr);
+            this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+            //CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+            //PopulateListView(cqr);
         }
 
         private void PopulateListView(CharacterQueryResult cqr)
