@@ -22,13 +22,10 @@
                 Grid.Row="1"
                 x:Name="resultListView"
                 x:FieldModifier="Public"
-                SeparatorColor="CornflowerBlue"                
-                ItemsSource="{Binding Characters}">
+                SeparatorColor="CornflowerBlue">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell 
-                            Text="{Binding Name.First}">
-                    </TextCell>
+                    <ImageCell Text="{Binding Name.First}" ImageSource="" Detail="{Binding BattleRank.Value}"/>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

@@ -51,57 +51,78 @@ namespace PsApp
         {
             PlanetsideService pService = new PlanetsideService(ServiceId);
             //this.BindingContext = pService.GetMultipleCharacters(query);
-            this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            //CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            //PopulateListView(cqr);
+            //this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+            CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+            PopulateListView(cqr);
         }
 
         private void PopulateListView(CharacterQueryResult cqr)
         {
-            resultListView.ItemsSource = cqr.Characters;
-            resultListView.ItemTemplate = new DataTemplate(() =>
+            ListView resultListView = new ListView
             {
-                //create views with bindings 
-                Label charName = new Label();
-                charName.SetBinding(Label.TextProperty, "Name.First");
+                //resultListView.ItemsSource = cqr.Characters;
+                //resultListView,ItemTemplate = new DataTemplate(() =>
 
-                Label charRank = new Label();
-                charRank.SetBinding(Label.TextProperty, "BattleRank");
+                ItemsSource = cqr.Characters,
+                ItemTemplate = new DataTemplate(() =>
 
-                //Image factionImage = new Image();
-                ////determine which faction icon is used
-                //foreach (Character c in cqr)
-                //{
-                //    if (c.FactionId == 1) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
-                //    if (c.FactionId == 2) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
-                //    if (c.FactionId == 3) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
-                //}
-
-                //return assembled cell
-
-                return new ViewCell                //convert to an image cell later
                 {
-                    View = new StackLayout
+                    //create views with bindings 
+                    Label charName = new Label();
+                    charName.SetBinding(Label.TextProperty, "Name.First");
+
+                    Label charRank = new Label();
+                    charRank.SetBinding(Label.TextProperty, "BattleRank.Value");
+
+                    Image factionImage = new Image();
+                    //determine which faction icon is used
+                    foreach (Character c in cqr.Characters)
                     {
-                        Padding = new Thickness(0, 5),
-                        Orientation = StackOrientation.Horizontal,
-                        Children =
+                        if (c.FactionId == 1) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
+                        if (c.FactionId == 2) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
+                        if (c.FactionId == 3) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
+                    }
+
+                    //return assembled cell
+
+                    return new ViewCell                //convert to an image cell later
+                    {
+                        View = new StackLayout
                         {
-                            //factionImage,
-                            new StackLayout
+                            Padding = new Thickness(1.5, 5),
+                            Orientation = StackOrientation.Vertical,
+                            Children =
                             {
-                                VerticalOptions = LayoutOptions.Center,
-                                Spacing = 0,
-                                Children =
+                                //factionImage,
+                                new StackLayout
                                 {
-                                    charName,
-                                    charRank
+                                    //VerticalOptions = LayoutOptions.Start,
+                                    HorizontalOptions = LayoutOptions.Start,
+                                    Spacing = 0,
+                                    Children =
+                                    {
+                                        factionImage, 
+                                        charName,
+                                        charRank
+                                    }
                                 }
                             }
                         }
-                    }
-                };
-            });
+
+                    };
+                })
+            };
+                        
+
+            //end delegate
+            this.Content = new StackLayout
+            {
+                Children =
+                {
+                    charSearch,
+                    resultListView
+                }
+            };
         }
     }
 }
