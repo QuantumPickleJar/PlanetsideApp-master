@@ -89,7 +89,7 @@ namespace PsApp
 
 
 
-        public async Task GetMultipleCharacters(string lowQuery)
+        public async Task<CharacterQueryResult> GetMultipleCharacters(string lowQuery)
         {
             string json;
 
@@ -106,7 +106,7 @@ namespace PsApp
             //{
             //    Console.WriteLine(c.Name);
             //}
-            
+            return resultClass;
         }
 
         public async Task StartAsync()
