@@ -8,6 +8,7 @@ namespace PsApp
 {
     public partial class MainPage : ContentPage
     {
+        
         const string serviceID = "PS2mobile2018";
 
         public MainPage()

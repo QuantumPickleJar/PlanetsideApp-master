@@ -2,41 +2,43 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PsApp.CharacterSearchPage">
-    
-    
+
+
     <Grid>
-       
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <SearchBar 
+
+
+            <SearchBar 
                 x:Name="charSearch"
-                Grid.Column="0" 
                 Grid.Row="0" 
                 Placeholder="Enter player name..."
                 SearchButtonPressed="charSearch_SearchButtonPressed"
                 />
-        <ListView  Grid.Row="1"
+       
+        <ListView 
+                Grid.Row="1"
                 x:Name="resultListView"
-                ItemsSource="{Binding Characters}"
                 x:FieldModifier="Public"
-                   Unfocused="resultListView_Unfocused"
-                SeparatorColor="CornflowerBlue">
+                SeparatorColor="CornflowerBlue">                
+            <!--ItemsSource="{Binding Characters}"-->
+
             <!--Array of subscribed events turned into strings from Newtonsoft-->
-            <ListView.ItemTemplate>
-                <DataTemplate>
+            <!--<ListView.ItemTemplate>
+                <DataTemplate>-->
                     <!--define how to display the data-->
                     <!--<ImageCell Text="{Binding }" ImageSource="{Binding }}}" /> character's faction icon -->
 
-                    <TextCell 
+                    <!--<TextCell 
                             Text="{Binding Name.First}">
                         
-                    </TextCell>
+                    </TextCell>-->
 
                     <!--captured by {Binding newOwner}-->
-                </DataTemplate>
-            </ListView.ItemTemplate>
+                <!--</DataTemplate>
+            </ListView.ItemTemplate>-->
         </ListView>
 
     </Grid>
