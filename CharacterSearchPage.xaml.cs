@@ -59,57 +59,28 @@ namespace PsApp
         private void PopulateListView(CharacterQueryResult cqr)
         {
             ListView resultListView = new ListView
+
+
             {
                 //resultListView.ItemsSource = cqr.Characters;
                 //resultListView,ItemTemplate = new DataTemplate(() =>
 
                 ItemsSource = cqr.Characters,
                 ItemTemplate = new DataTemplate(() =>
-
                 {
-                    //create views with bindings 
-                    Label charName = new Label();
-                    charName.SetBinding(Label.TextProperty, "Name.First");
+                    ImageCell imgCell = new ImageCell();
+                    
+                    imgCell.SetBinding(ImageCell.ImageSourceProperty, "ImageSrc");
+                    imgCell.SetBinding(TextCell.TextProperty, "Name.First");
+                    imgCell.SetBinding(TextCell.DetailProperty, "BattleRank.Value");
 
-                    Label charRank = new Label();
-                    charRank.SetBinding(Label.TextProperty, "BattleRank.Value");
+                    //string s = imgCell.Detail;
+                    //if int()
 
-                    Image factionImage = new Image();
-                    //determine which faction icon is used
-                    foreach (Character c in cqr.Characters)
-                    {
-                        if (c.FactionId == 1) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
-                        if (c.FactionId == 2) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
-                        if (c.FactionId == 3) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
-                    }
+                    //Image factionImage = new Image();
+                    //                    factionImage.SetBinding(Image.SourceProperty, "ImageSrc");
 
-                    //return assembled cell
-
-                    return new ViewCell                //convert to an image cell later
-                    {
-                        View = new StackLayout
-                        {
-                            Padding = new Thickness(1.5, 5),
-                            Orientation = StackOrientation.Vertical,
-                            Children =
-                            {
-                                //factionImage,
-                                new StackLayout
-                                {
-                                    //VerticalOptions = LayoutOptions.Start,
-                                    HorizontalOptions = LayoutOptions.Start,
-                                    Spacing = 0,
-                                    Children =
-                                    {
-                                        factionImage, 
-                                        charName,
-                                        charRank
-                                    }
-                                }
-                            }
-                        }
-
-                    };
+                    return imgCell;
                 })
             };
                         
@@ -124,5 +95,6 @@ namespace PsApp
                 }
             };
         }
+        
     }
 }
