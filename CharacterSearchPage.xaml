@@ -18,18 +18,20 @@
                 SearchButtonPressed="charSearch_SearchButtonPressed"
                 />
        
-        <!--<ListView 
+        <ListView 
                 Grid.Row="1"
                 x:Name="resultListView"
                 x:FieldModifier="Public"
-                SeparatorColor="CornflowerBlue">
-            --><!--<ListView.ItemTemplate>
+                SeparatorColor="CornflowerBlue"                
+                ItemsSource="{Binding Characters}">
+            <ListView.ItemTemplate>
                 <DataTemplate>
-                    <ImageCell Text="{Binding Name.First}" ImageSource="{Binding ImageSrc}" Detail="{Binding BattleRank.Value}"/>
+                    <TextCell 
+                            Text="{Binding Name.First}">
+                    </TextCell>
                 </DataTemplate>
-            </ListView.ItemTemplate>--><!--
-
-        </ListView>-->
+            </ListView.ItemTemplate>
+        </ListView>
 
     </Grid>
     

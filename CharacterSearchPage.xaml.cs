@@ -51,50 +51,57 @@ namespace PsApp
         {
             PlanetsideService pService = new PlanetsideService(ServiceId);
             //this.BindingContext = pService.GetMultipleCharacters(query);
-            //this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            PopulateListView(cqr);
+            this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+            //CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+            //PopulateListView(cqr);
         }
 
         private void PopulateListView(CharacterQueryResult cqr)
         {
-            ListView resultListView = new ListView
-
-
+            resultListView.ItemsSource = cqr.Characters;
+            resultListView.ItemTemplate = new DataTemplate(() =>
             {
-                //resultListView.ItemsSource = cqr.Characters;
-                //resultListView,ItemTemplate = new DataTemplate(() =>
+                //create views with bindings 
+                Label charName = new Label();
+                charName.SetBinding(Label.TextProperty, "Name.First");
 
-                ItemsSource = cqr.Characters,
-                ItemTemplate = new DataTemplate(() =>
+                Label charRank = new Label();
+                charRank.SetBinding(Label.TextProperty, "BattleRank");
+
+                //Image factionImage = new Image();
+                ////determine which faction icon is used
+                //foreach (Character c in cqr)
+                //{
+                //    if (c.FactionId == 1) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
+                //    if (c.FactionId == 2) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
+                //    if (c.FactionId == 3) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
+                //}
+
+                //return assembled cell
+
+                return new ViewCell                //convert to an image cell later
                 {
-                    ImageCell imgCell = new ImageCell();
-                    
-                    imgCell.SetBinding(ImageCell.ImageSourceProperty, "ImageSrc");
-                    imgCell.SetBinding(TextCell.TextProperty, "Name.First");
-                    imgCell.SetBinding(TextCell.DetailProperty, "BattleRank.Value");
-
-                    //string s = imgCell.Detail;
-                    //if int()
-
-                    //Image factionImage = new Image();
-                    //                    factionImage.SetBinding(Image.SourceProperty, "ImageSrc");
-
-                    return imgCell;
-                })
-            };
-                        
-
-            //end delegate
-            this.Content = new StackLayout
-            {
-                Children =
-                {
-                    charSearch,
-                    resultListView
-                }
-            };
+                    View = new StackLayout
+                    {
+                        Padding = new Thickness(0, 5),
+                        Orientation = StackOrientation.Horizontal,
+                        Children =
+                        {
+                            //factionImage,
+                            new StackLayout
+                            {
+                                VerticalOptions = LayoutOptions.Center,
+                                Spacing = 0,
+                                Children =
+                                {
+                                    charName,
+                                    charRank
+                                }
+                            }
+                        }
+                    }
+                };
+            });
         }
-        
     }
 }
