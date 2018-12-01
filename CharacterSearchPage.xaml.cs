@@ -12,20 +12,19 @@ namespace PsApp
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CharacterSearchPage : ContentPage
     {
-        //PlanetsideService pService; 
-        private string query;
-        public string ServiceId { get; }
+        //PlanetsideService pService  
+        private string QueryServiceId = "PS2mobile2018query";
 
         public CharacterSearchPage(string serviceId)
         {
             InitializeComponent();
-            this.ServiceId = serviceId;
+            this.QueryServiceId = serviceId;
         }
 
         public CharacterSearchPage(string serviceId, PlanetsideService service)
         {
             InitializeComponent();
-            this.ServiceId = serviceId;
+            this.QueryServiceId = serviceId;
             //pService = service; 
         }
 
@@ -40,22 +39,43 @@ namespace PsApp
         {
             base.OnAppearing();
         }
-
-        private void GetSearchResultSingle()
-        {
-            PlanetsideService service = new PlanetsideService(ServiceId);
-            this.BindingContext = service.GetCharacter(charSearch.Text.ToLower());
-        }
-
+        
         private async Task GetSearchResultsAsync()
         {
-            PlanetsideService pService = new PlanetsideService(ServiceId);
-            //this.BindingContext = pService.GetMultipleCharacters(query);
-            this.BindingContext = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            //CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
-            //PopulateListView(cqr);
+            PlanetsideService pService = new PlanetsideService(QueryServiceId);
+            CharacterQueryResult cqr = await pService.GetMultipleCharacters(charSearch.Text.ToLower());
+//            ListView temp = PopulateListView(cqr);
+            PopulateListView(cqr);
+
+            //PopulateListViewWithImages(temp);
         }
 
+
+        private void PopulateListViewWithImages(ListView temp)
+        {
+            GetImages(temp);
+        }
+
+
+        /**
+         * Method to go through each item and set the ImageSource property accoridng to FactionId
+         *  maybe disable the results from being visible until this method is complete?
+         */
+        private void GetImages(ListView listView)
+        {
+            //MUST be called AFTER the fetching of the informatio is complete (after the cells are already built)
+
+            var chars = listView.ItemsSource;
+            ////determine which faction icon is used
+            foreach (Character c in chars)
+            {
+                //if (c.FactionId == 1)  = "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
+                //if (c.FactionId == 2)  = "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
+                //if (c.FactionId == 3)  = "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
+            }
+        }
+
+//        private ListView PopulateListView(CharacterQueryResult cqr)
         private void PopulateListView(CharacterQueryResult cqr)
         {
             resultListView.ItemsSource = cqr.Characters;
@@ -66,24 +86,20 @@ namespace PsApp
                 charName.SetBinding(Label.TextProperty, "Name.First");
 
                 Label charRank = new Label();
-                charRank.SetBinding(Label.TextProperty, "BattleRank");
+                charRank.SetBinding(Label.TextProperty, "BattleRank.Value");
 
-                //Image factionImage = new Image();
-                ////determine which faction icon is used
-                //foreach (Character c in cqr)
-                //{
-                //    if (c.FactionId == 1) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
-                //    if (c.FactionId == 2) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
-                //    if (c.FactionId == 3) factionImage.Source = "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
-                //}
+                Image factionImage = new Image();
+                factionImage.HeightRequest = 60;
+
+                
 
                 //return assembled cell
 
-                return new ViewCell                //convert to an image cell later
+                ViewCell viewCell = new ViewCell()                //convert to an image cell later
                 {
                     View = new StackLayout
                     {
-                        Padding = new Thickness(0, 5),
+                        Padding = new Thickness(3, 1, 1, 5),
                         Orientation = StackOrientation.Horizontal,
                         Children =
                         {
@@ -94,6 +110,7 @@ namespace PsApp
                                 Spacing = 0,
                                 Children =
                                 {
+                                    //factionImage,
                                     charName,
                                     charRank
                                 }
@@ -101,7 +118,18 @@ namespace PsApp
                         }
                     }
                 };
-            });
+                //foreach(ViewCell v in resultListView.ItemsSource)
+                //{
+                //    GetImages(resultListView);
+                    
+                //}
+
+                //end of viewCell construction
+                return viewCell;
+            }); // end of DataTemplate construction
+           // return resultListView;
+            
+
         }
     }
 }

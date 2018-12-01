@@ -11,26 +11,18 @@
         </Grid.RowDefinitions>
 
 
-            <SearchBar 
-                x:Name="charSearch"
-                Grid.Row="0" 
-                Placeholder="Enter player name..."
-                SearchButtonPressed="charSearch_SearchButtonPressed"
-                />
-       
+        <SearchBar 
+            x:Name="charSearch"
+            Grid.Row="0" 
+            Placeholder="Enter player name..."
+            SearchButtonPressed="charSearch_SearchButtonPressed"
+            />
+
         <ListView 
                 Grid.Row="1"
                 x:Name="resultListView"
                 x:FieldModifier="Public"
-                SeparatorColor="CornflowerBlue"                
-                ItemsSource="{Binding Characters}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell 
-                            Text="{Binding Name.First}">
-                    </TextCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
+                SeparatorColor="CornflowerBlue">
         </ListView>
 
     </Grid>

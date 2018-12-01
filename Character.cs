@@ -1,16 +1,26 @@
 ﻿using Newtonsoft.Json;
 using PsApp.Gettables;
+using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace PsApp
 {
-    public class Character
+    public class Character //: INotifyPropertyChanged
     {
         [JsonProperty("name")]
         public Name Name { get; set; }
 
         [JsonProperty("faction_id")]
-        public int FactionId { get; set; }
+        public int FactionId
+        {
+            get;        
+            set;
+            //set
+            //{
+            //    FactionId = value;
+            //    OnPropertyChanged("FactionId");
+            //}
+        }
         // 1 = Terran Republic
         // 2 = Vanu Sovereignity
         // 3 = New Conglomarate
@@ -35,5 +45,25 @@ namespace PsApp
 
             }
         }
+
+
+        public string Faction
+        {
+            get => Faction;
+            set
+            {
+                if (FactionId == 1) Faction = "TR";
+                if (FactionId == 2) Faction = "VS";
+                if (FactionId == 3) Faction = "NC";
+            }
+        }
+
+        //public event PropertyChangedEventHandler PropertyChanged;
+
+        //private void OnPropertyChanged(string propertyName)
+        //{
+        //    if (propertyName != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        //}
+
     }
 }

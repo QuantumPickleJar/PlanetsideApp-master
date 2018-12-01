@@ -8,6 +8,7 @@ namespace PsApp
 {
     public partial class MainPage : ContentPage
     {
+        
         const string serviceID = "PS2mobile2018";
 
         public MainPage()
@@ -20,13 +21,20 @@ namespace PsApp
             //PlanetsideService planetsideService = new PlanetsideService();
             PlanetsideService planetsideService = new PlanetsideService(serviceID);
             await planetsideService.StartAsync();
-        
+
         }
+
+
 
         async void navCharacters_Clicked(object sender, EventArgs e)
         {
             CharacterSearchPage charSearch = new CharacterSearchPage(serviceID);
             await Navigation.PushAsync(charSearch);
+        }
+
+        private void navLiveEvent_Clicked(object sender, EventArgs e)
+        {
+
         }
     }
 }
