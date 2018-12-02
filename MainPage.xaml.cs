@@ -9,32 +9,21 @@ namespace PsApp
     public partial class MainPage : ContentPage
     {
         
-        const string serviceID = "PS2mobile2018";
-
         public MainPage()
         {
             InitializeComponent();
         }
 
-        async private void startSubscription_Clicked(object sender, EventArgs e)
-        {
-            //PlanetsideService planetsideService = new PlanetsideService();
-            PlanetsideService planetsideService = new PlanetsideService(serviceID);
-            await planetsideService.StartAsync();
-
-        }
-
-
-
         async void navCharacters_Clicked(object sender, EventArgs e)
         {
-            CharacterSearchPage charSearch = new CharacterSearchPage(serviceID);
+            CharacterSearchPage charSearch = new CharacterSearchPage("PS2mobile2018query");
             await Navigation.PushAsync(charSearch);
         }
 
-        private void navLiveEvent_Clicked(object sender, EventArgs e)
+        async void navLiveEvent_Clicked(object sender, EventArgs e)
         {
-
+            FeedPage feedPage = new FeedPage();
+            await Navigation.PushAsync(feedPage);
         }
     }
 }

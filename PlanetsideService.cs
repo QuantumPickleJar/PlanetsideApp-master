@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.WebSockets;
@@ -22,10 +23,17 @@ namespace PsApp
             this.ServiceId = serviceId;
             this.ClientWebSocket = new ClientWebSocket();
         }
+        public PlanetsideService(string serviceId, List<string> list)
+        {
+            this.ServiceId = serviceId;
+            this.ClientWebSocket = new ClientWebSocket();
+            this.returnList = list;
+        }
+        public List<string> returnList;
 
 
 
-        
+
         public async Task<CharacterQueryResult> GetMultipleCharacters(string lowQuery)
         {
             string json;
@@ -38,31 +46,9 @@ namespace PsApp
             }
 
             CharacterQueryResult resultClass = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);
-
-            //returns array of character objects 
-            //for each 
-            //foreach (Character c in resultClass.Characters)
-            //{
-            //    Console.WriteLine(c.Name);
-            //}
-
             return resultClass;
         }
-
-
-
-        //*******IMPORTANT*********
-        /// <summary>
-        /// There needs to be some sort of way for the client PlanetsideServices to recognize the ServiceID not registered error, 
-        /// as this goes away after 1-3 minutes of not sending any requests under the ServiceID
-        /// 
-        /// Failure to implement such a method could easily derail the app if enough users failed a search at once.  
-        /// 
-        /// Maybe consider applying for a second ServiceId that is to be used specifically for querying?
-        /// 
-        /// 
-        /// EDIT: Received second ServiceId to use for querying
-        /// </summary>
+        
 
 
         //event
@@ -92,14 +78,13 @@ namespace PsApp
 
             // convert to ArraySegment
             ArraySegment<byte> buffer = new ArraySegment<byte>(bytes);
-
-            
             CancellationToken cancellationToken = CancellationToken.None;
             //send the command asynchroneously 
             await ClientWebSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken);
-
+            List<string> results = new List<string>();
             WebSocketReceiveResult result;
-
+            string resultString = string.Empty;
+            string r = string.Empty;
             while (IsStarted)
             {
                 //define the WebSocket result 
@@ -108,11 +93,23 @@ namespace PsApp
                 if (result.EndOfMessage) //we have the full message. now we...
                 {
                     //decode
-                    string resultString = Encoding.ASCII.GetString(buffer.Array, buffer.Offset, result.Count);
-                    
-                    //inspect the message
-                    //the first one we'll get is a 
+                    //the reason I keep crashing is becaus ethe returned message still has the quotation marks and we can't add that to a list.  we need to edit the 
+                    //r = Encoding.ASCII.GetString(buffer.Array, buffer.Offset, result.Count);
+                    resultString = Encoding.ASCII.GetString(buffer.Array, buffer.Offset, result.Count);
+                    //for (int i = 0; i <= r.Length; i++)
+                    //{
+                    //    if(r.)
+                    //}
+
+                    //DEBUG: add string to resultList so we can retrieve it into a listview in FeedPage
+                    break;
                 }
+//                await SendTestCommand();
+                //we still need to send the test subscription message Command up to the service later.  
+
+                //set this string to something
+
+                //return the string as a message so that we can somehow put it into a ListView
 
 
                 // inspect the message
@@ -123,32 +120,87 @@ namespace PsApp
 
                 // raise the facility control change (on other thread)
 
+
                 OnFaciltyControlChanged(new FacilityControlChangedEventArgs
                 {
+                    //possib le event names
+                    //Death
+                    //FacilityControl
+                    //GainExperience
+                    //ItemAdded
+                    //MetagameEvent
+                    //PlayerFacilityCapture
+                    //PlayerFacilityDefend
+                    //PlayerLogout
+                    //PlayerLogin
+                    //SkillAdded
+                    //VehicleDestroy
+
+
+
                     // Facility Id
-                    //facilityresolver
+                    //call method to FacilityResolver to get the associated name for the ID
                     // Faction id
                 });
-
+                break;
             }
-
-
+            results.Add(resultString);
+            AddResult(results);
+            ClientWebSocket.Abort();
+            ClientWebSocket.Dispose();
+            IsStarted = false;
+            //StopAsync();
 
         }
 
+
+
+        //TEST METHOD
+        //return a string to add to an array that is in a list of items
+
+        public async Task<string> SendTestCommand()
+        { 
+            string resultString = string.Empty;
+            string[] events = new string[] { "PlayerLogout", "PlayerLogin", "FacilityControlChanged" };
+            string[] worlds = new string[] { "17" };
+
+            Events.Command command = new Events.Command("subscribe", "event", worlds, events);
+
+
+            //reconfigure command to a byte arraySegment so the API can receive it 
+            byte[] bytes = Encoding.UTF8.GetBytes(command.ToString());
+            ArraySegment<byte> buffer = new ArraySegment<byte>(bytes);
+            CancellationToken cancellationToken = CancellationToken.None;
+            WebSocketReceiveResult result;
+            await ClientWebSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken);
+            result = await ClientWebSocket.ReceiveAsync(buffer, cancellationToken);
+            //check the new message we received 
+            if (result.EndOfMessage)
+            {
+                resultString = Encoding.ASCII.GetString(buffer.Array, buffer.Offset, result.Count);
+
+            }
+            //return the message payload
+            return await Task.Run(() => resultString);
+        }
+        
+        public async void AddResult(List<string> list)
+        {
+            returnList = list;
+        }
+
+        private Thread thread;
         public async Task StartAsync()
         {
             // create a new thread
-            Thread thread = new Thread(ListenToWebSocketStuff);
+            thread = new Thread(ListenToWebSocketStuff);
             thread.Start();
 
             // have the new thread call ListenToWebSocketStuff()
 
             IsStarted = true;
         }
-
-
-        public async Task StopAsync(Thread thread)
+        public async Task StopAsync()
         {
             IsStarted = false;
 
@@ -156,10 +208,21 @@ namespace PsApp
             thread.Abort();
         }
 
-        public void Dispose()
+        public List<string> GetReturnList()
         {
-            this.ClientWebSocket?.Dispose();
+            return returnList;
+        }
+
+        void Dispose()
+        {
+            //this.ClientWebSocket?.Dispose();
+            this.ClientWebSocket.Dispose();
             this.ClientWebSocket = null;
         }
+
+        void IDisposable.Dispose()
+        {
+            ((IDisposable)ClientWebSocket).Dispose();
+        }
     }
-}
+}                

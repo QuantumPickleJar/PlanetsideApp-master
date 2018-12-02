@@ -17,6 +17,11 @@ namespace PsApp.Events
             public Payload payload { get; set; }
             
             /// <summary>
+            ///  Property we use to bind the TextCell Text property to
+            /// </summary>
+            public string OutputString { get; set; }
+            
+            /// <summary>
             /// type of service that we are doing
             /// Subscribe
             /// </summary>

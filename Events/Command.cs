@@ -15,7 +15,7 @@ namespace PsApp.Events
         public string serializedMessage { get; private set; }
 
 
-        public string myAction, myService;
+        public string action, service;
         public string[] characters, worlds, eventNames;
         //
         //worlds self explanatory
@@ -28,8 +28,8 @@ namespace PsApp.Events
         /// <param name="service">performing action to this.  Ex: SUBSCRIBE to EVENT </param>
         public Command(string action, string service)
         {
-            myAction = action;
-            myService = service;
+            this.action = action;
+            this.service = service;
         }
 
         /// <summary>
@@ -39,11 +39,33 @@ namespace PsApp.Events
         /// <param name="service">performing action to this.  Ex: SUBSCRIBE to EVENT </param>
         public Command(string action, string service, string[] characters)
         {
-            myAction = action;
-            myService = service;
+            this.action = action;
+            this.service = service;
+            this.characters = characters;
         }
 
+        /// <summary>
+        /// Command is the message sent to the WebSocket telling it what we want it to do 
+        /// </summary>    
+        /// <param name="action">the action we want to be performed (subscribe, clearSubscribe, recentCharacterIds,recentCharacterIdsCount</param>
+        /// <param name="service">performing action to this.  Ex: SUBSCRIBE to EVENT </param>
+        /// <param name="eventNames">events to subscribe to .  Ex: SUBSCRIBE to EVENT </param>
+        /// <param name="worlds">worlds to subscribe to (17=Emerald).  Ex: SUBSCRIBE to EVENT </param>
+        public Command(string action, string service, string[] worlds, string[] eventNames)
+        {
+            this.action = action;
+            this.service = service;
+            this.worlds = worlds;
+            this.eventNames = eventNames;
+                
+        }
 
+        public override string ToString()
+        {
+            string s = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+            return s;
+
+        }
     }
 
 }

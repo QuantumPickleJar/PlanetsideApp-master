@@ -27,14 +27,6 @@
             HeightRequest="300"
             WidthRequest="300"
             Source="http://www.userlogos.org/files/logos/Cracka/PlanetSide-2.png" />
-        
-        <Button 
-            Grid.Row="3"
-            x:Name="startSubscription" 
-            Text="subscribe" 
-            Clicked="startSubscription_Clicked" 
-            HorizontalOptions="Center"
-            VerticalOptions="Start"/>
 
         <Button 
             Grid.Row="2"
