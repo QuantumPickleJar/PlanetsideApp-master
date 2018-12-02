@@ -84,7 +84,6 @@ namespace PsApp
             List<string> results = new List<string>();
             WebSocketReceiveResult result;
             string resultString = string.Empty;
-            string r = string.Empty;
             while (IsStarted)
             {
                 //define the WebSocket result 
@@ -93,16 +92,12 @@ namespace PsApp
                 if (result.EndOfMessage) //we have the full message. now we...
                 {
                     //decode
-                    //the reason I keep crashing is becaus ethe returned message still has the quotation marks and we can't add that to a list.  we need to edit the 
-                    //r = Encoding.ASCII.GetString(buffer.Array, buffer.Offset, result.Count);
+                  
                     resultString = Encoding.ASCII.GetString(buffer.Array, buffer.Offset, result.Count);
-                    //for (int i = 0; i <= r.Length; i++)
-                    //{
-                    //    if(r.)
-                    //}
+                    
 
                     //DEBUG: add string to resultList so we can retrieve it into a listview in FeedPage
-                    break;
+                    
                 }
 //                await SendTestCommand();
                 //we still need to send the test subscription message Command up to the service later.  
@@ -147,10 +142,9 @@ namespace PsApp
             results.Add(resultString);
             AddResult(results);
             ClientWebSocket.Abort();
-            ClientWebSocket.Dispose();
+            task_Complete = true;
             IsStarted = false;
-            //StopAsync();
-
+            
         }
 
 
@@ -190,6 +184,7 @@ namespace PsApp
         }
 
         private Thread thread;
+
         public async Task StartAsync()
         {
             // create a new thread
@@ -200,12 +195,24 @@ namespace PsApp
 
             IsStarted = true;
         }
+        bool task_Complete = false;
+        public bool CompletedTask()
+        {
+            return task_Complete; 
+        }
+
+        // need to find a better way of suspending the websocket so that the user can re-subscribe without having to completely shutdown and restart the app
+        //pressing subscribe after stopping yields this exception:
+        //System.ObjectDisposedException: Cannot access a disposed object.
+        //Object name: 'System.Net.WebSockets.ClientWebSocket'.
         public async Task StopAsync()
         {
-            IsStarted = false;
 
+            ClientWebSocket.Abort();
+            ClientWebSocket.Dispose();
+            IsStarted = false;
             // perform any cleanup??
-            thread.Abort();
+            //thread.Abort();
         }
 
         public List<string> GetReturnList()

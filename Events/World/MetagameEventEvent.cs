@@ -1,24 +1,32 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 //world-level event payload 
 namespace PsApp.Events
 {
-    class MetagameEventEvent
+    class MetagameEventEvent : Payload
     {
-        public class Rootobject
+        public class RootObject
         {
-            public string event_name { get; set; }
-            public string timestamp { get; set; }
-            public string world_id { get; set; }
-            public string experience_bonus { get; set; }
-            public string faction_nc { get; set; }
-            public string faction_tr { get; set; }
-            public string faction_vs { get; set; }
-            public string metagame_event_id { get; set; }
-            public string metagame_event_state { get; set; }
-            public string zone_id { get; set; }
+            [JsonProperty("experience_bonus")]
+            public string Experience_bonus { get; set; }
+
+            [JsonProperty("faction_nc")]
+            public string Faction_nc { get; set; }
+
+            [JsonProperty("faction_tr")]
+            public string Faction_tr { get; set; }
+
+            [JsonProperty("faction_vs")]
+            public string Faction_vs { get; set; }
+
+            [JsonProperty("metagame_event_id")]
+            public string Metagame_event_id { get; set; }
+
+            [JsonProperty("metagame_event_state")]
+            public string Metagame_event_state { get; set; }
         }
 
     }

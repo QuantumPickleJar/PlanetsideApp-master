@@ -14,10 +14,12 @@
         </Grid.RowDefinitions>
 
         <ListView 
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="3"
             Grid.Row="1"
             Grid.Column="0"
             x:Name="consoleOut"
+            BackgroundColor="LightGray"
+            Margin="5,5,5,5"
                   >
         </ListView>
 

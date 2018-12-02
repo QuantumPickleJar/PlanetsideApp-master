@@ -1,25 +1,36 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 //world-level event payload 
 namespace PsApp.Events
 {
-    class ContinentUnlockEvent
+    class ContinentUnlockEvent : Payload
     {
-        public class Rootobject
+        public class RootObject
         {
-            public string event_name { get; set; }
-            public string timestamp { get; set; }
-            public string world_id { get; set; }
-            public string zone_id { get; set; }
-            public string triggering_faction { get; set; }
-            public string previous_faction { get; set; }
-            public string vs_population { get; set; }
-            public string nc_population { get; set; }
-            public string tr_population { get; set; }
-            public string metagame_event_id { get; set; }
-            public string event_type { get; set; }
+            [JsonProperty("triggering_faction")]
+            public string Triggering_faction { get; set; }
+
+            [JsonProperty("previous_faction")]
+            public string Previous_faction { get; set; }
+
+            [JsonProperty("vs_population")]
+            public string Vs_population { get; set; }
+
+            [JsonProperty("nc_population")]
+            public string Nc_population { get; set; }
+
+            [JsonProperty("tr_population")]
+            public string Tr_population { get; set; }
+
+            [JsonProperty("metagame_event_id")]
+            public string Metagame_event_id { get; set; }
+
+            [JsonProperty("event_type")]
+            public string Event_type { get; set; }
+
         }
 
     }
