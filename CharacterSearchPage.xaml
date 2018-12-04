@@ -23,6 +23,27 @@
                 x:Name="resultListView"
                 x:FieldModifier="Public"
                 SeparatorColor="CornflowerBlue">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+
+                            <Image Source="{Binding ImageSrc}" />
+                            <Label Grid.Row="1" Text="{Binding Name.First}" />
+
+                            <Label Grid.RowSpan="2" Grid.Column="1" Text="{Binding BattleRank.Value}" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
     </Grid>

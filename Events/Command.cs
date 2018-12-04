@@ -14,7 +14,7 @@ namespace PsApp.Events
         //this is what Newtonsoft.json will serialize
         public string serializedMessage { get; private set; }
 
-
+        public bool logicalCharactersWithWorlds;
         public string action, service;
         public string[] characters, worlds, eventNames;
         //
@@ -57,11 +57,22 @@ namespace PsApp.Events
             this.service = service;
             this.worlds = worlds;
             this.eventNames = eventNames;
-                
+
         }
+
+        public Command(string action, string service, string[] worlds, string[] eventNames, bool logicalCharactersWithWorlds)
+        {
+            this.action = action;
+            this.service = service;
+            this.worlds = worlds;
+            this.eventNames = eventNames;
+            this.logicalCharactersWithWorlds = logicalCharactersWithWorlds;
+        }
+
 
         public override string ToString()
         {
+            //add to watch to see of this serializes correctly 
             string s = Newtonsoft.Json.JsonConvert.SerializeObject(this);
             return s;
 

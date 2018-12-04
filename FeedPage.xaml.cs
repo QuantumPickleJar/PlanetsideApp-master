@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -16,40 +17,52 @@ namespace PsApp
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FeedPage : ContentPage
 	{
+        private bool _IsStartButtonRunning = false;
         const string serviceID = "PS2mobile2018";
 
         List<string> socketOutput = new List<string>();
         PlanetsideService planetsideService;
+        
+
 
 		public FeedPage ()
 		{
 			InitializeComponent ();
             planetsideService = new PlanetsideService(serviceID);
 
+            planetsideService.FacilityControlChanged += PlanetsideService_FacilityControlChanged;
+
+            consoleOut.ItemsSource = facilityControlMessages;
+
         }
 
-        private void startSubscription_Clicked(object sender, EventArgs e)
+        ObservableCollection<string> facilityControlMessages = new ObservableCollection<string>();
+
+        private void PlanetsideService_FacilityControlChanged(object sender, FacilityControlChangedEventArgs e)
         {
-            //PlanetsideService planetsideService = new PlanetsideService();
-
-            await planetsideService.StartAsync();
-            new Thread(async() => 
-            {
-                Thread.CurrentThread.IsBackground = true;
-                //while (planetsideService.IsStarted)
-            //    {
-            //        PopulateList();
-            //    }
-            }).Start();
-            //if(planetsideService.CompletedTask())
-            //{
-            //    PopulateList();
-            //}
-
+            // change this string to something more meaningful
+            facilityControlMessages.Add($"Facility Control Changed : {e.facility_id}");
         }
 
-        //problem: need to call StartAsync to fill the socketOutput list, but can't figure out how to make them call in the correct order. 
+        private async Task startSubscription_Clicked(object sender, EventArgs e)
+         //add some sort of failsafe (probably a bool value) 
+        {
+            if(_IsStartButtonRunning==false)
+            {;
+                _IsStartButtonRunning = true;
+                startSubscription.IsEnabled = false;
+                //PlanetsideService planetsideService = new PlanetsideService();
 
+                await planetsideService.StartAsync();
+
+            }
+            //these might be frivolous 
+            _IsStartButtonRunning = false;
+            startSubscription.IsEnabled = true;
+        }
+
+        //problem: need to call StartAsync to fill the socketOutput list, 
+        //but can't figure out how to make them call in the correct order. 
 
         public void PopulateList()
         {

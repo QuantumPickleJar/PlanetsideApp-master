@@ -21,6 +21,11 @@
             BackgroundColor="LightGray"
             Margin="5,5,5,5"
                   >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding .}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
         </ListView>
 
         <Button 

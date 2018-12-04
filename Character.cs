@@ -36,13 +36,13 @@ namespace PsApp
 
         public ImageSource ImageSrc
         {
-            get => ImageSrc;
-            private set
+            get
             {
-                if (this.FactionId == 1) ImageSrc = "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
-                if (this.FactionId == 2) ImageSrc = "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
-                if (this.FactionId == 3) ImageSrc = "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
+                if (this.FactionId == 1) return "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
+                if (this.FactionId == 2) return "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
+                if (this.FactionId == 3) return "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
 
+                return null;
             }
         }
 
