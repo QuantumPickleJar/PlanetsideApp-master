@@ -13,12 +13,20 @@ namespace PsApp
     public partial class CharacterSearchPage : ContentPage
     {
         //PlanetsideService pService  
-        private string QueryServiceId = "PS2mobile2018query";
+        //NOTE TO DEBUGGER:
+            //SWAP THESE TWO STATEMENTS WHEN API IS WORKING FOR OUR SERVICEID
+            //private string QueryServiceId = "PS2mobile2018query";
+            private string QueryServiceId = "example";
 
         public CharacterSearchPage(string serviceId)
         {
             InitializeComponent();
             this.QueryServiceId = serviceId;
+            
+            ////if dev property returns true
+            //{
+            //    //set the service ID to example
+            //}
         }
 
         public CharacterSearchPage(string serviceId, PlanetsideService service)

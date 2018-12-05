@@ -4,53 +4,75 @@
              xmlns:local="clr-namespace:Planetside2App"
              x:Class="PsApp.MainPage">
 
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <StackLayout>
+           <Grid
+            Grid.Column="0"
+            Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    Text="Server status:" />
 
-        <!--for debugging purposes the button will output text to the listview.  
-        Remember the goal is to create push notifications and not have to be in the app to view it-->
-
+            <Label
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Start"
+                    Text="Online"
+                    TextColor="Green"/>
+        </Grid>
+        
         <Image
-            Grid.Row="0"
-            Grid.ColumnSpan="3"
             HeightRequest="300"
             WidthRequest="300"
-            Source="http://www.userlogos.org/files/logos/Cracka/PlanetSide-2.png" />
+            Source="http://www.userlogos.org/files/logos/Cracka/PlanetSide-2.png" 
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            />
 
-        <Button 
-            Grid.Row="2"
-            x:Name="navCharacters" 
-            Text="Profiles" 
-            Clicked="navCharacters_Clicked"
-            HorizontalOptions="Center"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-        <Button 
-            Grid.Row="1"
-            x:Name="navLiveEvent" 
-            Text="Live" 
-            Clicked="navLiveEvent_Clicked"
-            HorizontalOptions="Center"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-        <ListView 
+
+            <Button
                 Grid.Row="0"
-                Grid.RowSpan="2"
-                Grid.Column="1"
-                x:Name="socketView"
-                ItemsSource="{Binding Region}"
-                x:FieldModifier="Public"
-                SeparatorColor="CornflowerBlue">
-        </ListView>
-    </Grid>
+                Grid.Column="0"
+                x:Name="navCharacters" 
+                Text="Profiles" 
+                WidthRequest="250"
+                Clicked="navCharacters_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
 
+            <Button 
+                Grid.Row="0"
+                Grid.Column="1"
+                x:Name="navLiveEvent" 
+                Text="Live"
+                WidthRequest="250"
+                Clicked="navLiveEvent_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"/>
+        </Grid> 
+        
+        <Button 
+            x:Name="navSettingsPage" 
+            Text="Settings" 
+            Clicked="navSettingsPage_Clicked"
+            HorizontalOptions="Center"/>
+    </StackLayout>
 </ContentPage>

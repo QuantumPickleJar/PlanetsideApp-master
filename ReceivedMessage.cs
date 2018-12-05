@@ -13,6 +13,12 @@ namespace PsApp.Events
         [JsonProperty("payload")]
         public Payload newPayload { get; set; }
 
+
+
+        public override string ToString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
         //
         //{
         //    "detail":"EventServerEndpoint_Connery_1",

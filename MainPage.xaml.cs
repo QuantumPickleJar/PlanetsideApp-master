@@ -8,7 +8,8 @@ namespace PsApp
 {
     public partial class MainPage : ContentPage
     {
-        
+        private bool isDev; 
+
         public MainPage()
         {
             InitializeComponent();
@@ -24,6 +25,12 @@ namespace PsApp
         {
             FeedPage feedPage = new FeedPage();
             await Navigation.PushAsync(feedPage);
+        }
+
+        async void navSettingsPage_Clicked(object sender, EventArgs e)
+        {
+            SettingsPage settingsPage = new SettingsPage(isDev);
+            await Navigation.PushAsync(settingsPage);
         }
     }
 }
