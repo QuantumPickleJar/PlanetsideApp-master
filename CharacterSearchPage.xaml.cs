@@ -33,6 +33,7 @@ namespace PsApp
             //query = charSearch.Text.ToLower();
             await GetSearchResultsAsync();
             //GetSearchResultSingle();
+            
         }
 
         protected override void OnAppearing()

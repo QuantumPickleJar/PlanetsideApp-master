@@ -38,25 +38,32 @@ namespace PsApp
         {
             get
             {
-                if (this.FactionId == 1) return "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
-                if (this.FactionId == 2) return "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
+                if (this.FactionId == 1) return "https://vignette.wikia.nocookie.net/planetside2/images/e/e1/Empires-vs-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021023";
+                if (this.FactionId == 2) return "https://vignette.wikia.nocookie.net/planetside2/images/d/dc/Empires-tr-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021327";
                 if (this.FactionId == 3) return "https://vignette.wikia.nocookie.net/planetside2/images/1/1e/Empires-nc-icon.png/revision/latest/zoom-crop/width/90/height/55?cb=20120927021335";
+
+
+                //image.Source = Device.RuntimePlatform == Device.Android ?
+                ////    ImageSource.FromFile("waterfront.jpg") : ImageSource.FromFile("Images/waterfront.jpg");
+                //if (this.FactionId == 1) return ImageSource.FromFile("vs_icon.png");
+                //if (this.FactionId == 2) return ImageSource.FromFile("tr_icon.png");
+                //if (this.FactionId == 3) return ImageSource.FromFile("nc_icon.png");
 
                 return null;
             }
         }
 
 
-        public string Faction
-        {
-            get => Faction;
-            set
-            {
-                if (FactionId == 1) Faction = "TR";
-                if (FactionId == 2) Faction = "VS";
-                if (FactionId == 3) Faction = "NC";
-            }
-        }
+        //public string Faction
+        //{
+        //    get => Faction;
+        //    set
+        //    {
+        //        if (FactionId == 1) Faction = "VS";
+        //        if (FactionId == 2) Faction = "TR";
+        //        if (FactionId == 3) Faction = "NC";
+        //    }
+        //}
 
         //public event PropertyChangedEventHandler PropertyChanged;
 

@@ -27,7 +27,7 @@ namespace PsApp
             public string type { get; set; }
         }
 
-        public class FacilityChangePayload
+        public class FacilityChangePayload 
         {
             
             [JsonProperty("duration_held")]

@@ -22,7 +22,8 @@
                 Grid.Row="1"
                 x:Name="resultListView"
                 x:FieldModifier="Public"
-                SeparatorColor="CornflowerBlue">
+                SeparatorColor="CornflowerBlue"
+                BackgroundColor="DarkGray">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -32,14 +33,20 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition />
-                                <ColumnDefinition />
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Image Source="{Binding ImageSrc}" />
-                            <Label Grid.Row="1" Text="{Binding Name.First}" />
+                            <Image 
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.RowSpan="2"
+                                x:Name="factImage"
+                                Source = "{Binding ImageSrc}"/>
 
-                            <Label Grid.RowSpan="2" Grid.Column="1" Text="{Binding BattleRank.Value}" />
+                            <Label Grid.Row="1" Text="{Binding Name.First}"/>
+
+                            <Label Grid.Row="2" Text="{Binding BattleRank.Value}" />
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

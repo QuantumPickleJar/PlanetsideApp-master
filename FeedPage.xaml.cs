@@ -33,7 +33,6 @@ namespace PsApp
             planetsideService.FacilityControlChanged += PlanetsideService_FacilityControlChanged;
 
             consoleOut.ItemsSource = facilityControlMessages;
-
         }
 
         ObservableCollection<string> facilityControlMessages = new ObservableCollection<string>();
@@ -44,11 +43,11 @@ namespace PsApp
             facilityControlMessages.Add($"Facility Control Changed : {e.facility_id}");
         }
 
-        private async Task startSubscription_Clicked(object sender, EventArgs e)
+        private async void startSubscription_Clicked(object sender, EventArgs e)
          //add some sort of failsafe (probably a bool value) 
         {
             if(_IsStartButtonRunning==false)
-            {;
+            {
                 _IsStartButtonRunning = true;
                 startSubscription.IsEnabled = false;
                 //PlanetsideService planetsideService = new PlanetsideService();
@@ -64,65 +63,7 @@ namespace PsApp
         //problem: need to call StartAsync to fill the socketOutput list, 
         //but can't figure out how to make them call in the correct order. 
 
-        public void PopulateList()
-        {
-            List<Events.Payload> payloads = new List<Events.Payload>();
-            socketOutput = planetsideService.GetReturnList();
-
-            
-
-            foreach (string s in socketOutput)
-            {
-                var myclass = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(s);
-
-                payloads.Add(JsonConvert.DeserializeObject<Events.Payload>(s));
-            }
-
-            consoleOut.ItemsSource = payloads;
-            //the itemsource needs to be set to an array of Event objects. 
-            //consoleOut.ItemsSource = socketOutput;
-            consoleOut.ItemTemplate = new DataTemplate(() =>
-                {
-                    //consoleOut.SetBinding(Label.TextProperty, socketOutput.Last());
-                    //TextCell textCell = new TextCell()
-                    //{
-                    //    //debug: we want to display the serialized Payload 
-                    //    Text = socketOutput.Last()
-                    //};
-                    //return textCell;
-                    Label serv = new Label();
-                    serv.SetBinding(Label.TextProperty, "service");
-
-                    Label eventname = new Label();
-                    eventname.SetBinding(Label.TextProperty, "event_name");
-
-                    Label worldid = new Label();
-                    worldid.SetBinding(Label.TextProperty, "world_id");
-
-                    Label timestamp = new Label();
-                    timestamp.SetBinding(Label.TextProperty, "timestamp");
-
-                    ViewCell viewCell = new ViewCell()
-                    {
-                        View = new StackLayout
-                        {
-                            Padding = new Thickness(5, 1, 5, 1),
-                            Orientation = StackOrientation.Horizontal,
-                            Children =
-                            {
-                                serv,
-                                eventname,
-                                worldid
-                                //,timestamp
-                               
-                            }
-
-                        }
-                    };
-                    return viewCell;
-                }
-            );
-        }
+      
 
         async private void stopLive_Clicked(object sender, EventArgs e)
         {
