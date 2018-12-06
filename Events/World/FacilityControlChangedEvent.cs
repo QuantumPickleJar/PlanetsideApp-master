@@ -10,13 +10,13 @@ namespace PsApp.Events
         public class RootObject
         {
             [JsonProperty("old_faction_id")]
-            public string Old_faction_id { get; set; }
+            public int Old_faction_id { get; set; }
 
             [JsonProperty("outfit_id")]
             public string Outfit_id { get; set; }
 
             [JsonProperty("new_faction_id")]
-            public string New_faction_id { get; set; }
+            public int New_faction_id { get; set; }
 
             [JsonProperty("facility_id")]
             public string Facility_id { get; set; }

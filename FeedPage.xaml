@@ -24,18 +24,23 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <!--create a view for the information -->
-                    <TextCell Text="{Binding .}" />
-                    <!--<ViewCell>
-                        <Grid>
+                    <!--<TextCell Text="{Binding .}" />-->
+                    <ViewCell>
+                        <!--<Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
-                                <RowDefinition
+                                <RowDefinition/>
                             </Grid.RowDefinitions>
-                        </Grid>
-                    </ViewCell>-->
+                                
+                        </Grid>-->
+                        <FlexLayout>
+                            <Label 
+                                Text="{Binding .}"/>
+                        </FlexLayout>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

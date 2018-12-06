@@ -101,7 +101,7 @@ namespace PsApp
 
                 // create our command that we're going to tell the service 
                 string s = @"{\042service\042:\042event\042,\042action\042:\042subscribe\042,\042worlds\042:[\0421\042,\0429\042,\04210\042,\04211\042,\04213\042,\04217\042,\04218\042,\04219\042,\04225\042,\0421000\042,\0421001\042],\042eventNames\042:[\042FacilityControl\042,\042MetagameEvent\042]}";
-                s = "{'service':'event','action':'subscribe','worlds':['1','9','10','11','13','17','18','19','25','1000','1001'],'eventNames':['FacilityControl','MetagameEvent']}";
+                s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent']}";
 
                 //fake payload
                 string fake1 = "{'payload':{'duration_held':'3319','event_name':'FacilityControl','facility_id':'226','new_faction_id':'1','old_faction_id':'3','outfit_id':'37510465163696259','timestamp':'1544057490','world_id':'17','zone_id':'2'},'service':'event','type':'serviceMessage'}";
@@ -131,20 +131,8 @@ namespace PsApp
 
                         //empty the buffer so it's ready for a new message
                         buffer = new ArraySegment<byte>(new byte[1024]);
-                        Console.WriteLine("RESULT STRING:  " + resultString);
-
-                        //how will we do the following?
-
-                        //if (resultString is facilityControlChange)
-                        //{
-
-                        // deserialize payload to a FacilityControlChangedEventArgs
-
-                        //RaiseFacilityControlOnMainThread( // the deserialized value)
-                        //}
-
-                        //Easy:
-
+                        //Console.WriteLine("RESULT STRING:  " + resultString);
+                        
                         //first things first we need to turn the payload STRING into a payload OBJECT
 
                         //check the TypE of the message to find out how we'll be able to deserialize something or not;  we'll need an even more generic class to just determien if the first word is "connected"
@@ -166,7 +154,7 @@ namespace PsApp
 
                                 //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
 
-
+                                var payload = rMsg.newPayload;
                                 //if it's not specified for whatever reason, assume user wants FacilityControlArgs
                                 if (eventsWeWant == null)
                                 {
@@ -178,51 +166,46 @@ namespace PsApp
 
                                 }
 
-                                int position = Array.IndexOf(eventsWeWant.ToArray(), rMsg.newPayload.Event_name);
+                                int position = Array.IndexOf(eventsWeWant.ToArray(), payload.Event_name);
                                 if (position > -1)
                                 {
                                     //get the event payload 
                                     Console.WriteLine("YEP ITS AN EVENT PAYLOAD   " + rMsg.newPayload.ToString());
                                 }
 
-                                if (rMsg.newPayload.Event_name == "FacilityControl")
+                                if (payload.Event_name == "FacilityControl")
                                 {
-                                    Events.FacilityControlChangedEvent newFCevent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
-                                    //raise event 
-                                    var args = new FacilityControlChangedEventArgs()
+                                    //there is a lot of invalid information that we need to filter out with if statements
+
+                                    if ((payload.old_faction_id != 0) && 
+                                      //(payload.old_faction_id != payload.new_faction_id) && uncomment if we want to see defenses 
+                                                                         //  payload.duration_held != 0 && defended 
+                                        (payload.duration_held < payload.Timestamp) && (payload.Zone_id.Length == 1))
                                     {
-                                        Payload = rMsg.newPayload
-                                    };
-                                    RaiseFacilityControlOnMainThread(args);
+                                        Events.FacilityControlChangedEvent newFCevent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
+                                        //raise event 
+                                        var args = new FacilityControlChangedEventArgs()
+                                        {
+                                            Payload = payload
+                                        };
+                                        RaiseFacilityControlOnMainThread(args);
+                                    }
                                 }
                                 // then raise the correct eventHandler 
 
-                                if (rMsg.newPayload.Event_name == "MetagameEvent")
+                                if (payload.Event_name == "MetagameEvent")
                                 {
                                     Events.MetagameEventEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.MetagameEventEvent>(innerPayloadJSON);
                                     //raise event 
                                     var args = new Events.World.MetagameEventEventArgs()
                                     {
-                                        Payload = rMsg.newPayload
+                                        Payload = payload
                                     };
                                     RaiseMetagameEventOnMainThread(args);
                                 }
                             }
                         }
-
-
-
-                        //the payload message we want has these criteria:
-                        //"service": "event",
-                        //"type": "serviceMessage"
-
-                        //check the value of "event_name" to decide the correct event to raise (in this case FacilityControlChanged)
-
-
-
-                        //await SendTestCommand();
-
-                    
+                        //await SendTestCommand
                     }
                 }
 

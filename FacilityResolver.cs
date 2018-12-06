@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
-
+using System.Threading.Tasks;
+using System.Linq;
+using PsApp.Events.World;
 namespace PsApp
 {
 
@@ -14,29 +17,53 @@ namespace PsApp
     
     public class FacilityResolver
     {
-        List<Events.World.RegionObject> myRegions = new List<Events.World.RegionObject>();
-
-        public FacilityResolver(List<Events.World.RegionObject> regionList)
+        private string ServiceId;
+        List<RegionObject> myRegions = new List<RegionObject>();
+        
+        //deprecated
+        public FacilityResolver(List<RegionObject> regionList)
         {
             this.myRegions = regionList;
 
         }
-        
+
+        public FacilityResolver(string ServiceId)
+        {
+            this.ServiceId = ServiceId;
+        }
+
+        public async Task<RegionResultList> GetListAsync()
+        {
+            string json;
+
+            using (var client = new WebClient())
+            {
+                string url = $"https://census.daybreakgames.com/s:{ServiceId}/get/ps2:v2/region/?c:limit=10000&c:lang=en&c:show=region_id,zone_id,name.en";
+
+                json = await client.DownloadStringTaskAsync(url);
+            }
+            RegionResultList resultList = Newtonsoft.Json.JsonConvert.DeserializeObject<RegionResultList>(json);
+            myRegions = resultList.Regions;
+            return resultList;
+        }
         // get all facilities, show only name, id and continent https://census.daybreakgames.com/s:PS2mobile2018/get/ps2:v2/region/?c:limit=10000&c:lang=en&c:show=region_id,zone_id,name.en
 
 
-        public string GetFacilityNameById(string facilityId)
+        public void SetRegionList(List<RegionObject> pass) { this.myRegions = pass; }
+
+        public string GetFacilityNameById(string facilityId, List<RegionObject> regionList)
         {
-            var placeholder = new Events.World.RegionObject();
-            string name = string.Empty;
-            foreach (var region in myRegions)
-            {
-                if (region.region_id == facilityId)
-                {
-                    placeholder = region;
-                }
-            }
-            if (placeholder.name != null) return placeholder.name.en;
+
+            var item = regionList.FirstOrDefault(o => o.region_id == facilityId);
+            //foreach (RegionObject region in regionList)
+            //{
+            //    if (region.region_id == facilityId)
+            //    {
+            //        placeholder = region;
+            //    }
+            //}
+            if (item != null) return item.name.en;
+
             else return "no match";   
         }
     }

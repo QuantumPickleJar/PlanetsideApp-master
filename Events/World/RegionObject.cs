@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 namespace PsApp.Events.World
 {
-    public class RegionObject
+    public class RegionObject 
     {
 
         [JsonProperty("region_id")]

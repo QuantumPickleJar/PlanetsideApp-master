@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using PsApp.Events;
+using PsApp.Events.World;
 
 namespace PsApp
 {
@@ -23,13 +25,17 @@ namespace PsApp
 
         List<string> socketOutput = new List<string>();
         PlanetsideService planetsideService;
+        FacilityResolver fR;
 
-        private List<Events.World.RegionResultList> regions = new List<Events.World.RegionResultList>();
-
-
-
+        List<RegionObject> myRegionObjects;
+        
+       
+        
         public FeedPage ()
 		{
+            fR= new FacilityResolver(serviceID);
+
+
             InitializeComponent();
             planetsideService = new PlanetsideService(serviceID);
             planetsideService.MetagameEventChange += PlanetsideService_MetagameEventChanged;
@@ -40,11 +46,47 @@ namespace PsApp
         ObservableCollection<string> subscribedMessages = new ObservableCollection<string>();
         private void PlanetsideService_FacilityControlChanged(object sender, FacilityControlChangedEventArgs e)
         {
-            // change this string to something more meaningful
-            subscribedMessages.Add($"Facility Control Changed : {e.Payload}");
-            //use the facility resolver class to get a better visual output
-            //facilityControlMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
+            if (e != null)
+            {
+                //assign faction strings
+                string oldFact, newFact;
+
+                oldFact = ResolveFactionId(e.Payload.old_faction_id);
+                newFact = ResolveFactionId(e.Payload.new_faction_id);
+
+                // change this string to something more meaningful
+                //subscribedMessages.Add($"Facility Control Changed : {e.Payload}");
+
+                //the region list we're passing is null
+                Facility myPlace = new Facility()
+                {
+                    name = fR.GetFacilityNameById(e.Payload.facility_id, myRegionObjects),
+                    zoneId = e.Payload.Zone_id
+                };
+                string action = "captured";
+                if (e.Payload.duration_held == 0) action = "defended";
+                
+
+                if (myPlace.continent != "unknown continent")
+                {
+                    Console.WriteLine($"\n\n{myPlace.ToString()} \nend string \n)");
+                    subscribedMessages.Add($"Hex control: {newFact} has {action} {myPlace.name} \n " +
+                        $"on {myPlace.continent} from {oldFact}");
+               
+                    //use the facility resolver class to get a better visual output
+                    //subscribedMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
+                }
+            }
         }
+
+        private string ResolveFactionId(int faction_id)
+        {
+            if (faction_id == 1) return "VS";
+            if (faction_id == 2) return "TR";
+            if (faction_id == 3) return "NC";
+            else return "Error 500";
+        }
+
         private void PlanetsideService_MetagameEventChanged(object sender, Events.World.MetagameEventEventArgs e)
         {
             // change this string to something more meaningful
@@ -57,7 +99,11 @@ namespace PsApp
         private async void startSubscription_Clicked(object sender, EventArgs e)
          //add some sort of failsafe (probably a bool value) 
         {
-            if(_IsStartButtonRunning==false)
+            var returnedtask = await fR.GetListAsync();
+            myRegionObjects = returnedtask.Regions;
+            fR.SetRegionList(myRegionObjects);
+
+            if (_IsStartButtonRunning==false)
             {
                 _IsStartButtonRunning = true;
                 startSubscription.IsEnabled = false;
@@ -80,7 +126,30 @@ namespace PsApp
         {
             await planetsideService.StopAsync();
         }
-        
+
+        private class Facility
+        {
+            //    public Facility(string facilityId)
+            //    {
+            //        this.FacilityId = facilityId;
+            //    }
+            //    public string FacilityId { get; set; }
+
+            public string name { get; set; }
+            public string zoneId { get; set; }
+            public string continent
+            {
+                get
+                {
+                    if (zoneId == "2") return "Indar";
+                    if (zoneId == "4") return "Hossin";
+                    if (zoneId == "6") return "Amerish";
+                    if (zoneId == "8") return "Esamir";
+                    else return "unknown continent";
+                }
+            }
+        }    
+
         //example of what a received payload from a playerlogin event subscription would look like in json
         //    {
         //      "payload":
