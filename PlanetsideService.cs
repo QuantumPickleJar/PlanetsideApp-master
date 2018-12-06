@@ -52,43 +52,7 @@ namespace PsApp
             return resultClass;
         }
 
-
-
-        //event
-        public event EventHandler<FacilityControlChangedEventArgs> FacilityControlChanged;
-
-        protected void OnFaciltyControlChanged(FacilityControlChangedEventArgs e)
-        {
-            if (FacilityControlChanged != null)
-                FacilityControlChanged(this, e);
-            //            output sample:
-            //            {
-            //                "payload":
-            //                {
-            //                    "duration_held":"87",
-            //                    "event_name":"FacilityControl",
-            //                    "facility_id":"310088",
-            //                    "new_faction_id":"2",
-            //                    "old_faction_id":"3",
-            //                    "outfit_id":"0",
-            //                    "timestamp":"1543955563",
-            //                    "world_id":"13",
-            //                    "zone_id":"528744543"
-            //                },
-            //                "service":"event",
-            //                "type":"serviceMessage"
-            //            }
-
-        }
-
-        protected void RaiseFacilityControlOnMainThread(FacilityControlChangedEventArgs e)
-        {
-            this.SynchronizationContext.Post(x =>
-            {
-                OnFaciltyControlChanged(e);
-            }, null);
-        }
-
+        
         async void ListenToWebSocketStuff()
         {
             // fake it until we make it
@@ -163,7 +127,7 @@ namespace PsApp
                     {
                         //decode the buffer array to a UTF-8 string
                         //resultString = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
-                        resultString = Encoding.ASCII.GetString(buffer.Array, 0, result.Count);
+                        resultString = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
 
                         //empty the buffer so it's ready for a new message
                         buffer = new ArraySegment<byte>(new byte[1024]);
@@ -209,6 +173,9 @@ namespace PsApp
                                     eventsWeWant = new List<string>();
                                     this.eventsWeWant.Add("FacilityControl");
                                     this.eventsWeWant.Add("MetagameEvent");
+                                    this.eventsWeWant.Add("ContinentUnlock");
+                                    this.eventsWeWant.Add("ContinentLock");
+
                                 }
 
                                 int position = Array.IndexOf(eventsWeWant.ToArray(), rMsg.newPayload.Event_name);
@@ -233,7 +200,12 @@ namespace PsApp
                                 if (rMsg.newPayload.Event_name == "MetagameEvent")
                                 {
                                     Events.MetagameEventEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.MetagameEventEvent>(innerPayloadJSON);
-
+                                    //raise event 
+                                    var args = new Events.World.MetagameEventEventArgs()
+                                    {
+                                        Payload = rMsg.newPayload
+                                    };
+                                    RaiseMetagameEventOnMainThread(args);
                                 }
                             }
                         }
@@ -258,47 +230,7 @@ namespace PsApp
 
         }
 
-        public Events.Payload GetEventPayloadFromResult(string resultString)
-        {
-            
-            //filter out the help message
-            Events.Payload innerPayload = null;
-            //if (message.Service != "push" &&
-            //    !(message.Service == "event" && message.Action == "help"))
-            //{
-
-                Events.ReceivedMsg rMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ReceivedMsg>(resultString);
-                if (rMsg != null && rMsg.Service == "event" && rMsg.Type == "serviceMessage")
-                {
-                    //okay, it's an event.  That's the first criteria
-                    //Events.Payload.EventPayload payload = message.newPayload;
-
-
-                    //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
-                    string innerPayloadJSON = string.Empty;
-
-                    //if it's not specified for whatever reason, assume user wants FacilityControlArgs
-                    if (eventsWeWant == null)
-                    {
-                        eventsWeWant = new List<string>();
-                        this.eventsWeWant.Add("FacilityControl");
-                        this.eventsWeWant.Add("MetagameEvent");
-                    }
-
-                    if (eventsWeWant.Contains(rMsg.newPayload?.Event_name))
-                    {
-                        
-                        //get the event payload
-                        Console.WriteLine("YEP ITS AN EVENT PAYLOAD   " + rMsg.newPayload.ToString());
-                        innerPayloadJSON = rMsg.newPayload.ToString();
-
-                    }
-                }
-                innerPayload =
-                    Newtonsoft.Json.JsonConvert.DeserializeObject<Events.Payload>(innerPayloadJSON);
-            return innerPayload;
-        }
-            
+        
         
 
         //TEST METHOD
@@ -371,5 +303,75 @@ namespace PsApp
             return returnList;
         }
 
+        public event EventHandler<FacilityControlChangedEventArgs> FacilityControlChanged;
+        public event EventHandler<Events.World.MetagameEventEventArgs> MetagameEventChange;
+
+        
+        //these are both just MetagameEvents, the only difference being in metagame_event_state 
+        //public event EventHandler<Events.World.ContinentLockEventArgs> ContinentLocked;
+        //public event EventHandler<Events.World.ContinentUnlockEventArgs> ContinentUnlocked;
+
+
+        protected void OnFaciltyControlChanged(FacilityControlChangedEventArgs e)
+        {
+            if (FacilityControlChanged != null)
+                FacilityControlChanged(this, e);
+
+        }
+
+
+
+
+
+        protected void OnMetagameEventChange(Events.World.MetagameEventEventArgs e)
+        {
+            if (MetagameEventChange != null)
+                MetagameEventChange(this, e);
+
+        }
+        //protected void OnContinentLock(Events.World.ContinentLockEventArgs e)
+        //{
+        //    if (ContinentLocked != null)
+        //        ContinentLocked(this, e);
+
+        //}
+
+
+        protected void RaiseFacilityControlOnMainThread(FacilityControlChangedEventArgs e)
+        {
+            this.SynchronizationContext.Post(x =>
+            {
+                OnFaciltyControlChanged(e);
+            }, null);
+        }
+        protected void RaiseMetagameEventOnMainThread(Events.World.MetagameEventEventArgs e)
+        {
+            this.SynchronizationContext.Post(x =>
+            {
+                OnMetagameEventChange(e);
+            }, null);
+        }
+
     }
 }
+// documented because these only happen four times a day
+//continent lock
+//RECEIVED: 
+//    {
+//        "payload":
+//            {
+//                "event_name":"MetagameEvent",
+//                "experience_bonus":"25.000000",
+//                "faction_nc":"52.156864",
+//                "faction_tr":"19.607843",
+//                "faction_vs":"27.843140",
+//                "instance_id":"20367",
+//                "metagame_event_id":"152",
+//                "metagame_event_state":"138",
+//                "metagame_event_state_name":"ended",
+//                "timestamp":"1544075818",
+//                "world_id":"17"
+//            },
+//        "service":"event",
+//        "type":"serviceMessage"
+//    }

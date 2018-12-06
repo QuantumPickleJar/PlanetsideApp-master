@@ -23,7 +23,19 @@
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
+                    <!--create a view for the information -->
                     <TextCell Text="{Binding .}" />
+                    <!--<ViewCell>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition
+                            </Grid.RowDefinitions>
+                        </Grid>
+                    </ViewCell>-->
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

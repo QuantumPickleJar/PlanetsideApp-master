@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +14,8 @@ namespace PsApp
 {
 
     //listview that displays object of type Event
-   
-	[XamlCompilation(XamlCompilationOptions.Compile)]
+
+    [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FeedPage : ContentPage
 	{
         private bool _IsStartButtonRunning = false;
@@ -22,25 +23,36 @@ namespace PsApp
 
         List<string> socketOutput = new List<string>();
         PlanetsideService planetsideService;
-        
+
+        private List<Events.World.RegionResultList> regions = new List<Events.World.RegionResultList>();
 
 
-		public FeedPage ()
+
+        public FeedPage ()
 		{
-			InitializeComponent ();
+            InitializeComponent();
             planetsideService = new PlanetsideService(serviceID);
-
+            planetsideService.MetagameEventChange += PlanetsideService_MetagameEventChanged;
             planetsideService.FacilityControlChanged += PlanetsideService_FacilityControlChanged;
-            consoleOut.ItemsSource = facilityControlMessages;
+            consoleOut.ItemsSource = subscribedMessages;
         }
 
-        ObservableCollection<string> facilityControlMessages = new ObservableCollection<string>();
-
+        ObservableCollection<string> subscribedMessages = new ObservableCollection<string>();
         private void PlanetsideService_FacilityControlChanged(object sender, FacilityControlChangedEventArgs e)
         {
             // change this string to something more meaningful
-            facilityControlMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
+            subscribedMessages.Add($"Facility Control Changed : {e.Payload}");
+            //use the facility resolver class to get a better visual output
+            //facilityControlMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
         }
+        private void PlanetsideService_MetagameEventChanged(object sender, Events.World.MetagameEventEventArgs e)
+        {
+            // change this string to something more meaningful
+            subscribedMessages.Add($"Metagame event : {e.Payload}");
+            //use the facility resolver class to get a better visual output
+            //facilityControlMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
+        }
+
 
         private async void startSubscription_Clicked(object sender, EventArgs e)
          //add some sort of failsafe (probably a bool value) 

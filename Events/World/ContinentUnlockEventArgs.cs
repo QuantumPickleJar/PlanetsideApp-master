@@ -1,15 +1,16 @@
-﻿using Newtonsoft.Json;
-using PsApp.Events;
-
-namespace PsApp
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using Newtonsoft.Json;
+namespace PsApp.Events.World
 {
-    public class FacilityControlChangedEventArgs : System.EventArgs
+    public class ContinentUnlockEventArgs : EventArgs
     {
         public Payload Payload { get; internal set; }
 
         public class Rootobject
         {
-            
+
             [JsonProperty("service")]
             public string Service { get; set; }
 
@@ -18,3 +19,4 @@ namespace PsApp
         }
     }
 }
+
