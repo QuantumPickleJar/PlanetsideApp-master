@@ -6,7 +6,7 @@ using System.Text;
 //world-level event payload 
 namespace PsApp.Events
 {
-    class ContinentUnlockEvent : Payload.EventPayload
+    class ContinentUnlockEvent : Payload
     {
         public class RootObject
         {

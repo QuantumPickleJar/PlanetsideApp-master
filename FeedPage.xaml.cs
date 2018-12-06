@@ -39,7 +39,7 @@ namespace PsApp
         private void PlanetsideService_FacilityControlChanged(object sender, FacilityControlChangedEventArgs e)
         {
             // change this string to something more meaningful
-            facilityControlMessages.Add($"Facility Control Changed : {e.Facility_id}");
+            facilityControlMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
         }
 
         private async void startSubscription_Clicked(object sender, EventArgs e)

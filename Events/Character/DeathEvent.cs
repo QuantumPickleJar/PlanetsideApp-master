@@ -4,7 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 namespace PsApp.Events.Character
 {
-     class DeathEvent : Payload.EventPayload
+     class DeathEvent : Payload
     {
 
         public class RootObject

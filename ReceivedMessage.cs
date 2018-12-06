@@ -4,7 +4,7 @@ using System.Text;
 using Newtonsoft.Json;
 namespace PsApp.Events
 {
-    class ReceivedMsg : Message
+    public class ReceivedMsg : Message
     {
         /// <summary>
         /// A ReceivedMsg contains a payload.  Payloads are RECEIVE-ONLY

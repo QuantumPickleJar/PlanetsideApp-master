@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace PsApp
 {
-    public class PlanetsideService 
+    public class PlanetsideService
     {
         public string ServiceId { get; private set; }
         //private string subMessage = { {"service":"event","action":"subscribe","worlds":[],"eventNames":["FacilityControl","MetagameEvent"]}"};
@@ -16,7 +16,7 @@ namespace PsApp
         public int selectedWorld;
         private string innerPayloadJSON = string.Empty;
         private List<string> eventsWeWant;
-        
+
 
         public SynchronizationContext SynchronizationContext { get; }
         public bool IsStarted { get; private set; }
@@ -35,7 +35,7 @@ namespace PsApp
         }
 
         public List<string> returnList;
-        
+
 
         public async Task<CharacterQueryResult> GetMultipleCharacters(string lowQuery)
         {
@@ -51,7 +51,7 @@ namespace PsApp
             CharacterQueryResult resultClass = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);
             return resultClass;
         }
-        
+
 
 
         //event
@@ -61,23 +61,23 @@ namespace PsApp
         {
             if (FacilityControlChanged != null)
                 FacilityControlChanged(this, e);
-//            output sample:
-//            {
-//                "payload":
-//                {
-//                    "duration_held":"87",
-//                    "event_name":"FacilityControl",
-//                    "facility_id":"310088",
-//                    "new_faction_id":"2",
-//                    "old_faction_id":"3",
-//                    "outfit_id":"0",
-//                    "timestamp":"1543955563",
-//                    "world_id":"13",
-//                    "zone_id":"528744543"
-//                },
-//                "service":"event",
-//                "type":"serviceMessage"
-//            }
+            //            output sample:
+            //            {
+            //                "payload":
+            //                {
+            //                    "duration_held":"87",
+            //                    "event_name":"FacilityControl",
+            //                    "facility_id":"310088",
+            //                    "new_faction_id":"2",
+            //                    "old_faction_id":"3",
+            //                    "outfit_id":"0",
+            //                    "timestamp":"1543955563",
+            //                    "world_id":"13",
+            //                    "zone_id":"528744543"
+            //                },
+            //                "service":"event",
+            //                "type":"serviceMessage"
+            //            }
 
         }
 
@@ -120,12 +120,12 @@ namespace PsApp
             //}
 
             //return;
-
             using (var clientWebSocket = new ClientWebSocket())
             {
 
 
                 this.ServiceId = "example";
+
                 Uri serverUri = new Uri($"wss://push.planetside2.com/streaming?environment=ps2&service-id=s:example");
 
                 //Uri serverUri = new Uri($"wss://push.planetside2.com/streaming?environment=ps2&service-id=s:{ServiceId}");
@@ -138,6 +138,11 @@ namespace PsApp
                 // create our command that we're going to tell the service 
                 string s = @"{\042service\042:\042event\042,\042action\042:\042subscribe\042,\042worlds\042:[\0421\042,\0429\042,\04210\042,\04211\042,\04213\042,\04217\042,\04218\042,\04219\042,\04225\042,\0421000\042,\0421001\042],\042eventNames\042:[\042FacilityControl\042,\042MetagameEvent\042]}";
                 s = "{'service':'event','action':'subscribe','worlds':['1','9','10','11','13','17','18','19','25','1000','1001'],'eventNames':['FacilityControl','MetagameEvent']}";
+
+                //fake payload
+                string fake1 = "{'payload':{'duration_held':'3319','event_name':'FacilityControl','facility_id':'226','new_faction_id':'1','old_faction_id':'3','outfit_id':'37510465163696259','timestamp':'1544057490','world_id':'17','zone_id':'2'},'service':'event','type':'serviceMessage'}";
+
+
                 // convert the command into an array of Bytes
                 byte[] bytes = Encoding.UTF8.GetBytes(s);
 
@@ -158,7 +163,7 @@ namespace PsApp
                     {
                         //decode the buffer array to a UTF-8 string
                         //resultString = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
-                        resultString = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
+                        resultString = Encoding.ASCII.GetString(buffer.Array, 0, result.Count);
 
                         //empty the buffer so it's ready for a new message
                         buffer = new ArraySegment<byte>(new byte[1024]);
@@ -166,95 +171,141 @@ namespace PsApp
 
                         //how will we do the following?
 
-        //if (resultString is facilityControlChange)
-      //{
+                        //if (resultString is facilityControlChange)
+                        //{
 
                         // deserialize payload to a FacilityControlChangedEventArgs
 
                         //RaiseFacilityControlOnMainThread( // the deserialized value)
-                       
+                        //}
+
+                        //Easy:
+
+                        //first things first we need to turn the payload STRING into a payload OBJECT
+
+                        //check the TypE of the message to find out how we'll be able to deserialize something or not;  we'll need an even more generic class to just determien if the first word is "connected"
 
                         //deserialize the resultString into an object of type ReceivedMsg
                         Message message = Newtonsoft.Json.JsonConvert.DeserializeObject<Message>(resultString);
-                        
+
                         //filter out the help message
-                    if (message.Service != "push"
-                        && !(message.Service == "event" && message.Action == "help"))
-                    {
-                        Events.ReceivedMsg rMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ReceivedMsg>(resultString);
-                            
-                        if (rMsg.Service == "event" && rMsg.Type == "serviceMessage")
+                        if (message.Service != "push"
+                            && !(message.Service == "event" && message.Action == "help"))
                         {
-                            //okay, it's an event.  That's the first criteria
-                            //Events.Payload.EventPayload payload = message.newPayload;
+                            Events.ReceivedMsg rMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ReceivedMsg>(resultString);
 
-
-                            //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
-                                
-                                string innerPayloadJSON = string.Empty;
-                            //if it's not specified for whatever reason, assume user wants FacilityControlArgs
-                            if (eventsWeWant == null)
+                            if (rMsg.Service == "event" && rMsg.Type == "serviceMessage")
                             {
-                                eventsWeWant = new List<string>();
-                                this.eventsWeWant.Add("FacilityControl");
-                                this.eventsWeWant.Add("MetagameEvent");
-                            }
+                                //okay, it's an event.  That's the first criteria
+                                //Events.Payload.EventPayload payload = message.newPayload;
 
-                            int position = Array.IndexOf(eventsWeWant.ToArray(), rMsg.newPayload.Event_name);
-                            if (position > -1)
-                            //if (rMsg.newPayload.Event_name == "FacilityControlChanged")
-                            {
-                                    //get the event payload
+
+                                //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
+
+
+                                //if it's not specified for whatever reason, assume user wants FacilityControlArgs
+                                if (eventsWeWant == null)
+                                {
+                                    eventsWeWant = new List<string>();
+                                    this.eventsWeWant.Add("FacilityControl");
+                                    this.eventsWeWant.Add("MetagameEvent");
+                                }
+
+                                int position = Array.IndexOf(eventsWeWant.ToArray(), rMsg.newPayload.Event_name);
+                                if (position > -1)
+                                {
+                                    //get the event payload 
                                     Console.WriteLine("YEP ITS AN EVENT PAYLOAD   " + rMsg.newPayload.ToString());
-                                    innerPayloadJSON = rMsg.newPayload.ToString();
+                                }
+
+                                if (rMsg.newPayload.Event_name == "FacilityControl")
+                                {
+                                    Events.FacilityControlChangedEvent newFCevent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
+                                    //raise event 
+                                    var args = new FacilityControlChangedEventArgs()
+                                    {
+                                        Payload = rMsg.newPayload
+                                    };
+                                    RaiseFacilityControlOnMainThread(args);
+                                }
+                                // then raise the correct eventHandler 
+
+                                if (rMsg.newPayload.Event_name == "MetagameEvent")
+                                {
+                                    Events.MetagameEventEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.MetagameEventEvent>(innerPayloadJSON);
+
+                                }
                             }
                         }
-//                            now we turn the rMsg.newPayload into an event, depending on the event_Name;
-                            if (rMsg.newPayload.Event_name == "FacilityControl")
-                                Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
-
-                            if (rMsg.newPayload.Event_name == "MetagameEvent")
-                                Newtonsoft.Json.JsonConvert.DeserializeObject<Events.MetagameEventEvent>(innerPayloadJSON);
-                            //}                            
-                        }
-
-                }   
-                    //await SendTestCommand();
-                    //we still need to send the test subscription message Command up to the service later.  
-
-                    //set this string to something
-
-                    //return the string as a message so that we can somehow put it into a ListView
 
 
-                    // inspect the message
 
-                    // if end of message
+                        //the payload message we want has these criteria:
+                        //"service": "event",
+                        //"type": "serviceMessage"
 
-                    // see if it is a facility control change
-
-                    // raise the facility control change (on other thread)
+                        //check the value of "event_name" to decide the correct event to raise (in this case FacilityControlChanged)
 
 
-                    //OnFaciltyControlChanged(new FacilityControlChangedEventArgs
-                    //{
 
-                    //    // Facility Id
-                    //    //call method to FacilityResolver to get the associated name for the ID
-                    //    // Faction id
-                    //});
-                    //break;
+                        //await SendTestCommand();
+
+                    
+                    }
                 }
+
             }
+
         }
 
+        public Events.Payload GetEventPayloadFromResult(string resultString)
+        {
+            
+            //filter out the help message
+            Events.Payload innerPayload = null;
+            //if (message.Service != "push" &&
+            //    !(message.Service == "event" && message.Action == "help"))
+            //{
 
+                Events.ReceivedMsg rMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ReceivedMsg>(resultString);
+                if (rMsg != null && rMsg.Service == "event" && rMsg.Type == "serviceMessage")
+                {
+                    //okay, it's an event.  That's the first criteria
+                    //Events.Payload.EventPayload payload = message.newPayload;
+
+
+                    //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
+                    string innerPayloadJSON = string.Empty;
+
+                    //if it's not specified for whatever reason, assume user wants FacilityControlArgs
+                    if (eventsWeWant == null)
+                    {
+                        eventsWeWant = new List<string>();
+                        this.eventsWeWant.Add("FacilityControl");
+                        this.eventsWeWant.Add("MetagameEvent");
+                    }
+
+                    if (eventsWeWant.Contains(rMsg.newPayload?.Event_name))
+                    {
+                        
+                        //get the event payload
+                        Console.WriteLine("YEP ITS AN EVENT PAYLOAD   " + rMsg.newPayload.ToString());
+                        innerPayloadJSON = rMsg.newPayload.ToString();
+
+                    }
+                }
+                innerPayload =
+                    Newtonsoft.Json.JsonConvert.DeserializeObject<Events.Payload>(innerPayloadJSON);
+            return innerPayload;
+        }
+            
+        
 
         //TEST METHOD
         //return a string to add to an array that is in a list of items
 
         public async Task<string> SendTestCommand()
-        { 
+        {
             string resultString = string.Empty;
             string[] events = new string[] { "PlayerLogout", "PlayerLogin", "FacilityControlChanged" };
             string[] worlds = new string[] { "17" };
@@ -284,7 +335,7 @@ namespace PsApp
                 return await Task.Run(() => resultString);
             }
         }
-        
+
         public async void AddResult(List<string> list)
         {
             returnList = list;
@@ -302,7 +353,7 @@ namespace PsApp
 
             IsStarted = true;
         }
-        
+
 
         // need to find a better way of suspending the websocket so that the user can re-subscribe without having to completely shutdown and restart the app
         //pressing subscribe after stopping yields this exception:
@@ -319,6 +370,6 @@ namespace PsApp
         {
             return returnList;
         }
-        
+
     }
-}                
+}

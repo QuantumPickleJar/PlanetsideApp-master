@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PsApp
 {
-    class Message
+    public class Message
     {
         //
         [JsonProperty("service")]

@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 //world-level event payload
 namespace PsApp.Events
 {
-    class FacilityControlChangedEvent : Payload.EventPayload
+    class FacilityControlChangedEvent : Payload
     {
         public class RootObject
         {

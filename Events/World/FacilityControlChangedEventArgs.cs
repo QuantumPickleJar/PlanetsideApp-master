@@ -1,24 +1,11 @@
 ﻿using Newtonsoft.Json;
+using PsApp.Events;
+
 namespace PsApp
 {
     public class FacilityControlChangedEventArgs : System.EventArgs
     {
-        // define the properties which describe the circumstances of the event
-        [JsonProperty("duration_held")]
-        public string Duration_held { get; set; }
-
-        [JsonProperty("facility_id")]
-        public string Facility_id { get; set; }
-
-        [JsonProperty("new_faction_id")]
-        public string New_faction_id { get; set; }
-
-        [JsonProperty("old_faction_id")]
-        public string Old_faction_id { get; set; }
-
-        [JsonProperty("outfit_id")]
-        public string Outfit_id { get; set; }
-
+        public Payload Payload { get; internal set; }
 
         public class Rootobject
         {

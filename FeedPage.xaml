@@ -46,6 +46,9 @@
             HorizontalOptions="Center"
             VerticalOptions="Start"/>
 
-
+        <!--<Label
+            x:Name="statusLabel"
+            Grid.Row="0"
+            Grid.Column="2"/>-->
     </Grid>
 </ContentPage>

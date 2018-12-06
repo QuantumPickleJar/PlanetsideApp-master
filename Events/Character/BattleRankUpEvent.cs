@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PsApp.Events.Character
 {
-    class BattleRankUpEvent : Payload.EventPayload
+    class BattleRankUpEvent : Payload
     {   
         public class RootObject
         {
