@@ -161,9 +161,6 @@ namespace PsApp
                                     eventsWeWant = new List<string>();
                                     this.eventsWeWant.Add("FacilityControl");
                                     this.eventsWeWant.Add("MetagameEvent");
-                                    this.eventsWeWant.Add("ContinentUnlock");
-                                    this.eventsWeWant.Add("ContinentLock");
-
                                 }
 
                                 int position = Array.IndexOf(eventsWeWant.ToArray(), payload.Event_name);
@@ -178,9 +175,9 @@ namespace PsApp
                                     //there is a lot of invalid information that we need to filter out with if statements
 
                                     if ((payload.old_faction_id != 0) && 
-                                      //(payload.old_faction_id != payload.new_faction_id) && uncomment if we want to see defenses 
-                                                                         //  payload.duration_held != 0 && defended 
-                                        (payload.duration_held < payload.Timestamp) && (payload.Zone_id.Length == 1))
+                                      (payload.old_faction_id != payload.new_faction_id) &&// uncomment if we want to see defenses 
+                                                                           payload.duration_held != 0 &&
+                                        (payload.duration_held < payload.Timestamp))
                                     {
                                         Events.FacilityControlChangedEvent newFCevent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
                                         //raise event 

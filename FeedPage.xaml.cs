@@ -26,10 +26,6 @@ namespace PsApp
         List<string> socketOutput = new List<string>();
         PlanetsideService planetsideService;
         FacilityResolver fR;
-
-        List<RegionObject> myRegionObjects;
-        
-       
         
         public FeedPage ()
 		{
@@ -57,19 +53,18 @@ namespace PsApp
                 // change this string to something more meaningful
                 //subscribedMessages.Add($"Facility Control Changed : {e.Payload}");
 
-                //the region list we're passing is null
                 Facility myPlace = new Facility()
                 {
-                    name = fR.GetFacilityNameById(e.Payload.facility_id, myRegionObjects),
+                    name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
                     zoneId = e.Payload.Zone_id
                 };
-                string action = "captured";
-                if (e.Payload.duration_held == 0) action = "defended";
-                
+                string action = string.Empty;
+                if (e.Payload.duration_held != 0) action = "captured";
+                if (e.Payload.duration_held == 0) action = "defend";
 
                 if (myPlace.continent != "unknown continent")
                 {
-                    Console.WriteLine($"\n\n{myPlace.ToString()} \nend string \n)");
+                    //Console.WriteLine($"\n\n{myPlace.ToString()} \nend string \n)");
                     subscribedMessages.Add($"Hex control: {newFact} has {action} {myPlace.name} \n " +
                         $"on {myPlace.continent} from {oldFact}");
                
@@ -100,9 +95,7 @@ namespace PsApp
          //add some sort of failsafe (probably a bool value) 
         {
             var returnedtask = await fR.GetListAsync();
-            myRegionObjects = returnedtask.Regions;
-            fR.SetRegionList(myRegionObjects);
-
+            //fR.FillList(returnedtask);
             if (_IsStartButtonRunning==false)
             {
                 _IsStartButtonRunning = true;
