@@ -6,7 +6,7 @@ namespace PsApp.Events.World
 {
     public class ContinentLockEventArgs : EventArgs
     {
-        public Payload Payload { get; internal set; }
+        public Payload Payload { get; set; }
 
         public class Rootobject
         {

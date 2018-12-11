@@ -39,13 +39,34 @@ namespace PsApp.Events
         [JsonProperty("outfit_id")]
         public string outfit_id { get; set; }
 
+        
+        // below properties are specificlly for metagame events
+        public string faction_nc { get; set; }
+        public string faction_tr { get; set; }
+        public string faction_vs { get; set; }
+        public string instance_id { get; set; }
+        public string metagame_event_id { get; set; }
+        public string metagame_event_state { get; set; }
+        public string metagame_event_state_name { get; set; }
 
+        public string new_faction_string
+        {
+            get
+            {
+                if (new_faction_id == 1) return "VS";
+                if (new_faction_id == 2) return "TR";
+                if (new_faction_id == 3) return "NC";
+                else return "UNKNOWN FACTIONID!*";
+            }
+        }
+
+        
         public override string ToString()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this);
         }
 
-
+        private FacilityResolver fR;
         //same as above, but has a constructor
         public class EventPayload : Payload
         {
@@ -62,6 +83,12 @@ namespace PsApp.Events
             
         }
 
+        private static DateTime FromUnixTime(long unixTime)
+        {
+            //add something to account for whatever timezone is in use 
+            return epoch.AddSeconds(unixTime);
+        }
+        private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
     }
 }

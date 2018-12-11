@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:PsApp"
+             x:Class="PsApp.FeedPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:IntToColorConverter DefaultFactionColor="Black" x:Key="factionIdToColor" />
+            <local:FactionIdToStringConverter x:Key="factionIdToString" />
+            </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <ListView 
+            Grid.ColumnSpan="3"
+            Grid.Row="1"
+            Grid.Column="0"
+            MinimumWidthRequest="550"
+
+            x:Name="consoleOut"
+            BackgroundColor="LightGray"
+            Margin="5,5,5,5"
+                  >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <!--create a view for the information -->
+                    <!--<TextCell Text="{Binding .}" />-->
+                    <ViewCell>
+                      
+                       
+                        <!--<FlexLayout>
+                            <Label x:Name="flexLabel">
+
+                                [0:] Binding: 'VisualPayload' property not found on 'PsApp.FeedPage+VisualPayload', 
+                                target property: 'Xamarin.Forms.Span.Text'
+
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding VisualPayload.Payload.new_faction_id, Converter={StaticResource factionIdToString}}" 
+                                              TextColor="{Binding VisualPayload.Payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
+                                        <Span Text=" has "/> <Span Text="{Binding VisualPayload.facilityAction}"/> 
+                                        
+                                        <Span Text="{Binding VisualPayload.Payload.name}"/>
+                                        <Span Text=" on "/>
+                                        
+                                        <Span Text="{Binding VisualPayload.Payload.continent}"/>
+                                        <Span Text=" from "/>
+                                        
+                                        <Span Text="{Binding VisualPayload.Payload.old_faction_id, Converter={StaticResource factionIdToString}}" 
+                                              TextColor="{Binding VisualPayload.Payload.old_faction_id, Converter={StaticResource factionIdToColor}}"/>
+
+                                        <Span Text=" at " />
+                                        <Span Text="{Binding VisualPayload.Payload.localizedTimestamp}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </FlexLayout>-->
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button 
+            Grid.Row="0"
+            Grid.Column="0"
+            x:Name="startSubscription" 
+            Text="subscribe" 
+            Clicked="startSubscription_Clicked" 
+            HorizontalOptions="Center"
+            VerticalOptions="Start"/>
+        
+        <Button 
+            Grid.Row="0"
+            Grid.Column="1"
+            x:Name="stopLive" 
+            Text="Stop" 
+            Clicked="stopLive_Clicked" 
+            HorizontalOptions="Center"
+            VerticalOptions="Start"/>
+
+        <Label
+            x:Name="statusLabel"
+            Text="Awaiting connection..."
+            Grid.Row="0"
+            Grid.Column="2"
+            HorizontalOptions="Center"/>
+
+    </Grid>
+</ContentPage>

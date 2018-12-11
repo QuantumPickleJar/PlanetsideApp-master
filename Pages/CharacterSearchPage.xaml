@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PsApp.CharacterSearchPage">
+
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <SearchBar 
+            x:Name="charSearch"
+            Grid.Row="0"
+            Placeholder="Enter player name..."
+            SearchButtonPressed="charSearch_SearchButtonPressed"
+            />
+
+        <ListView 
+                    Grid.Row="1"
+                    x:Name="resultListView"
+                    x:FieldModifier="Public"
+                    SeparatorColor="CornflowerBlue">
+            <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image 
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.RowSpan="2"
+                                x:Name="factImage"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"
+                                Source = "{Binding ImageSrc}"/>
+
+                        <Label Grid.Row="0" 
+                               Grid.Column="1"
+                               Text="{Binding Name.First}"/>
+
+                        <Label Grid.Row="1" 
+                               Grid.Column="1"
+                               Text="{Binding BattleRank.Value}" />
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+    
+
+  
+</ContentPage>

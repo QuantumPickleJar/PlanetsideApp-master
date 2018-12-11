@@ -1,6 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using PsApp;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace PsApp

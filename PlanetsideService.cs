@@ -8,6 +8,10 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace PsApp
 {
+
+    //need to add a handler for the exception:
+    //System.Net.WebSockets.WebSocketException: The remote party closed the WebSocket connection without completing the close handshake.
+
     public class PlanetsideService
     {
         public string ServiceId { get; private set; }
@@ -26,12 +30,11 @@ namespace PsApp
             this.ServiceId = serviceId;
             this.SynchronizationContext = SynchronizationContext.Current;
         }
-        //easy-override constructor for forcing use of "example" service id for when the API is fucked (thanks daybreak)
-        public PlanetsideService(string serviceId, bool dev)
+        public PlanetsideService(string serviceId, int server)
         {
             this.ServiceId = serviceId;
             this.SynchronizationContext = SynchronizationContext.Current;
-            if (dev) this.ServiceId = "example";
+            this.selectedWorld = server;
         }
 
         public List<string> returnList;
@@ -52,38 +55,9 @@ namespace PsApp
             return resultClass;
         }
 
-        
+
         async void ListenToWebSocketStuff()
         {
-            // fake it until we make it
-
-
-            //FacilityControlChangedEventArgs e;
-
-            //Random r = new Random();
-
-            //while (IsStarted)
-            //{
-            //    await Task.Delay(TimeSpan.FromSeconds(5));
-
-
-            //    this.SynchronizationContext.Post(x =>
-            //    {
-            //        OnFaciltyControlChanged(new FacilityControlChangedEventArgs()
-            //        {
-            //            facility_id = r.Next().ToString()
-            //        });
-            //    }, null);
-
-            //    e = new FacilityControlChangedEventArgs()
-            //    {
-            //        facility_id = r.Next().ToString()
-            //    };
-
-            //    OnFaciltyControlChanged(e);
-            //}
-
-            //return;
             using (var clientWebSocket = new ClientWebSocket())
             {
 
@@ -101,7 +75,11 @@ namespace PsApp
 
                 // create our command that we're going to tell the service 
                 string s = @"{\042service\042:\042event\042,\042action\042:\042subscribe\042,\042worlds\042:[\0421\042,\0429\042,\04210\042,\04211\042,\04213\042,\04217\042,\04218\042,\04219\042,\04225\042,\0421000\042,\0421001\042],\042eventNames\042:[\042FacilityControl\042,\042MetagameEvent\042]}";
-                s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent']}";
+                //s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
+                s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
+                //use json later to be able to parse the this.selectedWorld into the string command.
+
+                //create a method for turning the data from filterbox into a JSON command as seen above ^
 
                 //fake payload
                 string fake1 = "{'payload':{'duration_held':'3319','event_name':'FacilityControl','facility_id':'226','new_faction_id':'1','old_faction_id':'3','outfit_id':'37510465163696259','timestamp':'1544057490','world_id':'17','zone_id':'2'},'service':'event','type':'serviceMessage'}";
@@ -126,82 +104,112 @@ namespace PsApp
                     if (result.EndOfMessage) //we have the full message. now we...
                     {
                         //decode the buffer array to a UTF-8 string
-                        //resultString = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
                         resultString = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
 
                         //empty the buffer so it's ready for a new message
                         buffer = new ArraySegment<byte>(new byte[1024]);
-                        //Console.WriteLine("RESULT STRING:  " + resultString);
-                        
-                        //first things first we need to turn the payload STRING into a payload OBJECT
-
-                        //check the TypE of the message to find out how we'll be able to deserialize something or not;  we'll need an even more generic class to just determien if the first word is "connected"
 
                         //deserialize the resultString into an object of type ReceivedMsg
                         Message message = Newtonsoft.Json.JsonConvert.DeserializeObject<Message>(resultString);
 
                         //filter out the help message
-                        if (message.Service != "push"
-                            && !(message.Service == "event" && message.Action == "help"))
+                        if (message.Service == "push")
                         {
-                            Events.ReceivedMsg rMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ReceivedMsg>(resultString);
-
-                            if (rMsg.Service == "event" && rMsg.Type == "serviceMessage")
+                            Console.WriteLine("CONNECTION STATUS - - - - - " + message.ToString());
+                            var args = new Events.MessageEventArgs()
                             {
-                                //okay, it's an event.  That's the first criteria
-                                //Events.Payload.EventPayload payload = message.newPayload;
+                                connectionStatus = message.connectionStatus
+                            };
+                            RaiseConnectionStateOnMainThread(args);
+                            Console.WriteLine("---------------------EVENTRAISED ON SERVICE END-----------------------------");
+                            //this event just will NOT raise on the other page for some reason
 
+                        }
+                        if (message.Service != "push"
+                                && !(message.Service == "event" && message.Action == "help"))
+                            {
+                                Events.ReceivedMsg rMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ReceivedMsg>(resultString);
 
-                                //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
-
-                                var payload = rMsg.newPayload;
-                                //if it's not specified for whatever reason, assume user wants FacilityControlArgs
-                                if (eventsWeWant == null)
+                                if (rMsg.Service == "event" && rMsg.Type == "serviceMessage")
                                 {
-                                    eventsWeWant = new List<string>();
-                                    this.eventsWeWant.Add("FacilityControl");
-                                    this.eventsWeWant.Add("MetagameEvent");
-                                }
+                                    //okay, it's an event.  That's the first criteria
+                                    //Events.Payload.EventPayload payload = message.newPayload;
 
-                                int position = Array.IndexOf(eventsWeWant.ToArray(), payload.Event_name);
-                                if (position > -1)
-                                {
-                                    //get the event payload 
-                                    Console.WriteLine("YEP ITS AN EVENT PAYLOAD   " + rMsg.newPayload.ToString());
-                                }
 
-                                if (payload.Event_name == "FacilityControl")
-                                {
-                                    //there is a lot of invalid information that we need to filter out with if statements
+                                    //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
 
-                                    if ((payload.old_faction_id != 0) && 
-                                      (payload.old_faction_id != payload.new_faction_id) &&// uncomment if we want to see defenses 
-                                                                           payload.duration_held != 0 &&
-                                        (payload.duration_held < payload.Timestamp))
+                                    var payload = rMsg.newPayload;
+                                    //if it's not specified for whatever reason, assume user wants FacilityControlArgs
+                                    if (eventsWeWant == null)
                                     {
-                                        Events.FacilityControlChangedEvent newFCevent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
+                                        eventsWeWant = new List<string>();
+                                        this.eventsWeWant.Add("FacilityControl");
+                                        this.eventsWeWant.Add("MetagameEvent");
+                                    }
+
+                                    int position = Array.IndexOf(eventsWeWant.ToArray(), payload.Event_name);
+                                    if (position > -1)
+                                    {
+                                        //get the event payload 
+                                        Console.WriteLine("YEP ITS AN EVENT PAYLOAD   " + rMsg.newPayload.ToString());
+                                    }
+
+                                    if (payload.Event_name == "FacilityControl")
+                                    {
+                                        //there is a lot of invalid information that we need to filter out with if statements
+
+                                        if ((payload.old_faction_id != 0) &&
+                                          (payload.old_faction_id != payload.new_faction_id) &&// uncomment if we want to see defenses 
+                                                                               payload.duration_held != 0 &&
+                                            (payload.duration_held < payload.Timestamp))
+                                        {
+                                            Events.FacilityControlChangedEvent newFCevent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
+                                            //raise event 
+                                            var args = new FacilityControlChangedEventArgs()
+                                            {
+                                                Payload = payload
+                                            };
+                                            RaiseFacilityControlOnMainThread(args);
+                                        }
+                                    }
+
+                                    //Generic event
+                                    if (payload.Event_name == "MetagameEvent")
+                                    {
+                                        Events.MetagameEventEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.MetagameEventEvent>(innerPayloadJSON);
                                         //raise event 
-                                        var args = new FacilityControlChangedEventArgs()
+                                        var args = new Events.World.MetagameEventEventArgs()
                                         {
                                             Payload = payload
                                         };
-                                        RaiseFacilityControlOnMainThread(args);
+                                        RaiseMetagameEventOnMainThread(args);
+                                    }
+
+                                    //ContinentLock
+                                    if (payload.Event_name == "ContinentLock")
+                                    {
+                                        Events.ContinentLockEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ContinentLockEvent>(innerPayloadJSON);
+                                        //raise event 
+                                        var args = new Events.World.ContinentLockEventArgs()
+                                        {
+                                            Payload = payload
+                                        };
+                                        RaiseContinentLockEventOnMainThread(args);
+                                    }
+
+                                    //ContinentUnlock
+                                    if (payload.Event_name == "ContinentUnlock")
+                                    {
+                                        Events.ContinentUnlockEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ContinentUnlockEvent>(innerPayloadJSON);
+                                        //raise event 
+                                        var args = new Events.World.ContinentUnlockEventArgs()
+                                        {
+                                            Payload = payload
+                                        };
+                                        RaiseContinentUnlockEventOnMainThread(args);
                                     }
                                 }
-                                // then raise the correct eventHandler 
-
-                                if (payload.Event_name == "MetagameEvent")
-                                {
-                                    Events.MetagameEventEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.MetagameEventEvent>(innerPayloadJSON);
-                                    //raise event 
-                                    var args = new Events.World.MetagameEventEventArgs()
-                                    {
-                                        Payload = payload
-                                    };
-                                    RaiseMetagameEventOnMainThread(args);
-                                }
                             }
-                        }
                         //await SendTestCommand
                     }
                 }
@@ -210,8 +218,8 @@ namespace PsApp
 
         }
 
-        
-        
+
+
 
         //TEST METHOD
         //return a string to add to an array that is in a list of items
@@ -267,10 +275,7 @@ namespace PsApp
         }
 
 
-        // need to find a better way of suspending the websocket so that the user can re-subscribe without having to completely shutdown and restart the app
-        //pressing subscribe after stopping yields this exception:
-        //System.ObjectDisposedException: Cannot access a disposed object.
-        //Object name: 'System.Net.WebSockets.ClientWebSocket'.
+
         public async Task StopAsync()
         {
             IsStarted = false;
@@ -283,39 +288,12 @@ namespace PsApp
             return returnList;
         }
 
+
+        public event EventHandler<Events.MessageEventArgs> ConnectionStateChanged;
         public event EventHandler<FacilityControlChangedEventArgs> FacilityControlChanged;
         public event EventHandler<Events.World.MetagameEventEventArgs> MetagameEventChange;
-
-        
-        //these are both just MetagameEvents, the only difference being in metagame_event_state 
-        //public event EventHandler<Events.World.ContinentLockEventArgs> ContinentLocked;
-        //public event EventHandler<Events.World.ContinentUnlockEventArgs> ContinentUnlocked;
-
-
-        protected void OnFaciltyControlChanged(FacilityControlChangedEventArgs e)
-        {
-            if (FacilityControlChanged != null)
-                FacilityControlChanged(this, e);
-
-        }
-
-
-
-
-
-        protected void OnMetagameEventChange(Events.World.MetagameEventEventArgs e)
-        {
-            if (MetagameEventChange != null)
-                MetagameEventChange(this, e);
-
-        }
-        //protected void OnContinentLock(Events.World.ContinentLockEventArgs e)
-        //{
-        //    if (ContinentLocked != null)
-        //        ContinentLocked(this, e);
-
-        //}
-
+        public event EventHandler<Events.World.ContinentLockEventArgs> ContinentLocked;
+        public event EventHandler<Events.World.ContinentUnlockEventArgs> ContinentUnlocked;
 
         protected void RaiseFacilityControlOnMainThread(FacilityControlChangedEventArgs e)
         {
@@ -330,6 +308,65 @@ namespace PsApp
             {
                 OnMetagameEventChange(e);
             }, null);
+        }
+        protected void RaiseContinentLockEventOnMainThread(Events.World.ContinentLockEventArgs e)
+        {
+            this.SynchronizationContext.Post(x =>
+            {
+                OnContinentLock(e);
+            }, null);
+        }
+        protected void RaiseContinentUnlockEventOnMainThread(Events.World.ContinentUnlockEventArgs e)
+        {
+            this.SynchronizationContext.Post(x =>
+            {
+                OnContinentUnlock(e);
+            }, null);
+        }
+
+        protected void RaiseConnectionStateOnMainThread(Events.MessageEventArgs e)
+        {
+            this.SynchronizationContext.Post(x =>
+            {
+                OnConnectionChange(e);
+            }, null);
+        }
+
+        protected void OnFaciltyControlChanged(FacilityControlChangedEventArgs e)
+        {
+            if (FacilityControlChanged != null)
+                FacilityControlChanged(this, e);
+
+        }
+        protected void OnMetagameEventChange(Events.World.MetagameEventEventArgs e)
+        {
+            if (MetagameEventChange != null)
+                MetagameEventChange(this, e);
+
+        }
+        protected void OnContinentLock(Events.World.ContinentLockEventArgs e)
+        {
+            if (ContinentLocked != null)
+                ContinentLocked(this, e);
+
+        }
+        protected void OnContinentUnlock(Events.World.ContinentUnlockEventArgs e)
+        {
+            if (ContinentUnlocked != null)
+                ContinentUnlocked(this, e);
+
+        }
+        
+        protected void OnConnectionChange(Events.MessageEventArgs e)
+        {
+            if (ConnectionStateChanged != null)
+                ConnectionStateChanged(this, e);
+
+        }
+
+
+        public void Notify()
+        {
         }
 
     }

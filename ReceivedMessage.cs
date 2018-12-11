@@ -13,9 +13,7 @@ namespace PsApp.Events
         [JsonProperty("payload")]
         public Payload newPayload { get; set; }
 
-
-
-        public override string ToString()
+        public string GetJson()
         {
             return Newtonsoft.Json.JsonConvert.SerializeObject(this);
         }

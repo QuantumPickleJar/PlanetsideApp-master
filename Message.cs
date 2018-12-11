@@ -7,7 +7,6 @@ namespace PsApp
 {
     public class Message
     {
-        //
         [JsonProperty("service")]
         public string Service { get; set; }
 
@@ -16,6 +15,14 @@ namespace PsApp
         public string Type { get; set; }
 
         [JsonProperty("action")]
-        public string Action{ get; set; }
+        public string Action { get; set; }
+
+        [JsonProperty("connected")]
+        public string connectionStatus { get; set; }
+
+        public override string ToString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
     }
 }

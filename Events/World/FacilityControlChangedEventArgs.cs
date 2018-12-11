@@ -5,7 +5,7 @@ namespace PsApp
 {
     public class FacilityControlChangedEventArgs : System.EventArgs
     {
-        public Payload Payload { get; internal set; }
+        public Payload Payload { get; set; }
 
         public class Rootobject
         {
