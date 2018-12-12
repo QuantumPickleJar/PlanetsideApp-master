@@ -7,7 +7,72 @@
         <ResourceDictionary>
             <local:IntToColorConverter DefaultFactionColor="Black" x:Key="factionIdToColor" />
             <local:FactionIdToStringConverter x:Key="factionIdToString" />
-            </ResourceDictionary>
+
+            <DataTemplate x:Key="facilityControlTemplate">
+                <ViewCell>
+                    <FlexLayout>
+                        <Label x:Name="theLabel">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="newFactSpan" Text="{Binding VisualPayload.payload.new_faction_id, Converter={StaticResource factionIdToString}}" TextColor="{Binding VisualPayload, Converter={StaticResource factionIdToColor}}"/>
+                                    <Span x:Name="text1" Text=" has captured "/>
+                                    <Span x:Name="facilityNameSpan" Text="{Binding VisualPayload.name}"/>
+                                    <Span x:Name="text2" Text=" from "/>
+                                    <Span x:Name="oldFactSpan" Text="{Binding VisualPayload.payload.old_faction_id, Converter={StaticResource factionIdToString}}" TextColor="{Binding , Converter={StaticResource factionIdToColor}}"/>
+                                    <Span x:Name="text3" Text=" on "/>
+                                    <Span x:Name="continentSpan" Text="{Binding VisualPayload.continent}"/>
+                                    <Span x:Name="text4" Text=" at "/>
+                                    <Span x:Name="timestampSpan" Text="{Binding VisualPayload.payload.FromUnixTime}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </FlexLayout>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="facilityDefendTemplate">
+                <ViewCell>
+                    <FlexLayout>
+                        <Label x:Name="theLabel">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="newFactSpan" Text="{Binding VisualPayload.payload.new_faction_id, Converter={StaticResource factionIdToString}}" TextColor="{Binding VisualPayload.payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
+                                    <Span x:Name="text1" Text=" has successfully defended "/>
+                                    <Span x:Name="facilityNameSpan" Text="{Binding VisualPayload.name}"/>
+                                    <Span x:Name="text2" Text=" on "/>
+                                    <Span x:Name="continentSpan" Text="{Binding VisualPayload.continent}"/>
+                                    <Span x:Name="text3" Text=" at "/>
+                                    <Span x:Name="timestampSpan" Text="{Binding VisualPayload.payload.FromUnixTime}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </FlexLayout>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="metagameTemplate">
+                <ViewCell>
+                    <FlexLayout>
+                        <Label x:Name="theLabel">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="eventNameSpan" Text="{Binding VisualPayload.eventName}"/>
+                                    <Span x:Name="text1" Text=" on "/>
+                                    <Span x:Name="eventContSpan" Text="{Binding VisualPayload.eventCont}"/>
+                                    <Span x:Name="text2" Text=" has "/>
+                                    <Span x:Name="eventStatusSpan" Text="{Binding VisualPayload.eventStatus}"/>
+                                    <Span x:Name="text3" Text=" at "/>
+                                    <Span x:Name="timestampSpan" Text="{Binding VisualPayload.FromUnixTime}"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </FlexLayout>
+                </ViewCell>
+            </DataTemplate>
+            <local:FeedDataTemplateSelector x:Key="FeedDataTemplateSelector" facilityControlTemplate="{StaticResource facilityControlTemplate}" 
+                                              facilityDefendTemplate="{StaticResource facilityDefendTemplate}"  
+                                              metagameTemplate="{StaticResource metagameTemplate}"/>
+        </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -28,16 +93,17 @@
 
             x:Name="consoleOut"
             BackgroundColor="LightGray"
-            Margin="5,5,5,5"
-                  >
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <!--create a view for the information -->
-                    <!--<TextCell Text="{Binding .}" />-->
-                    <ViewCell>
-                      
-                       
-                        <!--<FlexLayout>
+            Margin="5,5,5,5" 
+            ItemTemplate="{StaticResource FeedDataTemplateSelector}"/>
+
+        <!--<ListView.ItemTemplate>
+                <DataTemplate>-->
+        <!--create a view for the information -->
+        <!--<TextCell Text="{Binding .}" />-->
+        <!--ViewCell-->
+
+
+        <!--<FlexLayout>
                             <Label x:Name="flexLabel">
 
                                 [0:] Binding: 'VisualPayload' property not found on 'PsApp.FeedPage+VisualPayload', 
@@ -64,10 +130,10 @@
                                 </Label.FormattedText>
                             </Label>
                         </FlexLayout>-->
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <!--</ViewCell>
+                </DataTemplate>-->
+        <!--</ListView.ItemTemplate>-->
+
 
         <Button 
             Grid.Row="0"

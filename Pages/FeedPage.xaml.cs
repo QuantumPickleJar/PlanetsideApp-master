@@ -12,7 +12,7 @@ using Xamarin.Forms.Xaml;
 using PsApp.Events;
 using PsApp.Events.World;
 using System.ComponentModel;
-
+using Microsoft.CSharp;
 namespace PsApp
 {
 
@@ -21,30 +21,6 @@ namespace PsApp
     [XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FeedPage : ContentPage//, INotifyPropertyChanged 
 	{
-        //define a view for a facility control event
-        public View FacilityView(VisualPayload vP)
-        {
-
-
-            View v = new FlexLayout
-            {
-                Children =
-                {
-
-                }
-            }; 
-            return v;
-        }
-
-
-        private bool _IsStartButtonRunning = false;
-        const string serviceID = "PS2mobile2018";
-
-        List<string> socketOutput = new List<string>();
-        PlanetsideService planetsideService;
-        FacilityResolver fR;
-
-        int worldId;
         public FeedPage (int SelectedWorld)
 		{
             this.worldId = SelectedWorld;
@@ -60,6 +36,17 @@ namespace PsApp
             planetsideService.FacilityControlChanged += PlanetsideService_FacilityControlChanged;
             consoleOut.ItemsSource = subscribedMessages;
         }
+
+
+        private bool _IsStartButtonRunning = false;
+        const string serviceID = "PS2mobile2018";
+
+        List<string> socketOutput = new List<string>();
+        PlanetsideService planetsideService;
+        FacilityResolver fR;
+
+        int worldId;
+        
 
         private void PlanetsideService_ContinentLockChanged(object sender, ContinentLockEventArgs e)
         {
@@ -99,7 +86,7 @@ namespace PsApp
         {
             if (e != null)
             {
-
+                dynamic passMe;
 
                 //foreach(var existingMessage in subscribedMessages)
                 //{
@@ -110,17 +97,56 @@ namespace PsApp
                 //    }
                 //}
                 //convert args from faclity control to the generic payload
-                VisualPayload passMe = new VisualPayload()
-                {
-                    payload = e.Payload,
-                    name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
-                    zoneId = e.Payload.Zone_id,
-                    continent = fR.GetContinentName(e.Payload.Zone_id)
-                    
-                };
-                //if (passMe.zoneName != null && (passMe.zoneName != "UNKNOWN FACILITY*") && passMe.zoneName.Contains("Koltyr") == false)
-                passMe.payload = e.Payload;
+                //passMe = new VisualPayload()
+                //{
+                //    payload = e.Payload,
+                //    name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
+                //    zoneId = e.Payload.Zone_id,
+                //    continent = fR.GetContinentName(e.Payload.Zone_id)
 
+                //};
+
+                if (e.Payload.old_faction_id == e.Payload.new_faction_id)
+                {
+                    //it's a defense payload
+                    passMe = new VisualDefensePayload()
+                    {
+                        payload = e.Payload,
+                        name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
+                        zoneId = e.Payload.Zone_id,
+                        continent = fR.GetContinentName(e.Payload.Zone_id)
+                    };
+
+                }
+
+                if (e.Payload.old_faction_id != e.Payload.new_faction_id)
+                {
+                    //it's a capture payload
+                    passMe = new VisualCapturePayload()
+                    {
+                        payload = e.Payload,
+                        name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
+                        zoneId = e.Payload.Zone_id,
+                        continent = fR.GetContinentName(e.Payload.Zone_id)
+                    };
+
+                }
+                else
+                {
+                    Console.WriteLine("WARNING: UNKNOWN FACILITY PAYLOAD STYLE");
+                    passMe = new VisualPayload()
+                    {
+                        payload = e.Payload,
+                        name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
+                        zoneId = e.Payload.Zone_id,
+                        continent = fR.GetContinentName(e.Payload.Zone_id)
+
+                    };
+                };
+
+
+                //if (passMe.zoneName != null && (passMe.zoneName != "UNKNOWN FACILITY*") && passMe.zoneName.Contains("Koltyr") == false)
+               
                 if (e.Payload.duration_held != 0)
                 {
 
@@ -132,14 +158,12 @@ namespace PsApp
                             //            $"on {passMe.continent} at {FromUnixTime(e.Payload.Timestamp).ToLocalTime().ToLongTimeString()}";
 
 
-
-                            consoleOut.
+                            
 
 
                             subscribedMessages.Add(passMe);
                             Console.WriteLine("YEP ITS A FACILITY PAYLOAD   \n" + e.Payload.ToString());
                         }
-
                     }
                 }
 
@@ -327,6 +351,7 @@ namespace PsApp
 
         }
 
+       
 
         private class MetagameEvent
         {
