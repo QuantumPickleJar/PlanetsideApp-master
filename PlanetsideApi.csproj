@@ -20,6 +20,11 @@
     <None Remove="Pages\SearchPageDetail.xaml" />
     <None Remove="Pages\SearchPageMaster.xaml" />
     <None Remove="Pages\SettingsPage.xaml" />
+    <None Remove="Pictures\hexagon.jpg" />
+    <None Remove="Pictures\nc_icon.png" />
+    <None Remove="Pictures\planetside2logo.png" />
+    <None Remove="Pictures\tr_icon.png" />
+    <None Remove="Pictures\vs_icon.png" />
     <None Remove="SettingsPage.xaml" />
   </ItemGroup>
 
@@ -76,6 +81,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Include="Pictures\hexagon.jpg" />
+    <EmbeddedResource Include="Pictures\nc_icon.png" />
+    <EmbeddedResource Include="Pictures\planetside2logo.png" />
+    <EmbeddedResource Include="Pictures\tr_icon.png" />
+    <EmbeddedResource Include="Pictures\vs_icon.png" />
     <EmbeddedResource Include="SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

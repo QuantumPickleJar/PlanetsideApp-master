@@ -46,7 +46,7 @@ namespace PsApp
 
             using (var client = new WebClient())
             {
-                string url = $"https://census.daybreakgames.com/s:{ServiceId}/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=100&c:sort=name.first_lower";
+                string url = $"https://census.daybreakgames.com/s:{ServiceId}/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=50&c:sort=name.first_lower";
 
                 json = await client.DownloadStringTaskAsync(url);
             }
@@ -54,6 +54,12 @@ namespace PsApp
             CharacterQueryResult resultClass = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);
             return resultClass;
         }
+
+
+        //public string CreateCommand(int selectedWorld, serviceId)
+        //{
+
+        //}
 
 
         async void ListenToWebSocketStuff()

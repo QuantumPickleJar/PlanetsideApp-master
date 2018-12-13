@@ -143,7 +143,9 @@ namespace PsApp
                     {
                         if (passMe.continent != "UNKNOWN CONTINENT (zoneId)*")
                         {
-                            subscribedMessages.Add(passMe);
+                            if (((subscribedMessages.Count >= 1) && subscribedMessages[subscribedMessages.Count - 1].payload.Timestamp != passMe.payload.Timestamp) || subscribedMessages.Count == 0) ;
+                                subscribedMessages.Add(passMe);
+                            
                             Console.WriteLine("[][] DEBUG  DISPLAY SHOULD UPDATE WHEN THIS IS PRINTED");
                         }
                     }

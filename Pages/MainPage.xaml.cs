@@ -17,7 +17,12 @@ namespace PsApp
             //navCharacters.IsEnabled = false;
             //navCont.IsEnabled = false;
             //navFisu.IsEnabled = false;
+            OnCreate();
+        }
 
+        private void OnCreate()
+        {
+            
         }
 
         //async protected override void OnAppearing()
@@ -37,7 +42,7 @@ namespace PsApp
 
         async void navCharacters_Clicked(object sender, EventArgs e)
         {
-            if (selectedWorld != 0)
+            //if (selectedWorld != 0)
             {
                 CharacterSearchPage charSearch = new CharacterSearchPage("PS2mobile2018query");
                 await Navigation.PushAsync(charSearch);
@@ -77,5 +82,6 @@ namespace PsApp
             await notifServ.NotifyAsync("test title", "message message");
 
         }
+        
     }
 }

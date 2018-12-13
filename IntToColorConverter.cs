@@ -12,10 +12,10 @@ namespace PsApp
         public Color Faction1Color { get; set; } = Color.FromRgb(68,15,98);
 
         public int Faction2Id { get; set; } = 2;
-        public Color Faction3Color { get; set; } = Color.FromRgb(158,11,15);
+        public Color Faction3Color { get; set; } = Color.FromRgb(0, 75, 128); 
 
         public int Faction3Id { get; set; } = 3;
-        public Color Faction2Color { get; set; } = Color.FromRgb(0,75,128);
+        public Color Faction2Color { get; set; } = Color.FromRgb(158, 11, 15);
 
         public Color DefaultFactionColor { get; set; }
 

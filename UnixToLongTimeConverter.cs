@@ -13,7 +13,7 @@ namespace PsApp
             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             if (value is long l)
             {
-                return epoch.AddSeconds(l).ToLongTimeString();
+                return epoch.AddSeconds(l).ToLocalTime().ToLongTimeString();
             }
             else
             {
