@@ -9,13 +9,13 @@ namespace PsApp
     class IntToColorConverter : IValueConverter
     {
         public int Faction1Id { get; set; } = 1;
-        public Color Faction1Color { get; set; } = new Color(68,15,98);
+        public Color Faction1Color { get; set; } = Color.FromRgb(68,15,98);
 
         public int Faction2Id { get; set; } = 2;
-        public Color Faction2Color { get; set; } = new Color(0,75,128);
+        public Color Faction3Color { get; set; } = Color.FromRgb(158,11,15);
 
         public int Faction3Id { get; set; } = 3;
-        public Color Faction3Color { get; set; } = new Color(158,11,15);
+        public Color Faction2Color { get; set; } = Color.FromRgb(0,75,128);
 
         public Color DefaultFactionColor { get; set; }
 
