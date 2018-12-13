@@ -5,8 +5,14 @@
              x:Class="PsApp.FeedPage">
     <ContentPage.Resources>
         <ResourceDictionary>
+
+            <OnPlatform x:TypeArguments="x:String" x:Key="NormalFont" Android="PlanetSide2.ttf#Planetside2"/>
+
+            <!--<Font>-->
+            <!--</Font>-->
             <local:IntToColorConverter DefaultFactionColor="Black" x:Key="factionIdToColor" />
             <local:FactionIdToStringConverter x:Key="factionIdToString" />
+            <local:UnixToLongTimeConverter x:Key="UnixToLong" />
 
             <DataTemplate x:Key="facilityControlTemplate">
                 <ViewCell>
@@ -14,15 +20,25 @@
                         <Label x:Name="theLabel">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span x:Name="newFactSpan" Text="{Binding VisualPayload.payload.new_faction_id, Converter={StaticResource factionIdToString}}" TextColor="{Binding VisualPayload, Converter={StaticResource factionIdToColor}}"/>
+                                    <Span x:Name="newFactSpan" 
+                                          FontAttributes="Bold"
+                                          Text="{Binding payload.new_faction_id, Converter={StaticResource factionIdToString}}"
+                                          Font="{StaticResource Key=NormalFont}"
+                                          TextColor="{Binding payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
+
                                     <Span x:Name="text1" Text=" has captured "/>
-                                    <Span x:Name="facilityNameSpan" Text="{Binding VisualPayload.name}"/>
+                                    <Span x:Name="facilityNameSpan" Text="{Binding name}"/>
                                     <Span x:Name="text2" Text=" from "/>
-                                    <Span x:Name="oldFactSpan" Text="{Binding VisualPayload.payload.old_faction_id, Converter={StaticResource factionIdToString}}" TextColor="{Binding , Converter={StaticResource factionIdToColor}}"/>
+                                    <Span x:Name="oldFactSpan" 
+                                          Font="{StaticResource Key=NormalFont}"
+                                          FontAttributes="Bold"
+                                          Text="{Binding payload.old_faction_id, Converter={StaticResource factionIdToString}}"
+                                          TextColor="{Binding payload.old_faction_id, Converter={StaticResource factionIdToColor}}"/>
+
                                     <Span x:Name="text3" Text=" on "/>
-                                    <Span x:Name="continentSpan" Text="{Binding VisualPayload.continent}"/>
+                                    <Span x:Name="continentSpan" Text="{Binding continent}"/>
                                     <Span x:Name="text4" Text=" at "/>
-                                    <Span x:Name="timestampSpan" Text="{Binding VisualPayload.payload.FromUnixTime}"/>
+                                    <Span x:Name="timestampSpan" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -36,13 +52,18 @@
                         <Label x:Name="theLabel">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span x:Name="newFactSpan" Text="{Binding VisualPayload.payload.new_faction_id, Converter={StaticResource factionIdToString}}" TextColor="{Binding VisualPayload.payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
+                                    <Span x:Name="newFactSpan" 
+                                          Text="{Binding payload.new_faction_id, Converter={StaticResource factionIdToString}}"
+                                          FontAttributes="Bold" 
+                                                                                    Font="{StaticResource Key=NormalFont}"
+
+                                          TextColor="{Binding payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
                                     <Span x:Name="text1" Text=" has successfully defended "/>
-                                    <Span x:Name="facilityNameSpan" Text="{Binding VisualPayload.name}"/>
+                                    <Span x:Name="facilityNameSpan" Text="{Binding name}"/>
                                     <Span x:Name="text2" Text=" on "/>
-                                    <Span x:Name="continentSpan" Text="{Binding VisualPayload.continent}"/>
+                                    <Span x:Name="continentSpan" Text="{Binding continent}"/>
                                     <Span x:Name="text3" Text=" at "/>
-                                    <Span x:Name="timestampSpan" Text="{Binding VisualPayload.payload.FromUnixTime}"/>
+                                    <Span x:Name="timestampSpan" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -56,13 +77,13 @@
                         <Label x:Name="theLabel">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span x:Name="eventNameSpan" Text="{Binding VisualPayload.eventName}"/>
+                                    <Span x:Name="eventNameSpan" Text="{Binding eventName}"/>
                                     <Span x:Name="text1" Text=" on "/>
-                                    <Span x:Name="eventContSpan" Text="{Binding VisualPayload.eventCont}"/>
+                                    <Span x:Name="eventContSpan" Text="{Binding eventCont}"/>
                                     <Span x:Name="text2" Text=" has "/>
-                                    <Span x:Name="eventStatusSpan" Text="{Binding VisualPayload.eventStatus}"/>
+                                    <Span x:Name="eventStatusSpan" Text="{Binding eventStatus}"/>
                                     <Span x:Name="text3" Text=" at "/>
-                                    <Span x:Name="timestampSpan" Text="{Binding VisualPayload.FromUnixTime}"/>
+                                    <Span x:Name="timestampSpan" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>

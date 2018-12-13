@@ -12,7 +12,7 @@ using Xamarin.Forms.Xaml;
 using PsApp.Events;
 using PsApp.Events.World;
 using System.ComponentModel;
-using Microsoft.CSharp;
+using Microsoft.CSharp.RuntimeBinder;
 namespace PsApp
 {
 
@@ -86,26 +86,10 @@ namespace PsApp
         {
             if (e != null)
             {
-                dynamic passMe;
-
-                //foreach(var existingMessage in subscribedMessages)
-                //{
-                //    if (e.Payload.Timestamp == e.Payload.Timestamp)
-                //    {
-                //        // don't add it!!
-                //        return;
-                //    }
-                //}
-                //convert args from faclity control to the generic payload
-                //passMe = new VisualPayload()
-                //{
-                //    payload = e.Payload,
-                //    name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
-                //    zoneId = e.Payload.Zone_id,
-                //    continent = fR.GetContinentName(e.Payload.Zone_id)
-
-                //};
-
+                VisualPayload passMe;
+                Console.WriteLine("[][] DEBUG [][] VisualPayload creaeted");
+                
+                
                 if (e.Payload.old_faction_id == e.Payload.new_faction_id)
                 {
                     //it's a defense payload
@@ -116,11 +100,14 @@ namespace PsApp
                         zoneId = e.Payload.Zone_id,
                         continent = fR.GetContinentName(e.Payload.Zone_id)
                     };
+                    Console.WriteLine("[][] DEBUG [][] DEFEND passMe param:  " + passMe.continent + " / " + passMe.name);
 
                 }
 
                 if (e.Payload.old_faction_id != e.Payload.new_faction_id)
                 {
+
+                    Console.WriteLine("[][] DEBUG [][] VISUALCAPTUREPAYLOAD");
                     //it's a capture payload
                     passMe = new VisualCapturePayload()
                     {
@@ -129,10 +116,12 @@ namespace PsApp
                         zoneId = e.Payload.Zone_id,
                         continent = fR.GetContinentName(e.Payload.Zone_id)
                     };
+                    Console.WriteLine("[][] DEBUG [][] CAPTURE passMe param:  " + passMe.continent + " / " + passMe.name);
 
                 }
                 else
                 {
+                    
                     Console.WriteLine("WARNING: UNKNOWN FACILITY PAYLOAD STYLE");
                     passMe = new VisualPayload()
                     {
@@ -144,9 +133,9 @@ namespace PsApp
                     };
                 };
 
-
+                Console.WriteLine("[][] DEBUG [][] If loops passsed;");
                 //if (passMe.zoneName != null && (passMe.zoneName != "UNKNOWN FACILITY*") && passMe.zoneName.Contains("Koltyr") == false)
-               
+
                 if (e.Payload.duration_held != 0)
                 {
 
@@ -154,75 +143,14 @@ namespace PsApp
                     {
                         if (passMe.continent != "UNKNOWN CONTINENT (zoneId)*")
                         {
-                            //string add = $"{newFact} has captured {passMe.name} from {oldFact} \n " +
-                            //            $"on {passMe.continent} at {FromUnixTime(e.Payload.Timestamp).ToLocalTime().ToLongTimeString()}";
-
-
-                            
-
-
                             subscribedMessages.Add(passMe);
-                            Console.WriteLine("YEP ITS A FACILITY PAYLOAD   \n" + e.Payload.ToString());
+                            Console.WriteLine("[][] DEBUG  DISPLAY SHOULD UPDATE WHEN THIS IS PRINTED");
                         }
                     }
                 }
-
-
-                ////assign faction strings
-                //string oldFact, newFact;
-
-                //oldFact = ResolveFactionId(e.Payload.old_faction_id);
-                //newFact = ResolveFactionId(e.Payload.new_faction_id);
-
-                //// change this string to something more meaningful
-                ////subscribedMessages.Add($"Facility Control Changed : {e.Payload}");
-
-                //Facility myPlace = new Facility()
-                //{
-                //    name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
-                //    zoneId = e.Payload.Zone_id,
-                //    continent = fR.GetContinentName(e.Payload.Zone_id)
-                //};
-                //string action = string.Empty;
-                ////if (e.Payload.duration_held != 0) action = "captured";
-                ////if (e.Payload.duration_held == 0) action = "defend"; // need to look at this again later
-                
-                //if(e.Payload.duration_held != 0)
-                //    {
-                    
-                //        if (myPlace != null && (myPlace.name != "UNKNOWN FACILITY*") && myPlace.name.Contains("Koltyr") == false)
-                //        {
-                //            if (myPlace.continent != "UNKNOWN CONTINENT (zoneId)*")
-                //            {
-                //            //Console.WriteLine($"\n\n{myPlace.ToString()} \nend string \n)");
-                //            string add = $"{newFact} has captured {myPlace.name} from {oldFact} \n " +
-                //                        $"on {myPlace.continent} at {FromUnixTime(e.Payload.Timestamp).ToLocalTime().ToLongTimeString()}";
-
-                //            if ((myPreviousPlace != myPlace)
-                //                && subscribedMessages.ElementAt(subscribedMessages.Count).ToString() != add /* && (prevInstance.Payload.Timestamp != e.Payload.Timestamp)*/) //dont add duplicates
-                //                {
-                //                             subscribedMessages.Add(add);
-                //                    Console.WriteLine("YEP ITS A FACILITY PAYLOAD   \n" + e.Payload.ToString());
-
-                //                }
-                //            if (subscribedMessages.Count != 0) myPreviousPlace = myPlace;
-                //                //if (subscribedMessages.Count != 0) prevInstance.Payload = e.Payload;
-
-
-                //            //use the facility resolver class to get a better visual output
-                //            //subscribedMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
-                //            }
-
-                //        }
-                //    }
             }
         }
-
-
-        //killfeed class defined in other file
-        //methods: GetIdByName
-
-
+        
         private string ResolveFactionId(int faction_id)
         {
             //if (faction_id == 1) return "Vanu Sovereignity";

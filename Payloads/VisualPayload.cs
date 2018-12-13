@@ -13,7 +13,7 @@ namespace PsApp
     public class VisualPayload
     {
        
-        public Payload payload;
+        public Payload payload { get; set; }
         public int event_id { get; set; }
         public string eventCont { get; private set; }
         public string eventStatus { get; set; }
