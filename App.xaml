@@ -3,13 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PsApp.App">
     <Application.Resources>
-        <ResourceDictionary>
-            <OnPlatform x:TypeArguments="x:String" x:Key="NormalFont" Android="PlanetSide2.ttf#Planetside2"/>
 
-
-            <!--<On Platform="Android" Value="OpenSans-Bold.ttf#Open Sans" />-->
-                <!--<On Platform="UWP" Value="/Assets/OpenSans-Bold.ttf#Open Sans" />-->
-            
-        </ResourceDictionary>
     </Application.Resources>
 </Application>

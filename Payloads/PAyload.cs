@@ -84,12 +84,12 @@ namespace PsApp.Events
             
         }
 
-        //private static string FromUnixTime(long unixTime)
-        //{
-        //    //add something to account for whatever timezone is in use 
-        //    return epoch.AddSeconds(unixTime).ToLongTimeString();
-        //}
-        //private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static string FromUnixTime(long unixTime)
+        {
+            //add something to account for whatever timezone is in use 
+            return epoch.AddSeconds(unixTime).ToLongTimeString();
+        }
+        private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
     }
 }

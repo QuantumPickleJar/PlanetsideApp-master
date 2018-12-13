@@ -40,7 +40,7 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 x:Name="navCharacters" 
-                Text="Search" 
+                Text="Profiles" 
                 WidthRequest="250"
                 Clicked="navCharacters_Clicked"
                 HorizontalOptions="Center"

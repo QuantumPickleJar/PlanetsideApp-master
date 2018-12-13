@@ -26,37 +26,11 @@ namespace PsApp
         protected override void OnSleep()
         {
             // Handle when your app sleeps
-
-            //start a timer 
-
-            //either create a job scheduler to do a
-            
-
-            //StartJobScehduler();
-                //first query determines where on the 
-                //call to the api that uses the 'after = [timestamp]
-
         }
-
-        private void StartJobScehduler(long t)
-        {
-            long timeOfSleep = t;
-
-
-            //get events API once every 30 / 140 seconds to check for events past         }
-        }
-
-        private async void NotifyOfEvent(object sender, EventArgs e)
-        {
-            var notifServ = DependencyService.Resolve<INotificationService>();
-            await notifServ.NotifyAsync("test title", "message message");
-
-        }
-
+        
         protected override void OnResume()
         {
             // Handle when your app resumes
-            // destroy the job scheduler 
         }
         
     }
