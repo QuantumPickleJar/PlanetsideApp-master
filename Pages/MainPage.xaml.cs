@@ -51,11 +51,8 @@ namespace PsApp
 
         async void navLiveEvent_Clicked(object sender, EventArgs e)
         {
-
-            FeedPageSelect feedPageSelect = new FeedPageSelect();
-            await Navigation.PushAsync(feedPageSelect);
-            //FeedPage feedPage = new FeedPage(17);
-            //await Navigation.PushAsync(feedPage);
+            FeedPage feedPage = new FeedPage(17);
+            await Navigation.PushAsync(feedPage);
         }
 
         async void navSettingsPage_Clicked(object sender, EventArgs e)
