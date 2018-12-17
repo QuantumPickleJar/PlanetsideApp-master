@@ -37,11 +37,6 @@ namespace PsApp
             consoleOut.ItemsSource = subscribedMessages;
         }
 
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            startSubscription.IsEnabled = true;
-        }
 
         private bool _IsStartButtonRunning = false;
         const string serviceID = "PS2mobile2018";
@@ -53,21 +48,13 @@ namespace PsApp
         int worldId;
         
 
-        private async void PlanetsideService_ContinentLockChangedAsync(object sender, ContinentLockEventArgs e)
+        private void PlanetsideService_ContinentLockChanged(object sender, ContinentLockEventArgs e)
         {
-            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var notifServ = Xamarin.Forms.DependencyService.Resolve<INotificationService>();
 
-            await notifServ.NotifyAsync("Planetside Alert", $"{e.Payload.Timestamp} started at " +
-                epoch.AddSeconds(e.Payload.Timestamp).ToLocalTime().ToShortTimeString());
         }
-        private async void PlanetsideService_ContinentUnlockChangedAsync(object sender, ContinentUnlockEventArgs e)
+        private void PlanetsideService_ContinentUnlockChanged(object sender, ContinentUnlockEventArgs e)
         {
-             DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                        var notifServ = Xamarin.Forms.DependencyService.Resolve<INotificationService>();
 
-            await notifServ.NotifyAsync("Planetside Alert", $"{e.Payload.Timestamp} started at " +
-                epoch.AddSeconds(e.Payload.Timestamp).ToLocalTime().ToShortTimeString());
         }
 
         
@@ -84,7 +71,6 @@ namespace PsApp
                 {
                     statusLabel.Text = "Online";
                     statusLabel.TextColor = Color.Green;
-                    startSubscription.IsEnabled = false;
                 }
 
                 if (e.connectionStatus == "false")
@@ -94,46 +80,17 @@ namespace PsApp
                 }
             }
         }
-
+        
 
         private void PlanetsideService_FacilityControlChanged(object sender, FacilityControlChangedEventArgs e)
         {
-            VisualPayload passMe = new VisualPayload();
-            if (e != null) //&& e.Payload.World_id == worldId)
+            if (e != null)
             {
-
-                if (e.Payload.new_faction_id == e.Payload.old_faction_id && e.Payload.facility_id == null)
-                {
-                    Console.WriteLine("\n\nWARNING: UNKNOWN FACILITY PAYLOAD STYLE\n");
-                    passMe = null;
-                    return;
-                    passMe = new VisualPayload()
-                    {
-                        payload = e.Payload,
-                        name = "Unavailable",
-                        zoneId = e.Payload.Zone_id,
-                        continent = "Unavailable"
-
-                    };
-                }
-
-
-                if ((e.Payload.old_faction_id != e.Payload.new_faction_id) && e.Payload.old_faction_id !=0)
-                {
-                    //it's a capture payload
-                    passMe = new VisualCapturePayload()
-                    {
-                        payload = e.Payload,
-                        name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
-                        zoneId = e.Payload.Zone_id,
-                        continent = fR.GetContinentName(e.Payload.Zone_id)
-                    };
-                    Console.WriteLine("[][] DEBUG [][] CAPTURE passMe param:  " + passMe.continent + " / " + passMe.name + " / " + passMe.payload.new_faction_id + " from " + passMe.payload.old_faction_id
-                        + "\n [][] zoneID: " + passMe.zoneId + " REAL ACTION: " + passMe.facilityAction + " on server: " + passMe.payload.World_id);
-                    
-                }
-
-                if (e.Payload.old_faction_id == e.Payload.new_faction_id && e.Payload.new_faction_id != 0)
+                VisualPayload passMe;
+                Console.WriteLine("[][] DEBUG [][] VisualPayload creaeted");
+                
+                
+                if (e.Payload.old_faction_id == e.Payload.new_faction_id)
                 {
                     //it's a defense payload
                     passMe = new VisualDefensePayload()
@@ -143,34 +100,59 @@ namespace PsApp
                         zoneId = e.Payload.Zone_id,
                         continent = fR.GetContinentName(e.Payload.Zone_id)
                     };
-                    Console.WriteLine("[][] DEBUG [][] DEFEND passMe param:  " + passMe.continent + " / " + passMe.name + " / " + passMe.payload.new_faction_id + " from " + passMe.payload.old_faction_id
-                        + "\n [][] zoneID: " + passMe.zoneId + " REAL ACTION: " + passMe.facilityAction + " on server: " + passMe.payload.World_id);
+                    Console.WriteLine("[][] DEBUG [][] DEFEND passMe param:  " + passMe.continent + " / " + passMe.name);
 
                 }
-                               
-                Console.WriteLine("[][] DEBUG [][] If loops passed.\n");
+
+                if (e.Payload.old_faction_id != e.Payload.new_faction_id)
+                {
+
+                    Console.WriteLine("[][] DEBUG [][] VISUALCAPTUREPAYLOAD");
+                    //it's a capture payload
+                    passMe = new VisualCapturePayload()
+                    {
+                        payload = e.Payload,
+                        name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
+                        zoneId = e.Payload.Zone_id,
+                        continent = fR.GetContinentName(e.Payload.Zone_id)
+                    };
+                    Console.WriteLine("[][] DEBUG [][] CAPTURE passMe param:  " + passMe.continent + " / " + passMe.name);
+
+                }
+                else
+                {
+                    
+                    Console.WriteLine("WARNING: UNKNOWN FACILITY PAYLOAD STYLE");
+                    passMe = new VisualPayload()
+                    {
+                        payload = e.Payload,
+                        name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
+                        zoneId = e.Payload.Zone_id,
+                        continent = fR.GetContinentName(e.Payload.Zone_id)
+
+                    };
+                };
+
+                Console.WriteLine("[][] DEBUG [][] If loops passsed;");
                 //if (passMe.zoneName != null && (passMe.zoneName != "UNKNOWN FACILITY*") && passMe.zoneName.Contains("Koltyr") == false)
 
-
-                if (passMe.continent != null && (passMe.name != "UNKNOWN FACILITY*") && passMe.name.Contains("Koltyr") == false)
+                if (e.Payload.duration_held != 0)
                 {
-                    if (passMe.continent != "UNKNOWN CONTINENT (zoneId)*")
+
+                    if (passMe.continent != null && (passMe.name != "UNKNOWN FACILITY*") && passMe.name.Contains("Koltyr") == false)
                     {
-                        if (((subscribedMessages.Count >= 1) && subscribedMessages[subscribedMessages.Count - 1].payload.Timestamp != passMe.payload.Timestamp)
-                            || subscribedMessages.Count == 0)
+                        if (passMe.continent != "UNKNOWN CONTINENT (zoneId)*")
                         {
-                            subscribedMessages.Add(passMe);
-                            Console.WriteLine("\n[][] DEBUG [][]DISPLAY SHOULD UPDATE WHEN THIS IS PRINTED\n");
+                            if (((subscribedMessages.Count >= 1) && subscribedMessages[subscribedMessages.Count - 1].payload.Timestamp != passMe.payload.Timestamp) || subscribedMessages.Count == 0) ;
+                                subscribedMessages.Add(passMe);
+                            
+                            Console.WriteLine("[][] DEBUG  DISPLAY SHOULD UPDATE WHEN THIS IS PRINTED");
                         }
-                        else { Console.WriteLine("[][] DEBUG [][] SKIPPED ITEM"); }
                     }
                 }
             }
         }
-
-    
-
-
+        
         private string ResolveFactionId(int faction_id)
         {
             //if (faction_id == 1) return "Vanu Sovereignity";
@@ -183,61 +165,63 @@ namespace PsApp
             else return "UNKNOWN FACTIONID!*";
         }
 
-        private async void PlanetsideService_MetagameEventChangedAsync(object sender, Events.World.MetagameEventEventArgs e)
+        private void PlanetsideService_MetagameEventChanged(object sender, Events.World.MetagameEventEventArgs e)
         {
             if (e != null)
             {
 
-                VisualPayload passMe;
-                if (e.Payload.metagame_event_id != null)
+                //just add e to the collection(see the other code)
+                VisualPayload vP = new VisualPayload()
                 {
+                    payload = e.Payload,
+                    event_id = int.Parse(e.Payload.metagame_event_id),
+                    eventStatus = e.Payload.metagame_event_state_name,
+                    nc = double.Parse(e.Payload.faction_nc),
+                    tr = double.Parse(e.Payload.faction_tr),
+                    vs = double.Parse(e.Payload.faction_vs)
+                };
 
-                    Console.WriteLine("[][] DEBUG [][] EVENT PAYLOAD");
-                    //it's a capture payload
-                    DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-                    var notifServ = Xamarin.Forms.DependencyService.Resolve<INotificationService>();
-                    passMe = new VisualEventPayload()
-                    {
-                        payload = e.Payload,
-                        name = fR.FetchFacilityNameFromMasterList(e.Payload.facility_id),
-                        zoneId = e.Payload.Zone_id,
-                        continent = fR.GetContinentName(e.Payload.Zone_id),
-                        event_id = int.Parse(e.Payload.metagame_event_id),
-                        eventStatus = e.Payload.metagame_event_state_name,
-                        nc = double.Parse(e.Payload.faction_nc),
-                        tr = double.Parse(e.Payload.faction_tr),
-                        vs = double.Parse(e.Payload.faction_vs)
-                    };
-                    Console.WriteLine("[][] DEBUG [][] EVENT passMe param:  " + passMe.continent + " / " + passMe.name + " / " + passMe.payload.new_faction_id + " from " + passMe.payload.old_faction_id
-                        + "\n [][] zoneID: " + passMe.zoneId + " REAL ACTION: " + passMe.facilityAction + " on server: " + passMe.payload.World_id);
+                //if warpgate event, reformat syntax
+                //if(metagameEvent.eventName=="Warpgates"
 
-                    string message = ($"{e.Payload.metagame_event_id} started at " +
-                        epoch.AddSeconds(e.Payload.Timestamp).ToLocalTime().ToShortTimeString());
-                    await NotifyUser(message);
-                    subscribedMessages.Add(passMe);
-                }
-               
+                //if (e.Payload.Event_name == "Warpgates")
+                //{
+                //    if (metagameEvent.eventStatus == "started") metagameEvent.eventStatus = "stabilizing";
+                //    if (metagameEvent.eventStatus == "ended") metagameEvent.eventStatus = "stabilized";
+
+                //    subscribedMessages.Add($"{metagameEvent.eventName} {e.Payload.metagame_event_state_name} on {metagameEvent.eventCont} \n {FromUnixTime(e.Payload.Timestamp).ToLocalTime().ToLongTimeString()}");
+                //} 
+
+                //else if (e.Payload.metagame_event_state_name == "started" || ((e.Payload.metagame_event_state_name == "ended") && (e.Payload.metagame_event_state_name == "Warpgates")))
+                //{
+
+                //    subscribedMessages.Add($"Event {metagameEvent.eventStatus}: {metagameEvent.eventName} on {metagameEvent.eventCont}");
+                //}
+
+
+                //else if (metagameEvent.eventStatus == "ended")
+                //{
+                //    subscribedMessages.Add($"Event {metagameEvent.eventStatus}: {metagameEvent.eventName} on {metagameEvent.eventCont}\n" +
+
+                //    $"VS:{(int)metagameEvent.vs} TR:{(int)metagameEvent.tr} NC:{(int)metagameEvent.nc}");
+                //}
+
 
                 
+
+                subscribedMessages.Add(vP);
             }
+                        // change this string to something more meaningful
+            //subscribedMessages.Add($"Metagame event : {e.Payload} \n {e.Payload.faction_nc}");
+            //use the facility resolver class to get a better visual output
+            //facilityControlMessages.Add($"Facility Control Changed : {e.Payload.facility_id}");
         }
-
-
-        private async Task NotifyUser(String message)
-        {
-            var notifServ = DependencyService.Resolve<INotificationService>();
-            await notifServ.NotifyAsync("test title", "message message");
-        }
-
 
         public static DateTime FromUnixTime(long unixTime)
         {
             //add something to account for whatever timezone is in use 
             return epoch.AddSeconds(unixTime);
         }
-
-
-
         private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
 
@@ -324,9 +308,6 @@ namespace PsApp
                     if (event_id == 152)
                     { eventCont = "Esamir"; return "Continent Alert"; }
 
-                    if (event_id == 154)
-                    { eventCont = "Hossin"; return "Continent Locked"; }
-
                     if (event_id == 158)
                     { eventCont = "Amerish"; return "Continent Alert"; }
 
@@ -374,13 +355,8 @@ namespace PsApp
             public double vs { get; set; } 
 
         }
-
-        private void consoleOut_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            consoleOut.SelectedItem = null;
-
-        }
         
+
     }
 
 }
