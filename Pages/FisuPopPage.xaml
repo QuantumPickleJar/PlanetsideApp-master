@@ -77,9 +77,9 @@
 
             <Grid Grid.Row="2" x:Name="GridButtonLayout">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width=".33*"/>
+                    <ColumnDefinition Width=".33*"/>
+                    <ColumnDefinition Width=".33*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

@@ -39,14 +39,15 @@ namespace PsApp
 
         public List<string> returnList;
 
-
+        string s = string.Empty;
         public async Task<CharacterQueryResult> GetMultipleCharacters(string lowQuery)
         {
             string json;
 
             using (var client = new WebClient())
             {
-                string url = $"https://census.daybreakgames.com/s:{ServiceId}/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=50&c:sort=name.first_lower";
+                //string url = $"https://census.daybreakgames.com/s:{ServiceId}/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=50&c:sort=name.first_lower";
+                string url = $"https://census.daybreakgames.com/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=50&c:sort=name.first_lower";
 
                 json = await client.DownloadStringTaskAsync(url);
             }
@@ -64,13 +65,7 @@ namespace PsApp
 
         async void ListenToWebSocketStuff()
         {
-
-
-            var client = new System.Net.Http.HttpClient
-            {
-                BaseAddress = new Uri("http://1.2.3.4"),
-                DefaultRequestHeaders = { Host = "example.com" }
-            };
+            
             
             using (var clientWebSocket = new ClientWebSocket())
             {
@@ -88,13 +83,13 @@ namespace PsApp
 
 
                 // create our command that we're going to tell the service 
-                string s = @"{\042service\042:\042event\042,\042action\042:\042subscribe\042,\042worlds\042:[\0421\042,\0429\042,\04210\042,\04211\042,\04213\042,\04217\042,\04218\042,\04219\042,\04225\042,\0421000\042,\0421001\042],\042eventNames\042:[\042FacilityControl\042,\042MetagameEvent\042]}";
+                //string s = @"{\042service\042:\042event\042,\042action\042:\042subscribe\042,\042worlds\042:[\0421\042,\0429\042,\04210\042,\04211\042,\04213\042,\04217\042,\04218\042,\04219\042,\04225\042,\0421000\042,\0421001\042],\042eventNames\042:[\042FacilityControl\042,\042MetagameEvent\042]}";
                 //s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
-                s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
+                
                 //use json later to be able to parse the this.selectedWorld into the string command.
 
                 //create a method for turning the data from filterbox into a JSON command as seen above ^
-                
+
                 // convert the command into an array of Bytes
                 byte[] bytes = Encoding.UTF8.GetBytes(s);
 
@@ -113,16 +108,10 @@ namespace PsApp
 
                     if (result.EndOfMessage) //we have the full message. now we...
                     {
-                        //decode the buffer array to a UTF-8 string
+
                         resultString = Encoding.UTF8.GetString(buffer.Array, 0, result.Count);
-
-                        //empty the buffer so it's ready for a new message
                         buffer = new ArraySegment<byte>(new byte[1024]);
-
-                        //deserialize the resultString into an object of type ReceivedMsg
                         Message message = Newtonsoft.Json.JsonConvert.DeserializeObject<Message>(resultString);
-
-                        //filter out the help message
                         if (message.Service == "push")
                         {
                             Console.WriteLine("CONNECTION STATUS - - - - - " + message.ToString());
@@ -132,24 +121,14 @@ namespace PsApp
                             };
                             RaiseConnectionStateOnMainThread(args);
                             Console.WriteLine("---------------------EVENTRAISED ON SERVICE END-----------------------------");
-                            //this event just will NOT raise on the other page for some reason
-
                         }
                         if (message.Service != "push"
                                 && !(message.Service == "event" && message.Action == "help"))
                             {
                                 Events.ReceivedMsg rMsg = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ReceivedMsg>(resultString);
-
                                 if (rMsg.Service == "event" && rMsg.Type == "serviceMessage")
                                 {
-                                    //okay, it's an event.  That's the first criteria
-                                    //Events.Payload.EventPayload payload = message.newPayload;
-
-
-                                    //if rMsg.newPayload.Event_name matches any entry in the eventsWeWant
-
                                     var payload = rMsg.newPayload;
-                                    //if it's not specified for whatever reason, assume user wants FacilityControlArgs
                                     if (eventsWeWant == null)
                                     {
                                         eventsWeWant = new List<string>();
@@ -232,48 +211,27 @@ namespace PsApp
         //TEST METHOD
         //return a string to add to an array that is in a list of items
 
-        public async Task<string> SendTestCommand()
+        public void SendTestCommand(int selectedWorld)
         {
             string resultString = string.Empty;
-            string[] events = new string[] { "PlayerLogout", "PlayerLogin", "FacilityControlChanged" };
-            string[] worlds = new string[] { "17" };
+            //string[] events = new string[] { "PlayerLogout", "PlayerLogin", "FacilityControlChanged" };
+            string[] events = new string[] { "MetagameEvent", "ContinentLock", "ContinentUnlock", "FacilityControlChanged" };
+            string[] worlds = new string[] { selectedWorld.ToString() };
             eventsWeWant.Clear();
             foreach (string s in events)
             {
                 eventsWeWant.Add(s);
             }
             Events.Command command = new Events.Command("subscribe", "event", worlds, events, true);
-
-            using (var clientWebSocket = new ClientWebSocket())
-            {
-                //reconfigure command to a byte arraySegment so the API can receive it 
-                byte[] bytes = Encoding.UTF8.GetBytes(command.ToString());
-                ArraySegment<byte> buffer = new ArraySegment<byte>(bytes);
-                CancellationToken cancellationToken = CancellationToken.None;
-                WebSocketReceiveResult result;
-                await clientWebSocket.SendAsync(buffer, WebSocketMessageType.Text, true, cancellationToken);
-                result = await clientWebSocket.ReceiveAsync(buffer, cancellationToken);
-                //check the new message we received 
-                if (result.EndOfMessage)
-                {
-                    resultString = Encoding.ASCII.GetString(buffer.Array, buffer.Offset, result.Count);
-
-                }
-                //return the message payload
-                return await Task.Run(() => resultString);
-            }
-        }
-
-        public async void AddResult(List<string> list)
-        {
-            returnList = list;
+            s = resultString;
         }
 
         private Thread thread;
 
-        public async Task StartAsync()
+        public async Task StartAsync(int worldId)
         {
             // create a new thread
+            SendTestCommand(worldId);
             thread = new Thread(ListenToWebSocketStuff);
             thread.Start();
 
