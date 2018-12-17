@@ -8,6 +8,7 @@ namespace PsApp
 {
     public class ZoneResult
     {
+        public ZoneResult() { }
         [JsonProperty("zone_list")]
         public List<ZoneList> zoneList { get; set; }
         public int returned { get; set; }

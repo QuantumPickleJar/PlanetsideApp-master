@@ -64,6 +64,14 @@ namespace PsApp
 
         async void ListenToWebSocketStuff()
         {
+
+
+            var client = new System.Net.Http.HttpClient
+            {
+                BaseAddress = new Uri("http://1.2.3.4"),
+                DefaultRequestHeaders = { Host = "example.com" }
+            };
+            
             using (var clientWebSocket = new ClientWebSocket())
             {
 
@@ -82,11 +90,11 @@ namespace PsApp
                 // create our command that we're going to tell the service 
                 string s = @"{\042service\042:\042event\042,\042action\042:\042subscribe\042,\042worlds\042:[\0421\042,\0429\042,\04210\042,\04211\042,\04213\042,\04217\042,\04218\042,\04219\042,\04225\042,\0421000\042,\0421001\042],\042eventNames\042:[\042FacilityControl\042,\042MetagameEvent\042]}";
                 //s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
-                s = "{'service':'event','action':'subscribe','worlds':['1','9','10','11','13','17','18','19','25'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
+                s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
                 //use json later to be able to parse the this.selectedWorld into the string command.
 
                 //create a method for turning the data from filterbox into a JSON command as seen above ^
-
+                
                 // convert the command into an array of Bytes
                 byte[] bytes = Encoding.UTF8.GetBytes(s);
 
@@ -153,7 +161,7 @@ namespace PsApp
                                     if (position > -1)
                                     {
                                         //get the event payload 
-                                        Console.WriteLine("YEP ITS AN EVENT PAYLOAD   " + rMsg.newPayload.ToString());
+                                        Console.WriteLine("\nPAYLOAD RECEIVED " + rMsg.newPayload.ToString());
                                     }
 
                                     if (payload.Event_name == "FacilityControl")
@@ -161,8 +169,6 @@ namespace PsApp
                                         //there is a lot of invalid information that we need to filter out with if statements
 
                                         if ((payload.old_faction_id != 0) &&
-                                          (payload.old_faction_id != payload.new_faction_id) &&// uncomment if we want to see defenses 
-                                                                               payload.duration_held != 0 &&
                                             (payload.duration_held < payload.Timestamp))
                                         {
                                             Events.FacilityControlChangedEvent newFCevent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.FacilityControlChangedEvent>(innerPayloadJSON);
@@ -188,7 +194,7 @@ namespace PsApp
                                     }
 
                                     //ContinentLock
-                                    if (payload.Event_name == "ContinentLock")
+                                    if (payload.Event_name == "MetagameEvent" && payload.metagame_event_state_name=="ended")
                                     {
                                         Events.ContinentLockEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ContinentLockEvent>(innerPayloadJSON);
                                         //raise event 
@@ -200,7 +206,7 @@ namespace PsApp
                                     }
 
                                     //ContinentUnlock
-                                    if (payload.Event_name == "ContinentUnlock")
+                                    if (payload.Event_name == "MetagameEvent" && payload.metagame_event_state_name == "started")
                                     {
                                         Events.ContinentUnlockEvent newMgEvent = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.ContinentUnlockEvent>(innerPayloadJSON);
                                         //raise event 

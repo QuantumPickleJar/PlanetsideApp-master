@@ -14,6 +14,8 @@
     <None Remove="MainPage.xaml" />
     <None Remove="Pages\CharacterSearchPage.xaml" />
     <None Remove="Pages\FeedPage.xaml" />
+    <None Remove="Pages\FisuPage.xaml" />
+    <None Remove="Pages\FisuPopPage.xaml" />
     <None Remove="Pages\FTerrPage.xaml" />
     <None Remove="Pages\MainPage.xaml" />
     <None Remove="Pages\SearchPage.xaml" />
@@ -54,6 +56,14 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\FeedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\FisuPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\FisuPopPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -122,6 +132,14 @@
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Pages\FeedPage.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\FisuPage.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\FisuPopPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>

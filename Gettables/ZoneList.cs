@@ -7,6 +7,7 @@ namespace PsApp.Gettables
 {
     public class ZoneList
     {
+        public ZoneList() { }
         [JsonProperty("zone_id")]
         public string zone_id { get; set; }
         //public string code { get; set; }

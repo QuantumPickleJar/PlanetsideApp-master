@@ -27,6 +27,8 @@ namespace PsApp
         {
             // Handle when your app sleeps
 
+            
+
             //start a timer 
 
             //either create a job scheduler to do a
