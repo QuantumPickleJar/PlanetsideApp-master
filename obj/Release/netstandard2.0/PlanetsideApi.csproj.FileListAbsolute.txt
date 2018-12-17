@@ -1,0 +1,4 @@
+C:\Users\vmorr\Desktop\Planetside Project\PlanetsideApi\obj\Release\netstandard2.0\PlanetsideApi.csprojAssemblyReference.cache
+C:\Users\vmorr\Desktop\Planetside Project\PlanetsideApi\obj\Release\netstandard2.0\PlanetsideApi.csproj.CoreCompileInputs.cache
+C:\Users\vmorr\Desktop\Planetside Project\PlanetsideApi\obj\Release\netstandard2.0\PlanetsideApi.AssemblyInfoInputs.cache
+C:\Users\vmorr\Desktop\Planetside Project\PlanetsideApi\obj\Release\netstandard2.0\PlanetsideApi.AssemblyInfo.cs
