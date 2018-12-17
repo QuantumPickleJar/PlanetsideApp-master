@@ -234,9 +234,9 @@ namespace PsApp
             {
                 _IsStartButtonRunning = true;
                 startSubscription.IsEnabled = false;
-                //PlanetsideService planetsideService = new Planetv2sideService();
+                //PlanetsideService planetsideService = new PlanetsideService();
 
-                await planetsideService.StartAsync(worldId);
+                await planetsideService.StartAsync();
 
             }
             //these might be frivolous 

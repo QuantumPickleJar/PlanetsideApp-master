@@ -2,9 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:PsApp"
-             x:Class="PsApp.FeedPage"
-             Title="Live feed"
-             BackgroundColor="DarkGray">
+             x:Class="PsApp.FeedPage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:IntToColorConverter DefaultFactionColor="Black" x:Key="factionIdToColor" />
@@ -20,30 +18,23 @@
                                     <Span x:Name="newFactSpan" 
                                           FontAttributes="Bold"
                                           Text="{Binding payload.new_faction_id, Converter={StaticResource factionIdToString}}"
-                                          FontFamily="Geo-Md.ttf#Geogrotesque Medium"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"
                                           TextColor="{Binding payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
 
-                                    <Span x:Name="text1" Text=" has captured " 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium" />
-                                    <Span x:Name="facilityNameSpan" Text="{Binding name}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="text2" Text=" from " 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
+                                    <Span x:Name="text1" Text=" has captured " FontFamily="PlanetSide2.ttf#Planetside2" />
+                                    <Span x:Name="facilityNameSpan" Text="{Binding name}" FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text2" Text=" from " FontFamily="PlanetSide2.ttf#Planetside2"/>
                                     <Span x:Name="oldFactSpan" 
-                                          FontFamily="Geo-Md.ttf#Geogrotesque Medium"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"
                                           FontAttributes="Bold"
                                           Text="{Binding payload.old_faction_id, Converter={StaticResource factionIdToString}}"
                                           TextColor="{Binding payload.old_faction_id, Converter={StaticResource factionIdToColor}}"/>
 
-                                    <Span x:Name="text3" Text=" on " 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium" />
-                                    <Span x:Name="continentSpan" Text="{Binding continent}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="text4" Text=" at " 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
+                                    <Span x:Name="text3" Text=" on " FontFamily="PlanetSide2.ttf#Planetside2" />
+                                    <Span x:Name="continentSpan" Text="{Binding continent}" FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text4" Text=" at " FontFamily="PlanetSide2.ttf#Planetside2"/>
                                     <Span x:Name="timestampSpan"
-                                          Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
+                                          Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" FontFamily="PlanetSide2.ttf#Planetside2"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -59,20 +50,14 @@
                                 <FormattedString>
                                     <Span x:Name="newFactSpan" 
                                           Text="{Binding payload.new_faction_id, Converter={StaticResource factionIdToString}}"
-                                          FontAttributes="Bold" FontFamily="Geo-Md.ttf#Geogrotesque Medium"
+                                          FontAttributes="Bold" FontFamily="PlanetSide2.ttf#Planetside2"
                                           TextColor="{Binding payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
-                                    <Span x:Name="text1" Text=" has defended " 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="facilityNameSpan" Text="{Binding name}"  
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="text2" Text=" on " 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="continentSpan" Text="{Binding continent}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="text3" Text=" at " 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="timestampSpan" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
+                                    <Span x:Name="text1" Text=" has defended " FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="facilityNameSpan" Text="{Binding name}"  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text2" Text=" on " FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="continentSpan" Text="{Binding continent}" FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text3" Text=" at " FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="timestampSpan" FontFamily="PlanetSide2.ttf#Planetside2" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -86,19 +71,13 @@
                         <Label x:Name="theLabel">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span x:Name="eventNameSpan" Text="{Binding eventName}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="text1" Text=" on "
-                                          TextColor="WhiteSmoke" />
-                                    <Span x:Name="eventContSpan" Text="{Binding eventCont}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
+                                    <Span x:Name="eventNameSpan" Text="{Binding eventName}" FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text1" Text=" on "/>
+                                    <Span x:Name="eventContSpan" Text="{Binding eventCont}" FontFamily="PlanetSide2.ttf#Planetside2"/>
                                     <Span x:Name="text2" Text=" has "/>
-                                    <Span x:Name="eventStatusSpan" Text="{Binding eventStatus}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
-                                    <Span x:Name="text3" Text=" at "
-                                          TextColor="WhiteSmoke" />
-                                    <Span x:Name="timestampSpan" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" 
-                                          TextColor="WhiteSmoke" FontFamily="Geo-Md.ttf#Geogrotesque Medium"/>
+                                    <Span x:Name="eventStatusSpan" Text="{Binding eventStatus}" FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text3" Text=" at "/>
+                                    <Span x:Name="timestampSpan" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" FontFamily="PlanetSide2.ttf#Planetside2"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -130,22 +109,57 @@
             ItemTapped="consoleOut_ItemTapped" 
             x:Name="consoleOut"
             BackgroundColor="Gray"
+            Margin="5,5,5,5" 
             ItemTemplate="{StaticResource FeedDataTemplateSelector}"/>
 
+        <!--<ListView.ItemTemplate>
+                <DataTemplate>-->
+        <!--create a view for the information -->
+        <!--<TextCell Text="{Binding .}" />-->
+        <!--ViewCell-->
+
+
+        <!--<FlexLayout>
+                            <Label x:Name="flexLabel">
+
+                                [0:] Binding: 'VisualPayload' property not found on 'PsApp.FeedPage+VisualPayload', 
+                                target property: 'Xamarin.Forms.Span.Text'
+
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding VisualPayload.Payload.new_faction_id, Converter={StaticResource factionIdToString}}" 
+                                              TextColor="{Binding VisualPayload.Payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
+                                        <Span Text=" has "/> <Span Text="{Binding VisualPayload.facilityAction}"/> 
+                                        
+                                        <Span Text="{Binding VisualPayload.Payload.name}"/>
+                                        <Span Text=" on "/>
+                                        
+                                        <Span Text="{Binding VisualPayload.Payload.continent}"/>
+                                        <Span Text=" from "/>
+                                        
+                                        <Span Text="{Binding VisualPayload.Payload.old_faction_id, Converter={StaticResource factionIdToString}}" 
+                                              TextColor="{Binding VisualPayload.Payload.old_faction_id, Converter={StaticResource factionIdToColor}}"/>
+
+                                        <Span Text=" at " />
+                                        <Span Text="{Binding VisualPayload.Payload.localizedTimestamp}"/>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </FlexLayout>-->
+        <!--</ViewCell>
+                </DataTemplate>-->
+        <!--</ListView.ItemTemplate>-->
 
 
         <Button 
             Grid.Row="0"
             Grid.Column="0"
             x:Name="startSubscription" 
-            Text="Start" 
+            Text="subscribe" 
             Clicked="startSubscription_Clicked" 
             HorizontalOptions="Center"
-            VerticalOptions="Start">
-            <Button.FontFamily>
-                <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium"/>
-            </Button.FontFamily>
-        </Button>
+            VerticalOptions="Start"/>
+        
         <Button 
             Grid.Row="0"
             Grid.Column="1"
@@ -153,11 +167,7 @@
             Text="Stop" 
             Clicked="stopLive_Clicked" 
             HorizontalOptions="Center"
-            VerticalOptions="Start">
-            <Button.FontFamily>
-                <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium"/>
-            </Button.FontFamily>
-        </Button>
+            VerticalOptions="Start"/>
 
         <Label
             x:Name="statusLabel"
