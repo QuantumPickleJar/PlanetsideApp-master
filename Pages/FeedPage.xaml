@@ -19,22 +19,51 @@
                                           FontAttributes="Bold"
                                           Text="{Binding payload.new_faction_id, Converter={StaticResource factionIdToString}}"
                                           FontFamily="PlanetSide2.ttf#Planetside2"
+                                          FontSize="14" 
                                           TextColor="{Binding payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
 
-                                    <Span x:Name="text1" Text=" has captured " FontFamily="PlanetSide2.ttf#Planetside2" />
-                                    <Span x:Name="facilityNameSpan" Text="{Binding name}" FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="text2" Text=" from " FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text1" 
+                                          Text=" has captured " 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2" />
+                                    <Span x:Name="facilityNameSpan" 
+                                          Text="{Binding name}" 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text2" 
+                                          Text=" from " 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
                                     <Span x:Name="oldFactSpan" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"
                                           FontAttributes="Bold"
+                                          FontSize="14" 
                                           Text="{Binding payload.old_faction_id, Converter={StaticResource factionIdToString}}"
                                           TextColor="{Binding payload.old_faction_id, Converter={StaticResource factionIdToColor}}"/>
 
-                                    <Span x:Name="text3" Text=" on " FontFamily="PlanetSide2.ttf#Planetside2" />
-                                    <Span x:Name="continentSpan" Text="{Binding continent}" FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="text4" Text=" at " FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text3" 
+                                          Text=" on " 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2" />
+                                    <Span x:Name="continentSpan" 
+                                          Text="{Binding continent}" 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text4" 
+                                          Text=" at " 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
                                     <Span x:Name="timestampSpan"
-                                          Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                          Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -50,14 +79,40 @@
                                 <FormattedString>
                                     <Span x:Name="newFactSpan" 
                                           Text="{Binding payload.new_faction_id, Converter={StaticResource factionIdToString}}"
-                                          FontAttributes="Bold" FontFamily="PlanetSide2.ttf#Planetside2"
+                                          FontAttributes="Bold"
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"
                                           TextColor="{Binding payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
-                                    <Span x:Name="text1" Text=" has defended " FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="facilityNameSpan" Text="{Binding name}"  FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="text2" Text=" on " FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="continentSpan" Text="{Binding continent}" FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="text3" Text=" at " FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="timestampSpan" FontFamily="PlanetSide2.ttf#Planetside2" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
+                                    <Span x:Name="text1" 
+                                          Text=" has defended " 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="facilityNameSpan" 
+                                          Text="{Binding name}"  
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text2" 
+                                          Text=" on " 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="continentSpan" 
+                                          Text="{Binding continent}" 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text3" 
+                                          Text=" at "
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="timestampSpan" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -71,13 +126,37 @@
                         <Label x:Name="theLabel">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span x:Name="eventNameSpan" Text="{Binding eventName}" FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="text1" Text=" on "/>
-                                    <Span x:Name="eventContSpan" Text="{Binding eventCont}" FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="text2" Text=" has "/>
-                                    <Span x:Name="eventStatusSpan" Text="{Binding eventStatus}" FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    <Span x:Name="text3" Text=" at "/>
-                                    <Span x:Name="timestampSpan" Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="eventNameSpan" 
+                                          Text="{Binding eventName}" 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text1" 
+                                          Text=" on "
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" />
+                                    <Span x:Name="eventContSpan" 
+                                          Text="{Binding eventCont}" 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text2" 
+                                          Text=" has "
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" />
+                                    <Span x:Name="eventStatusSpan" 
+                                          Text="{Binding eventStatus}" 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span x:Name="text3" 
+                                          Text=" at "
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" />
+                                    <Span x:Name="timestampSpan" 
+                                        TextColor="WhiteSmoke" 
+                                        FontSize="14" 
+                                          Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}" FontFamily="PlanetSide2.ttf#Planetside2"/>
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -91,89 +170,71 @@
     </ContentPage.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width=".33*"/>
+            <ColumnDefinition Width=".33*"/>
+            <ColumnDefinition Width=".33*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <ListView 
             Grid.ColumnSpan="3"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="0"
             MinimumWidthRequest="550"
             x:FieldModifier="public"
             x:Name="consoleOut"
             BackgroundColor="Gray"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"
             Margin="5,5,5,5" 
             ItemTemplate="{StaticResource FeedDataTemplateSelector}"/>
-
-        <!--<ListView.ItemTemplate>
-                <DataTemplate>-->
-        <!--create a view for the information -->
-        <!--<TextCell Text="{Binding .}" />-->
-        <!--ViewCell-->
-
-
-        <!--<FlexLayout>
-                            <Label x:Name="flexLabel">
-
-                                [0:] Binding: 'VisualPayload' property not found on 'PsApp.FeedPage+VisualPayload', 
-                                target property: 'Xamarin.Forms.Span.Text'
-
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <Span Text="{Binding VisualPayload.Payload.new_faction_id, Converter={StaticResource factionIdToString}}" 
-                                              TextColor="{Binding VisualPayload.Payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
-                                        <Span Text=" has "/> <Span Text="{Binding VisualPayload.facilityAction}"/> 
-                                        
-                                        <Span Text="{Binding VisualPayload.Payload.name}"/>
-                                        <Span Text=" on "/>
-                                        
-                                        <Span Text="{Binding VisualPayload.Payload.continent}"/>
-                                        <Span Text=" from "/>
-                                        
-                                        <Span Text="{Binding VisualPayload.Payload.old_faction_id, Converter={StaticResource factionIdToString}}" 
-                                              TextColor="{Binding VisualPayload.Payload.old_faction_id, Converter={StaticResource factionIdToColor}}"/>
-
-                                        <Span Text=" at " />
-                                        <Span Text="{Binding VisualPayload.Payload.localizedTimestamp}"/>
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-                        </FlexLayout>-->
-        <!--</ViewCell>
-                </DataTemplate>-->
-        <!--</ListView.ItemTemplate>-->
-
+        <Label
+            x:Name="statusLabel"
+            Text="Awaiting connection..."
+            FontAttributes="Bold"
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalOptions="CenterAndExpand">
+            <Label.FontFamily>
+                <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                            UWP="PlanetSide2.ttf#Planetside2"/>
+            </Label.FontFamily>
+        </Label>
 
         <Button 
-            Grid.Row="0"
+            Grid.Row="1"
             Grid.Column="0"
             x:Name="startSubscription" 
-            Text="subscribe" 
+            Text="Start" 
             Clicked="startSubscription_Clicked" 
+            FontFamily="PlanetSide2.ttf#Planetside2"
+            HorizontalOptions="Center"
+            VerticalOptions="Start"/>
+        <Button 
+            Grid.Row="1"
+            Grid.Column="2"
+            x:Name="clearList" 
+            Text="Clear" 
+            Clicked="clearList_Clicked" 
+            FontFamily="PlanetSide2.ttf#Planetside2"
             HorizontalOptions="Center"
             VerticalOptions="Start"/>
 
         <Button 
-            Grid.Row="0"
+            Grid.Row="1"
             Grid.Column="1"
             x:Name="stopLive" 
-            Text="Stop" 
+            Text="Stop"  
+            FontFamily="PlanetSide2.ttf#Planetside2"
             Clicked="stopLive_Clicked" 
             HorizontalOptions="Center"
             VerticalOptions="Start"/>
 
-        <Label
-            x:Name="statusLabel"
-            Text="Awaiting connection..."
-            Grid.Row="0"
-            Grid.Column="2"
-            HorizontalOptions="Center"/>
+        
 
     </Grid>
 </ContentPage>

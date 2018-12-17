@@ -71,15 +71,16 @@
                 HorizontalOptions="Center"
                 Clicked="getPop_Clicked">
                 <Button.FontFamily>
-                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                </Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
             </Button>
 
             <Grid Grid.Row="2" x:Name="GridButtonLayout">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width=".33*"/>
+                    <ColumnDefinition Width=".33*"/>
+                    <ColumnDefinition Width=".33*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -91,8 +92,9 @@
                     Text="CONNERY" 
                     Clicked="server1_Clicked">
                     <Button.FontFamily>
-                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                    </Button.FontFamily>
+                            <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                        </Button.FontFamily>
                 </Button>
 
                 <Button 
@@ -100,8 +102,9 @@
                     Text="MILLER" 
                     Clicked="server2_Clicked">
                     <Button.FontFamily>
-                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                    </Button.FontFamily>
+                            <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                        </Button.FontFamily>
                 </Button>
 
                 <Button 
@@ -109,8 +112,9 @@
                     Text="COBALT" 
                     Clicked="server3_Clicked">
                     <Button.FontFamily>
-                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                    </Button.FontFamily>
+                            <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                        </Button.FontFamily>
                 </Button>
 
                 <Button 
@@ -118,8 +122,9 @@
                     Text="EMERALD" 
                     Clicked="server4_Clicked">
                     <Button.FontFamily>
-                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                    </Button.FontFamily>
+                            <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                        </Button.FontFamily>
                 </Button>
 
                 <Button 
@@ -127,8 +132,9 @@
                     Text="JAEGER" 
                     Clicked="server5_Clicked">
                     <Button.FontFamily>
-                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                    </Button.FontFamily>
+                            <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                        </Button.FontFamily>
                 </Button>
 
                 <Button 
@@ -136,8 +142,9 @@
                     Text="BRIGGS" 
                     Clicked="server6_Clicked">
                     <Button.FontFamily>
-                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                    </Button.FontFamily>
+                            <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                        </Button.FontFamily>
                 </Button>
 
             </Grid>
@@ -148,8 +155,9 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
                 <Button.FontFamily>
-                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-                </Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
             </Button>
 
         </Grid>
@@ -157,14 +165,16 @@
         <Label Text="PLANETSIDE 2"
                >
             <Label.FontFamily>
-                <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-            </Label.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                UWP="PlanetSide2.ttf#Planetside2"/>
+                </Label.FontFamily>
         </Label>
            <Label Text="planetside 2"
                >
             <Label.FontFamily>
-                <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
-            </Label.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                UWP="PlanetSide2.ttf#Planetside2"/>
+                </Label.FontFamily>
         </Label>
             
             

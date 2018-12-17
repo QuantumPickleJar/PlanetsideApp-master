@@ -90,7 +90,7 @@ namespace PsApp
                 // create our command that we're going to tell the service 
                 string s = @"{\042service\042:\042event\042,\042action\042:\042subscribe\042,\042worlds\042:[\0421\042,\0429\042,\04210\042,\04211\042,\04213\042,\04217\042,\04218\042,\04219\042,\04225\042,\0421000\042,\0421001\042],\042eventNames\042:[\042FacilityControl\042,\042MetagameEvent\042]}";
                 //s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
-                s = "{'service':'event','action':'subscribe','worlds':['17'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
+                s = "{'service':'event','action':'subscribe','worlds':['1','10','13','17','19','25','40'],'eventNames':['FacilityControl','MetagameEvent','ContinentLock',ContinentUnlock']}";
                 //use json later to be able to parse the this.selectedWorld into the string command.
 
                 //create a method for turning the data from filterbox into a JSON command as seen above ^

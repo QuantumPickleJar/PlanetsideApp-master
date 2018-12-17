@@ -13,8 +13,8 @@
     <None Remove="Pages\FeedPageSelect.xaml" />
     <None Remove="Pages\FisuPage.xaml" />
     <None Remove="Pages\FisuPopPage.xaml" />
-    <None Remove="Pages\FTerrPage.xaml" />
     <None Remove="Pages\MainPage.xaml" />
+    <None Remove="Pages\SerachPage.xaml" />
     <None Remove="Pictures\hexagon.jpg" />
     <None Remove="Pictures\nc_icon.png" />
     <None Remove="Pictures\planetside2logo.png" />
@@ -47,11 +47,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pages\FTerrPage.xaml">
+    <EmbeddedResource Include="Pages\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Include="Pages\MainPage.xaml">
+    <EmbeddedResource Include="Pages\SerachPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -91,11 +91,11 @@
       <SubType>Code</SubType>
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="Pages\FTerrPage.xaml.cs">
+    <Compile Update="Pages\MainPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
-    <Compile Update="Pages\MainPage.xaml.cs">
+    <Compile Update="Pages\SerachPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>

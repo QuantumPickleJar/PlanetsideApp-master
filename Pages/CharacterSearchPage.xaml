@@ -19,7 +19,8 @@
             SearchButtonPressed="charSearch_SearchButtonPressed"
             TextColor="White">
             <SearchBar.FontFamily>
-                <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium"/>
+              <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium"
+                          UWP="Geo-Md.ttf#Geogrotesque Medium"/>            
             </SearchBar.FontFamily>
         </SearchBar>
 
@@ -60,7 +61,8 @@
                                FontSize="15"
                                TextColor="WhiteSmoke">
                                 <Label.FontFamily>
-                                    <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium"/>
+                                    <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium"
+                                                UWP="Geo-Md.ttf#Geogrotesque Medium"/>
                                 </Label.FontFamily>
                             </Label>
 
@@ -70,7 +72,8 @@
                                Text="{Binding BattleRank.Value}"
                                FontSize="15">
                                 <Label.FontFamily>
-                                    <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium"/>
+                                  <OnPlatform Android="Geo-Md.ttf#Geogrotesque Medium" 
+                                              UWP="Geo-Md.ttf#Geogrotesque Medium"/>                                
                                 </Label.FontFamily>
 
                                 <Label.FormattedText>

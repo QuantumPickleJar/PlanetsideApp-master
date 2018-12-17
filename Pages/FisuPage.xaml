@@ -27,7 +27,8 @@
                 HorizontalOptions="Center"
                 VerticalOptions="Center">
                 <Button.FontFamily>
-                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                UWP="PlanetSide2.ttf#Planetside2"/>
                 </Button.FontFamily>
             </Button>
         </Grid>
