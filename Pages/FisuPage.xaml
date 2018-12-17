@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PsApp.Pages.FisuPage"
+             Title="Fisu Services">
+    <ContentPage.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                x:Name="fisuPop" 
+                Text="Population"
+                WidthRequest="400"
+                Clicked="fisuPop_ClickedAsync"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Button.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                </Button.FontFamily>
+            </Button>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

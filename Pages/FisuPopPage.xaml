@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PsApp.Pages.FisuPopPage"
+             Title="Server pop"
+             BackgroundColor="DarkGray">
+    <ContentPage.Content>
+        <StackLayout>
+        <Grid Margin="0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" x:Name="GridPopView" HorizontalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width=".33*"/>
+                    <ColumnDefinition Width=".33*"/>
+                    <ColumnDefinition Width=".33*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"  />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Image 
+                    WidthRequest="50"
+                    HeightRequest="50"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Grid.Column="0" Grid.Row="0"
+                    Source="vs_icon.png" />
+                <Label 
+                    Grid.Column="0" Grid.Row="1"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" 
+                    x:Name="vs_label" Text="{Binding Vs}" />
+
+                <Image
+                    WidthRequest="50"
+                    HeightRequest="50"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Grid.Column="1" Grid.Row="0"
+                    Source="tr_icon.png" />
+                <Label 
+                    Grid.Column="1" Grid.Row="1"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" 
+                    x:Name="tr_label" Text="{Binding Tr}" />
+
+                <Image 
+                    WidthRequest="50"
+                    HeightRequest="50"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Grid.Column="2" Grid.Row="0"
+                    Source="nc_icon.png" />
+                <Label 
+                    Grid.Column="2" Grid.Row="1"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" 
+                    x:Name="nc_label" Text="{Binding Nc}" />
+            </Grid>
+
+            <Button 
+                Grid.Row="1"
+                Text="REFRESH"
+                HorizontalOptions="Center"
+                Clicked="getPop_Clicked">
+                <Button.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                </Button.FontFamily>
+            </Button>
+
+            <Grid Grid.Row="2" x:Name="GridButtonLayout">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Button 
+                    Grid.Row="0" Grid.Column="0"
+                    Text="CONNERY" 
+                    Clicked="server1_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button 
+                    Grid.Row="0" Grid.Column="1"
+                    Text="MILLER" 
+                    Clicked="server2_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button 
+                    Grid.Row="0" Grid.Column="2"
+                    Text="COBALT" 
+                    Clicked="server3_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button 
+                    Grid.Row="1" Grid.Column="0"
+                    Text="EMERALD" 
+                    Clicked="server4_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button 
+                    Grid.Row="1" Grid.Column="1"
+                    Text="JAEGER" 
+                    Clicked="server5_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button 
+                    Grid.Row="1" Grid.Column="2"
+                    Text="BRIGGS" 
+                    Clicked="server6_Clicked">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+            </Grid>
+
+            <Button Grid.Row="3"
+                Text="SOLTECH" 
+                Clicked="server7_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Button.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                </Button.FontFamily>
+            </Button>
+
+        </Grid>
+        
+        <Label Text="PLANETSIDE 2"
+               >
+            <Label.FontFamily>
+                <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+            </Label.FontFamily>
+        </Label>
+           <Label Text="planetside 2"
+               >
+            <Label.FontFamily>
+                <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+            </Label.FontFamily>
+        </Label>
+            
+            
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PsApp.MainPage" Title="Quant Home">
+
+    <StackLayout>
+        <Grid
+            Grid.Column="0"
+            Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+        </Grid>
+
+        <Image
+            x:Name="logo"
+            HeightRequest="300"
+            WidthRequest="300"
+            Source= "planetside2logo.png" 
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            />
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+
+            <Button
+                Grid.Row="0"
+                Grid.Column="0"
+                x:Name="navCharacters" 
+                Text="Search" 
+                WidthRequest="250"
+                Clicked="navCharacters_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Button.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                </Button.FontFamily>
+            </Button>
+
+            <Button 
+                Grid.Row="0"
+                Grid.Column="1"
+                x:Name="navLiveEvent" 
+                Text="Live"
+                WidthRequest="250"
+                Clicked="navLiveEvent_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Button.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                </Button.FontFamily>
+            </Button>
+
+            <Button
+                Grid.Row="1"
+                Grid.Column="0"
+                x:Name="Searches" 
+                Text="TestNotif"
+                WidthRequest="250"
+                Clicked="navSearchPage_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Button.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                </Button.FontFamily>
+            </Button>
+
+            <Button 
+                Grid.Row="1"
+                Grid.Column="1"
+                x:Name="FisuPageButton" 
+                Text="Fisu"
+                WidthRequest="250"
+                Clicked="navFisuButton_Clicked"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+                <Button.FontFamily>
+                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"/>
+                </Button.FontFamily>
+            </Button>
+        </Grid>
+
+        <!--<Picker Title="Select server" 
+                x:Name="serverPicker"
+                SelectedIndexChanged="serverPicker_SelectedIndexChanged"
+                HorizontalOptions="Center"
+                ItemsSource=""/>-->
+        <!--<Button 
+            x:Name="navSettingsPage" 
+            Text="Settings" 
+            Clicked="navSettingsPage_Clicked"
+            HorizontalOptions="Center"/>-->
+    </StackLayout>
+</ContentPage>
