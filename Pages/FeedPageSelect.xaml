@@ -12,6 +12,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <Label Text="Please select a server"
@@ -101,6 +102,17 @@
                 <Button Grid.Row="3"
                 Text="SOLTECH" 
                 Clicked="server7_Clicked"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+                
+                <Button Grid.Row="4"
+                Text="ALL (Debug)" 
+                Clicked="debug_Clicked"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand">
                     <Button.FontFamily>

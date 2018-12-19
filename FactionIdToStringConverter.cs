@@ -11,11 +11,11 @@ namespace PsApp
         public int Faction1Id { get; set; } = 1;
         public string Faction1String { get; set; } = "VS";
         
-        public int Faction2Id { get; set; } = 2;
-        public string Faction2String { get; set; } = "TR";
-        
-        public int Faction3Id { get; set; } = 3;
+        public int Faction3Id { get; set; } = 2;
         public string Faction3String { get; set; } = "NC";
+        
+        public int Faction2Id { get; set; } = 3;
+        public string Faction2String { get; set; } = "TR";
 
        
 
@@ -45,9 +45,9 @@ namespace PsApp
             {
                 if (i == "VS")
                     return Faction1Id;
-                if (i == "TR")
-                    return Faction2Id;
                 if (i == "NC")
+                    return Faction2Id;
+                if (i == "TR")
                     return Faction3Id;
                 return "Unknown faction string";
             }

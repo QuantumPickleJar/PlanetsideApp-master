@@ -63,5 +63,12 @@ namespace PsApp.Pages
             FeedPage feedPage = new FeedPage(40);
             await Navigation.PushAsync(feedPage);
         }
+
+        private async void debug_Clicked(object sender, EventArgs e)
+        {
+            //SolTech 40
+            FeedPage feedPage = new FeedPage(100);
+            await Navigation.PushAsync(feedPage);
+        }
     }
 }

@@ -46,7 +46,7 @@ namespace PsApp
             //get events API once every 30 / 140 seconds to check for events past         }
         }
 
-        private async void NotifyOfEvent(object sender, EventArgs e)
+        public async void NotifyOfEvent(object sender, EventArgs e)
         {
             var notifServ = DependencyService.Resolve<INotificationService>();
             await notifServ.NotifyAsync("test title", "message message");
@@ -57,6 +57,8 @@ namespace PsApp
         {
             // Handle when your app resumes
             // destroy the job scheduler 
+
+
         }
         
     }

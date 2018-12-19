@@ -45,8 +45,8 @@ namespace PsApp
 
                 if(Device.RuntimePlatform == Device.Android)
                 if (this.FactionId == 1) return ImageSource.FromFile("vs_icon.png");
-                if (this.FactionId == 2) return ImageSource.FromFile("tr_icon.png");
-                if (this.FactionId == 3) return ImageSource.FromFile("nc_icon.png");
+                if (this.FactionId == 2) return ImageSource.FromFile("nc_icon.png");
+                if (this.FactionId == 3) return ImageSource.FromFile("tr_icon.png");
 
                 return null;
             }
@@ -59,8 +59,8 @@ namespace PsApp
         //    set
         //    {
         //        if (FactionId == 1) Faction = "VS";
-        //        if (FactionId == 2) Faction = "TR";
-        //        if (FactionId == 3) Faction = "NC";
+        //        if (FactionId == 3) Faction = "TR";
+        //        if (FactionId == 2) Faction = "NC";
         //    }
         //}
 

@@ -29,13 +29,13 @@ namespace PsApp
 
             InitializeComponent();
             planetsideService = new PlanetsideService(serviceID);
-            //planetsideService.MetagameEventChange += PlanetsideService_MetagameEventChanged;
+            planetsideService.MetagameEventChange += PlanetsideService_MetagameEventChangedAsync;
             planetsideService.ConnectionStateChanged += PlanetsideService_ConnectionStateChanged;
-            //planetsideService.ContinentLocked += PlanetsideService_ContinentLockChanged;
-            //planetsideService.ContinentUnlocked += PlanetsideService_ContinentUnlockChanged;
             planetsideService.FacilityControlChanged += PlanetsideService_FacilityControlChanged;
             consoleOut.ItemsSource = subscribedMessages;
         }
+        public Events.World.Event[] _events = new Events.World.EventDataclass().GetEvents();
+
 
         protected override void OnAppearing()
         {
@@ -53,24 +53,7 @@ namespace PsApp
         int worldId;
 
 
-        private async void PlanetsideService_ContinentLockChangedAsync(object sender, ContinentLockEventArgs e)
-        {
-            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var notifServ = Xamarin.Forms.DependencyService.Resolve<INotificationService>();
-
-            await notifServ.NotifyAsync("Planetside Alert", $"{e.Payload.Timestamp} started at " +
-                epoch.AddSeconds(e.Payload.Timestamp).ToLocalTime().ToShortTimeString());
-        }
-        private async void PlanetsideService_ContinentUnlockChangedAsync(object sender, ContinentUnlockEventArgs e)
-        {
-            DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            var notifServ = Xamarin.Forms.DependencyService.Resolve<INotificationService>();
-
-            await notifServ.NotifyAsync("Planetside Alert", $"{e.Payload.Timestamp} started at " +
-                epoch.AddSeconds(e.Payload.Timestamp).ToLocalTime().ToShortTimeString());
-        }
-
-
+       
 
         ObservableCollection<VisualPayload> subscribedMessages = new ObservableCollection<VisualPayload>();
 
@@ -99,7 +82,7 @@ namespace PsApp
         private void PlanetsideService_FacilityControlChanged(object sender, FacilityControlChangedEventArgs e)
         {
             VisualPayload passMe = new VisualPayload();
-            if (e != null && e.Payload.World_id == worldId)
+            if (e != null && e.Payload.World_id == worldId || worldId == 100)
             {
 
                 if (e.Payload.new_faction_id == e.Payload.old_faction_id && e.Payload.facility_id == null)
@@ -178,8 +161,8 @@ namespace PsApp
             //if (faction_id == 3) return "New Conglomerate";
 
             if (faction_id == 1) return "VS";
-            if (faction_id == 2) return "TR";
-            if (faction_id == 3) return "NC";
+            if (faction_id == 2) return "NC";
+            if (faction_id == 3) return "TR";
             else return "UNKNOWN FACTIONID!*";
         }
 
@@ -211,22 +194,39 @@ namespace PsApp
                     Console.WriteLine("[][] DEBUG [][] EVENT passMe param:  " + passMe.continent + " / " + passMe.name + " / " + passMe.payload.new_faction_id + " from " + passMe.payload.old_faction_id
                         + "\n [][] zoneID: " + passMe.zoneId + " REAL ACTION: " + passMe.facilityAction + " on server: " + passMe.payload.World_id);
 
-                    string message = ($"{e.Payload.metagame_event_id} started at " +
-                        epoch.AddSeconds(e.Payload.Timestamp).ToLocalTime().ToShortTimeString());
-                    await NotifyUser(message);
-                    subscribedMessages.Add(passMe);
+                    var d = MatchEvents(e);
+                    if (d != null)
+                    {
+                        string message = ($"{d.event_name} on {d.continent} {e.Payload.metagame_event_state_name} at " +
+                            epoch.AddSeconds(e.Payload.Timestamp).ToLocalTime().ToShortTimeString());
+
+                        await NotifyUserAsync("Planetside Alert", message);
+                        subscribedMessages.Add(passMe);
+                    }
                 }
-
-
-
             }
         }
 
-
-        private async Task NotifyUser(String message)
+        private Events.World.Event MatchEvents(Events.World.MetagameEventEventArgs check)
         {
-            var notifServ = DependencyService.Resolve<INotificationService>();
-            await notifServ.NotifyAsync("test title", "message message");
+            Events.World.Event localCheck = null;
+            for (int i = 0; i < _events.Length; i++)
+            {
+                if (check.Payload.metagame_event_id == _events[i].event_id.ToString())
+                {
+                    localCheck = _events[i];
+                    break;
+                }
+            }
+            if (localCheck != null)
+            {
+                return localCheck;
+            }
+            else
+            {
+                Console.WriteLine("\n\n-----ERROR PARSING EVENT INFORMATION FROM LOCAL DATABASE-------\n\n");
+                return null;
+            }
         }
 
 
@@ -316,7 +316,7 @@ namespace PsApp
 
         }
 
-
+        
 
         private class MetagameEvent
         {
@@ -328,6 +328,22 @@ namespace PsApp
                 //separate continent un/lockings when i add ContinentLockEventHandlers
                 get
                 {
+
+                    //make a list of arrays 
+
+
+                    if (event_id == 9)
+                    { eventCont = "Amerish"; return "Power Rush"; }
+                    if (event_id == 9)
+                    { eventCont = "Amerish"; return "Power Rush"; }
+                    if (event_id == 9)
+                    { eventCont = "Amerish"; return "Power Rush"; }
+                    if (event_id == 9)
+                    { eventCont = "Amerish"; return "Power Rush"; }
+
+                    if (event_id == 9)
+                    { eventCont = "Amerish"; return "Power Rush"; }
+
                     if (event_id == 9)
                     { eventCont = "Amerish"; return "Power Rush"; }
 
@@ -403,6 +419,24 @@ namespace PsApp
         private void clearList_Clicked(object sender, EventArgs e)
         {
             subscribedMessages.Clear();
+        }
+
+        public Task NotifyUserAsync(string title, string message)
+        {
+
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                return Task.Factory.StartNew(() =>
+                {
+
+                    var notifServ = Xamarin.Forms.DependencyService.Resolve<INotificationService>();
+                    notifServ.NotifyOldAsync(title, message);
+
+                });
+            }
+
+            else return Task.CompletedTask;
+            
         }
     }
 
