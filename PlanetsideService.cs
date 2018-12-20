@@ -287,6 +287,7 @@ namespace PsApp
         public async Task StopAsync()
         {
             IsStarted = false;
+
             // perform any cleanup??
             //thread.Abort();
         }

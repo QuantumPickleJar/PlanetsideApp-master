@@ -15,6 +15,7 @@
     <None Remove="Pages\FisuPopPage.xaml" />
     <None Remove="Pages\MainPage.xaml" />
     <None Remove="Pages\SerachPage.xaml" />
+    <None Remove="Pages\SettingsPage.xaml" />
     <None Remove="Pictures\hexagon.jpg" />
     <None Remove="Pictures\nc_icon.png" />
     <None Remove="Pictures\planetside2logo.png" />
@@ -52,6 +53,10 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Include="Pages\SerachPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -96,6 +101,10 @@
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Pages\SerachPage.xaml.cs">
+      <SubType>Code</SubType>
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\SettingsPage.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>

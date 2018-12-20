@@ -70,7 +70,7 @@ namespace PsApp
             //SettingsPage settingsPage = new SettingsPage();
             //await Navigation.PushAsync(settingsPage);
             var notifServ = DependencyService.Resolve<INotificationService>();
-            await notifServ.NotifyAsync("test title", "message message");
+            await notifServ.NotifyBigAsync("test title", "message message");
         }
 
         //void serverPicker_SelectedIndexChanged(object sender, EventArgs e)

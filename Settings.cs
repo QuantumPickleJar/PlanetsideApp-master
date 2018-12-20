@@ -11,6 +11,16 @@ namespace PsApp
             InitializeThemes();
         }
 
+        //Enable live feed on main page
+        
+        //Ask for server every time
+
+        //Theme
+
+        //Entry to set the user's current character so we can have a "my profile" page
+
+
+
         public bool _IsDeveloperModeOn { get; private set; }
 
         public string name { get; private set; }

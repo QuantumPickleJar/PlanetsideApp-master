@@ -17,6 +17,11 @@ namespace PsApp.Pages
 		{
 			InitializeComponent();
 		}
+
+        //Need to add some way to tell the CheckMissedEvents method on MainActivity.cs which world_id
+        //we are subscribed to MainActivity 
+
+        
         private async void server1_Clicked(object sender, EventArgs e)
         {
             //Connery 1 
@@ -66,7 +71,7 @@ namespace PsApp.Pages
 
         private async void debug_Clicked(object sender, EventArgs e)
         {
-            //SolTech 40
+            //debug, all servers
             FeedPage feedPage = new FeedPage(100);
             await Navigation.PushAsync(feedPage);
         }
