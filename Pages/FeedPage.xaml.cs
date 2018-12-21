@@ -17,7 +17,6 @@ namespace PsApp
         const string serviceID = "PS2mobile2018";
         private static readonly DateTime epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-        List<string> socketOutput = new List<string>();
         PlanetsideService planetsideService;
         FacilityResolver fR;
 
@@ -54,7 +53,8 @@ namespace PsApp
         {
 
             Console.WriteLine("\n\nCollection Changed\n\n");
-            consoleOut.ScrollTo(subscribedMessages[subscribedMessages.Count - 1], Xamarin.Forms.ScrollToPosition.End, true);
+            if(subscribedMessages.Count!=0)
+                consoleOut.ScrollTo(subscribedMessages[subscribedMessages.Count - 1], Xamarin.Forms.ScrollToPosition.End, true);
 
             //app crashes when we add too many 
             
@@ -62,7 +62,7 @@ namespace PsApp
 
         protected override void OnAppearing()
         {
-            worldIdSpan.Text = new WorldIdToString().FetchString(worldId);
+                        worldIdSpan.Text = new WorldIdToString().FetchString(worldId);
 
             base.OnAppearing();
             if (planetsideService.IsStarted == false)

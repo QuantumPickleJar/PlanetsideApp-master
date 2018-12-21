@@ -3,8 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:PsApp"
              x:Class="PsApp.FeedPage" 
-             Title="Live feed"
-             BackgroundImage="bluehex.png">
+             Title="Live feed">
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:IntToColorConverter DefaultFactionColor="OrangeRed" x:Key="factionIdToColor" />
@@ -42,19 +41,19 @@
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2" />
-                                    
+
                                     <Span x:Name="facilityNameSpan" 
                                           Text="{Binding name}" 
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="text2" 
                                           Text=" from " 
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="oldFactSpan" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"
                                           FontAttributes="Bold"
@@ -67,20 +66,19 @@
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2" />
-                                    
+
                                     <Span x:Name="continentSpan" 
                                           Text="{Binding continent}" 
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-
             <DataTemplate x:Key="facilityDefendTemplate">
                 <ViewCell>
                     <StackLayout HeightRequest="45">
@@ -92,38 +90,38 @@
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           Text="{Binding payload.Timestamp,Converter={StaticResource UnixToLong}}"/>
-                                    
+
                                     <Span x:Name="text3" 
                                           Text=" - "
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="newFactSpan" 
                                           Text="{Binding payload.new_faction_id, Converter={StaticResource factionIdToString}}"
                                           FontAttributes="Bold"
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"
                                           TextColor="{Binding payload.new_faction_id, Converter={StaticResource factionIdToColor}}"/>
-                                    
+
                                     <Span x:Name="text1" 
                                           Text=" has defended " 
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="facilityNameSpan" 
                                           Text="{Binding name}"  
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="text2" 
                                           Text=" on " 
                                           TextColor="WhiteSmoke" 
                                           FontSize="14" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="continentSpan" 
                                           Text="{Binding continent}" 
                                           TextColor="WhiteSmoke" 
@@ -135,7 +133,6 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-
             <DataTemplate x:Key="nonMetagameTemplate">
                 <ViewCell>
                     <StackLayout HeightRequest="45">
@@ -285,7 +282,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
-        <Image Source="bluehex.png" Aspect="AspectFill"/>
+        <Image Source="https://i.imgur.com/QcEdvB3.png" Aspect="AspectFill"/>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width=".33*"/>
@@ -297,7 +294,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
+            
             <ListView 
                 Grid.ColumnSpan="3"
                 Grid.Row="2"
@@ -307,13 +304,11 @@
                 ItemTapped="OnItemTapped"
                 x:FieldModifier="public"
                 x:Name="consoleOut"
-                BackgroundColor="DimGray"
-                Opacity=".5"
                 HorizontalOptions="CenterAndExpand"
                 VerticalOptions="CenterAndExpand"
                 Margin="5,5,0,5" 
                 ItemTemplate="{StaticResource FeedDataTemplateSelector}"/>
-        
+ 
             <Label
                 x:Name="statusLabel"
                 Text="Awaiting connection..."

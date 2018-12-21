@@ -2,113 +2,216 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PsApp.MainPage" Title="Quant Home"
-             BackgroundImage="communitybackground.png">
+             xmlns:local="clr-namespace:PsApp">
+    <!--BackgroundImage="https://www-cdn.planetside2.com/images/mobile/backgrounds/community-background.jpg?v=2386047961"-->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:IntToColorConverter DefaultFactionColor="OrangeRed" x:Key="factionIdToColor" />
+            <local:FactionIdToStringConverter x:Key="factionIdToString" />
+            <local:UnixToLongTimeConverter x:Key="UnixToLong" />
+            <local:WorldIdToString x:Key="WorldToString" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Image Source="https://www-cdn.planetside2.com/images/mobile/backgrounds/community-background.jpg?v=2386047961"
+               Aspect="AspectFill"/>
 
-    <StackLayout>
-        <Grid
-            Grid.Column="0"
-            Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+        <StackLayout>
 
-        </Grid>
-
-        <Image
-            x:Name="logo"
-            HeightRequest="300"
-            WidthRequest="300"
-            Source= "planetside2logo.png" 
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
-            />
-
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-
-            <Button
-                Grid.Row="0"
-                Grid.Column="0"
-                x:Name="navCharacters" 
-                Text="Search" 
-                WidthRequest="250"
-                Clicked="navCharacters_Clicked"
+           
+            <Image
+                x:Name="logo"
+                HeightRequest="300"
+                WidthRequest="300"
+                Source= "planetside2logo.png" 
                 HorizontalOptions="Center"
-                VerticalOptions="Center">
-                <Button.FontFamily>
-                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"
-                                UWP="PlanetSide2.ttf#Planetside2"/>
-                   
-                </Button.FontFamily>
-            </Button>
+                VerticalOptions="Center"
+                />
 
-            <Button 
-                Grid.Row="0"
-                Grid.Column="1"
-                x:Name="navLiveEvent" 
-                Text="Live"
-                WidthRequest="250"
-                Clicked="navLiveEvent_Clicked"
-                HorizontalOptions="Center"
-                VerticalOptions="Center">
-                <Button.FontFamily>
-                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"
-                                UWP="PlanetSide2.ttf#Planetside2"/>
-                </Button.FontFamily>
-            </Button>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-            <Button
-                Grid.Row="1"
-                Grid.Column="0"
-                x:Name="Searches" 
-                Text="TestNotif"
-                WidthRequest="250"
-                Clicked="navSearchPage_Clicked"
-                HorizontalOptions="Center"
-                VerticalOptions="Center">
-                <Button.FontFamily>
-                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"
-                                UWP="PlanetSide2.ttf#Planetside2"/>
-                </Button.FontFamily>
-            </Button>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-            <Button 
-                Grid.Row="1"
-                Grid.Column="1"
-                x:Name="FisuPageButton" 
-                Text="Fisu"
-                WidthRequest="250"
-                Clicked="navFisuButton_Clicked"
-                HorizontalOptions="Center"
-                VerticalOptions="Center">
-                <Button.FontFamily>
-                    <OnPlatform Android="PlanetSide2.ttf#Planetside2"
-                                UWP="PlanetSide2.ttf#Planetside2"/>
-                </Button.FontFamily>
-            </Button>
-        </Grid>
 
-        <!--<Picker Title="Select server" 
-                x:Name="serverPicker"
-                SelectedIndexChanged="serverPicker_SelectedIndexChanged"
-                HorizontalOptions="Center"
-                ItemsSource=""/>-->
-        <!--<Button 
-            x:Name="navSettingsPage" 
-            Text="Settings" 
-            Clicked="navSettingsPage_Clicked"
-            HorizontalOptions="Center"/>-->
-    </StackLayout>
+                <Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    x:Name="navCharacters" 
+                    Text="Search" 
+                    WidthRequest="250"
+                    Clicked="navCharacters_Clicked"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button 
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    x:Name="navLiveEvent" 
+                    Text="Live"
+                    WidthRequest="250"
+                    Clicked="navLiveEvent_Clicked"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    x:Name="Searches" 
+                    Text="TestNotif"
+                    WidthRequest="250"
+                    Clicked="navSearchPage_Clicked"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+
+                <Button 
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    x:Name="FisuPageButton" 
+                    Text="Fisu"
+                    WidthRequest="250"
+                    Clicked="navFisuButton_Clicked"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+            </Grid>
+
+            <Picker Title="Select server" 
+                    x:Name="serverPicker"
+                    ItemDisplayBinding="{Binding theName}"
+                    SelectedIndexChanged="serverPicker_SelectedIndexChanged"
+                    HorizontalOptions="Center"
+                    />
+            
+            <!--<Button 
+                x:Name="navSettingsPage" 
+                Text="Settings" 
+                Clicked="navSettingsPage_Clicked"
+                HorizontalOptions="Center"/>-->
+
+            <ListView
+                
+                IsVisible="True"
+                MinimumWidthRequest="550"
+                ItemTapped="OnItemTapped"
+                BackgroundColor="DarkGray"
+                x:FieldModifier="public"
+                x:Name="recentEvents"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                Margin="5,5,0,5">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout HeightRequest="45">
+                                <Label Margin="2,0,0,0" x:Name="theLabel">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span x:Name="timestampSpan" 
+                                                TextColor="WhiteSmoke" 
+                                                FontSize="14" 
+                                                  Text="{Binding timestamp,Converter={StaticResource UnixToLong}}" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                            <Span x:Name="text3" 
+                                                  Text=" - "
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" />
+
+                                            <Span x:Name="eventNameSpan" 
+                                                  Text="{Binding eventName}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                            <Span x:Name="text2" 
+                                                  Text=" "
+                                                  FontSize="14" />
+
+                                            <Span x:Name="eventStatusSpan2" 
+                                                  Text="{Binding metagame_event_state_name}" 
+                                                  TextColor="CornflowerBlue" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                        </FormattedString>
+
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label Margin="2,0,0,0" x:Name="theScores">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+
+                                            <Span x:Name="vsSpan" 
+                                                  Text=" VS: "
+                                                  TextColor="#440F62"
+                                                  FontSize= "12" />
+
+                                            <Span x:Name="vsValueSpan" 
+                                                  Text="{Binding faction_vs}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                            <Span x:Name="ncSpan" 
+                                                  Text=" NC: " 
+                                                  TextColor="#004B80" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                            <Span x:Name="ncValueSpan" 
+                                                  Text="{Binding faction_nc}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                            <Span x:Name="trSpan" 
+                                                  Text=" TR: " 
+                                                  TextColor="#9E0B0F" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                            <Span x:Name="trValueSpan" 
+                                                  Text="{Binding faction_tr}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+
+        </StackLayout>
+    </Grid>
 </ContentPage>

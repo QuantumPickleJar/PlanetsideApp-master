@@ -12,7 +12,6 @@ namespace PsApp
     {
         public Payload payload { get; set; }
         public int event_id { get; set; }
-        public string eventCont { get; private set; }
         public string eventStatus { get; set; }
         public string eventName { get; set; }
         public double nc { get; set; }

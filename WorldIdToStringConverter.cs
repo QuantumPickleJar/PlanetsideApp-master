@@ -58,6 +58,7 @@ namespace PsApp
                 if (i == worldId19) return worldName19;
                 if (i == worldId25) return worldName25;
                 if (i == worldId40) return worldName40;
+                if (i == worldId100) return worldName100;
                 return "ERROR";
             }
             else
@@ -70,9 +71,17 @@ namespace PsApp
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
 
-            if (value is string i)
+            if (value is string s)
             {
-                return value;
+                if (s == worldName1) return worldId1;
+                if (s == worldName10) return worldId10;
+                if (s == worldName13) return worldId13;
+                if (s == worldName17) return worldId17;
+                if (s == worldName19) return worldId19;
+                if (s == worldName25) return worldId25;
+                if (s == worldName40) return worldId40;
+                if (s == worldName100) return worldId100;
+                return "ERROR";
             }
             else
             {

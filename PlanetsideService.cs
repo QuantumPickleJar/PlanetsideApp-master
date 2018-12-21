@@ -6,6 +6,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 namespace PsApp
 {
 
@@ -53,6 +54,22 @@ namespace PsApp
 
             CharacterQueryResult resultClass = Newtonsoft.Json.JsonConvert.DeserializeObject<CharacterQueryResult>(json);
             return resultClass;
+        }
+
+        public async Task<Events.WorldEventListResult> GetRecentEvents()
+        {
+            string pref = Preferences.Get("globalWorldId", "100", "theWorld");
+            int time = ((int)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime()).TotalSeconds) - 14400;
+            string json;
+            using (var client = new WebClient())
+            {
+                string uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?world_id={pref}after={time}&c:limit=500";
+                json = await client.DownloadStringTaskAsync(uri);
+            }
+            Events.WorldEventListResult recentList = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.WorldEventListResult>(json);
+            //IEnumerable<CompactWorldEvent> query = recentList.Where(recentList =>
+            //recentList.metagame_event_id == "3");
+            return recentList;
         }
 
 

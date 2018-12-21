@@ -4,7 +4,8 @@
              x:Class="PsApp.Pages.SettingsPage">
     <ContentPage.Content>
         <StackLayout>
-           
+           <Picker Title="serverPick" 
+                   SelectedIndexChanged="Picker_SelectedIndexChanged"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
