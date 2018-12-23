@@ -63,12 +63,13 @@ namespace PsApp
             string json;
             using (var client = new WebClient())
             {
-                string uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?world_id={pref}after={time}&c:limit=500";
+                string uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?world_id={pref}after={time}&c:limit=750";
                 json = await client.DownloadStringTaskAsync(uri);
             }
             Events.WorldEventListResult recentList = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.WorldEventListResult>(json);
             //IEnumerable<CompactWorldEvent> query = recentList.Where(recentList =>
             //recentList.metagame_event_id == "3");
+           
             return recentList;
         }
 
@@ -81,8 +82,6 @@ namespace PsApp
 
         async void ListenToWebSocketStuff()
         {
-
-
             var client = new System.Net.Http.HttpClient
             {
                 BaseAddress = new Uri("http://1.2.3.4"),
@@ -280,11 +279,7 @@ namespace PsApp
                 return await Task.Run(() => resultString);
             }
         }
-
-        public async void AddResult(List<string> list)
-        {
-            returnList = list;
-        }
+        
 
         private Thread thread;
 

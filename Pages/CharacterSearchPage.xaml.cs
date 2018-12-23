@@ -39,7 +39,9 @@ namespace PsApp
         private async void charSearch_SearchButtonPressed(object sender, EventArgs e)
         {
             //query = charSearch.Text.ToLower();
+
             await GetSearchResultsAsync();
+            
             //GetSearchResultSingle();
 
         }

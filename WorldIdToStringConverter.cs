@@ -81,6 +81,15 @@ namespace PsApp
                 if (s == worldName25) return worldId25;
                 if (s == worldName40) return worldId40;
                 if (s == worldName100) return worldId100;
+
+                if (s == worldId1.ToString()) return worldName1;
+                if (s == worldId10.ToString()) return worldName10;
+                if (s == worldId13.ToString()) return worldName13;
+                if (s == worldId17.ToString()) return worldName17;
+                if (s == worldId19.ToString()) return worldName19;
+                if (s == worldId25.ToString()) return worldName25;
+                if (s == worldId40.ToString()) return worldName40;
+                if (s == worldId100.ToString()) return worldName100;
                 return "ERROR";
             }
             else

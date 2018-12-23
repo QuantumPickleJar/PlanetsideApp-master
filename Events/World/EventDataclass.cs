@@ -53,8 +53,8 @@ namespace PsApp.Events.World
 
                 new Event{event_name = "Amerish Warpgates Stabilizing", continent = "Amerish", event_id=159},
                 new Event{event_name = "Esamir Warpgates Stabilizing", continent = "Esamir", event_id = 160},
-                new Event{event_name = "Indar Warpgates Stabilizing", continent = "Indar", event_id =   162},
-                new Event{event_name = "Hossin Warpgates Stabilizing", continent = "Hossin", event_id = 163},
+                new Event{event_name = "Indar Warpgates Stabilizing", continent = "Indar", event_id =   161},
+                new Event{event_name = "Hossin Warpgates Stabilizing", continent = "Hossin", event_id = 162},
 
                 new Event{event_name = "Aerial Anomalies", continent = "Indar", event_id = 167},
                 new Event{event_name = "Aerial Anomalies", continent = "Amerish", event_id = 172},

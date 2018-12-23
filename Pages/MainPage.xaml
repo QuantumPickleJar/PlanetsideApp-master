@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PsApp.MainPage" Title="Quant Home"
+             x:Class="PsApp.MainPage" 
+             Title="Quant Home"
              xmlns:local="clr-namespace:PsApp">
     <!--BackgroundImage="https://www-cdn.planetside2.com/images/mobile/backgrounds/community-background.jpg?v=2386047961"-->
     <ContentPage.Resources>
@@ -10,6 +11,330 @@
             <local:FactionIdToStringConverter x:Key="factionIdToString" />
             <local:UnixToLongTimeConverter x:Key="UnixToLong" />
             <local:WorldIdToString x:Key="WorldToString" />
+            <DataTemplate x:Key="debugMessage">
+                <TextCell Text="{Binding message}"
+                          TextColor="WhiteSmoke"
+                          />
+            </DataTemplate>
+
+            <DataTemplate x:Key="contTemp">
+                <ViewCell>
+                    <StackLayout HeightRequest="50">
+                        <Label Margin="2,0,0,0" x:Name="theLabel">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="timestampSpan" 
+                                                TextColor="WhiteSmoke" 
+                                                FontSize="14" 
+                                                  Text="{Binding timestamp,Converter={StaticResource UnixToLong}}" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="text1" 
+                                                  Text=" - "
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" />
+
+                                    <Span x:Name="eventNameSpan" 
+                                                  Text="{Binding eventName}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                  
+                                    <Span Text=" : "
+                                          FontSize="14" 
+                                          TextColor="WhiteSmoke" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="eventStatusSpan2" 
+                                                  Text="{Binding metagame_event_state_name}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" [" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="MetaWorldSpan" 
+                                                  Text="{Binding world_id_int,Converter={StaticResource WorldToString}}" 
+                                                  TextColor="DarkGreen" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span Text="]" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                </FormattedString>
+
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Margin="2,0,0,0" x:Name="theScores">
+                            <Label.FormattedText>
+                                <FormattedString>
+
+                                    <Span x:Name="vsSpan" 
+                                                  Text=" VS: "
+                                                  TextColor="#440F62"
+                                                  FontSize= "12"
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="vsValueSpan" 
+                                                  Text="{Binding faction_vs}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="ncSpan" 
+                                                  Text=" NC: " 
+                                                  TextColor="#004B80" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="ncValueSpan" 
+                                                  Text="{Binding faction_nc}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="trSpan" 
+                                                  Text=" TR: " 
+                                                  TextColor="#9E0B0F" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="trValueSpan" 
+                                                  Text="{Binding faction_tr}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            <DataTemplate x:Key="scoredTemp">
+                <ViewCell>
+                    <StackLayout HeightRequest="50">
+                        <Label Margin="2,0,0,0" x:Name="theLabel">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="timestampSpan" 
+                                                TextColor="WhiteSmoke" 
+                                                FontSize="14" 
+                                                  Text="{Binding timestamp,Converter={StaticResource UnixToLong}}" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="text1" 
+                                                  Text=" - "
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" />
+
+                                    <Span x:Name="eventNameSpan" 
+                                                  Text="{Binding eventName}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span
+                                                  Text=" on "
+                                                  FontSize="14" 
+                                        TextColor="WhiteSmoke" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"
+                                        />
+
+                                    <Span x:Name="cSpan" 
+                                                  Text="{Binding continent}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="eventStatusSpan2" 
+                                                  Text="{Binding metagame_event_state_name}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" [" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="MetaWorldSpan" 
+                                                  Text="{Binding world_id_int,Converter={StaticResource WorldToString}}" 
+                                                  TextColor="DarkGreen" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span Text="]" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                </FormattedString>
+
+                            </Label.FormattedText>
+                        </Label>
+                        <Label Margin="2,0,0,0" x:Name="theScores">
+                            <Label.FormattedText>
+                                <FormattedString>
+
+                                    <Span x:Name="vsSpan" 
+                                                  Text=" VS: "
+                                                  TextColor="#440F62"
+                                                  FontSize= "12"
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="vsValueSpan" 
+                                                  Text="{Binding faction_vs}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="ncSpan" 
+                                                  Text=" NC: " 
+                                                  TextColor="#004B80" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="ncValueSpan" 
+                                                  Text="{Binding faction_nc}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="trSpan" 
+                                                  Text=" TR: " 
+                                                  TextColor="#9E0B0F" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="trValueSpan" 
+                                                  Text="{Binding faction_tr}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="12" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="metaTemp">
+                <ViewCell>
+                    <StackLayout HeightRequest="45">
+                        <Label Margin="2,0,0,0" x:Name="theLabel">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="timestampSpan" 
+                                                TextColor="WhiteSmoke" 
+                                                FontSize="14" 
+                                                  Text="{Binding timestamp,Converter={StaticResource UnixToLong}}" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" - "
+                                          
+                                          FontSize="14" />
+
+                                    <Span x:Name="eventNameSpan" 
+                                                  Text="{Binding eventName}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" "
+                                          FontSize="14" />
+
+                                    <Span x:Name="eventStatusSpan2" 
+                                                  Text="{Binding metagame_event_state_name}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" [" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="MetaWorldSpan" 
+                                                  Text="{Binding world_id_int,Converter={StaticResource WorldToString}}" 
+                                                  TextColor="DarkGreen" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span Text="]" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                </FormattedString>
+
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            
+            <DataTemplate x:Key="nonmetaTemp">
+                <ViewCell>
+                    <StackLayout HeightRequest="45">
+                        <Label Margin="2,0,0,0" x:Name="theLabel">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span x:Name="timestampSpan" 
+                                                TextColor="WhiteSmoke" 
+                                                FontSize="14" 
+                                                  Text="{Binding timestamp,Converter={StaticResource UnixToLong}}" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" - " 
+                                          TextColor="WhiteSmoke" 
+                                          FontSize="14" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="eventNameSpan" 
+                                                  Text="{Binding eventName}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" " FontSize="14" />
+
+                                    <Span x:Name="eventStatusSpan2" 
+                                                  Text="{Binding metagame_event_state_name}" 
+                                                  TextColor="WhiteSmoke" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="text3" 
+                                                  Text=" on "
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2" 
+                                                  TextColor="WhiteSmoke"/>
+
+                                    <Span x:Name="contSpan" 
+                                                  Text="{Binding continent}" 
+                                                  TextColor="Snow" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span Text=" [" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                                    <Span x:Name="MetaWorldSpan" 
+                                                  Text="{Binding world_id_int,Converter={StaticResource WorldToString}}" 
+                                                  TextColor="DarkGreen" 
+                                                  FontSize="14" 
+                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    <Span Text="]" FontSize="14" 
+                                          TextColor="WhiteSmoke"
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                </FormattedString>
+
+                            </Label.FormattedText>
+                        </Label>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+            
+            <local:MainPageDataTemplateSelector x:Key="MainPageDataTemplateSelector" 
+                                                  metaDataTemplate="{StaticResource metaTemp}"
+                                                  nonmetaDataTemplate="{StaticResource nonmetaTemp}"
+                                                  scoredDataTemplate="{StaticResource scoredTemp}"
+                                                  continentTemplate="{StaticResource contTemp}"
+                                                  debugMsgTemplate="{StaticResource debugMessage}"/>
         </ResourceDictionary>
     </ContentPage.Resources>
     <Grid>
@@ -21,11 +346,10 @@
            
             <Image
                 x:Name="logo"
-                HeightRequest="300"
-                WidthRequest="300"
+                HeightRequest="250"
+                WidthRequest="250"
                 Source= "planetside2logo.png" 
                 HorizontalOptions="Center"
-                VerticalOptions="Center"
                 />
 
             <Grid>
@@ -73,10 +397,11 @@
                 </Button>
 
                 <Button
+                    IsEnabled="False"
                     Grid.Row="1"
                     Grid.Column="0"
                     x:Name="Searches" 
-                    Text="TestNotif"
+                    Text="Outfit"
                     WidthRequest="250"
                     Clicked="navSearchPage_Clicked"
                     HorizontalOptions="Center"
@@ -91,7 +416,7 @@
                     Grid.Row="1"
                     Grid.Column="1"
                     x:Name="FisuPageButton" 
-                    Text="Fisu"
+                    Text="Miscellaneous"
                     WidthRequest="250"
                     Clicked="navFisuButton_Clicked"
                     HorizontalOptions="Center"
@@ -103,115 +428,76 @@
                 </Button>
             </Grid>
 
-            <Picker Title="Select server" 
-                    x:Name="serverPicker"
-                    ItemDisplayBinding="{Binding theName}"
-                    SelectedIndexChanged="serverPicker_SelectedIndexChanged"
+            <StackLayout Orientation="Horizontal">
+
+                <Picker Title="Select server" 
+                        BackgroundColor="Silver"
+                        x:Name="serverPicker"
+                        TextColor="WhiteSmoke"
+                        ItemDisplayBinding="{Binding theName}"
+                        SelectedIndexChanged="serverPicker_SelectedIndexChanged"
+                        HorizontalOptions="Center">
+                </Picker>
+                <Button 
+                        
+                        x:Name="refreshFeedBtn"
+                        HorizontalOptions="Center"
+                        BackgroundColor="Navy"
+                        Clicked="refreshFeed_Clicked"
+                        FontFamily="PlanetSide2.ttf#Planetside2"
+                        Text="Refresh"
+                        TextColor="WhiteSmoke"/>
+
+            </StackLayout>
+
+
+            <Label 
+                        HorizontalOptions="Start"
+                        Margin="5,2,0,2"
+                        Text="In past 2 hours..."
+                        FontFamily="PlanetSide2.ttf#Planetside2"
+                        TextColor="WhiteSmoke"/>
+        <!--<AbsoluteLayout>-->
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+            <ListView
+                    IsVisible="True"
+                    MinimumWidthRequest="550"
+                    MinimumHeightRequest="300"
+                    ItemTapped="OnItemTapped"
+                    BackgroundColor="DarkGray"
+                    x:FieldModifier="public"
+                    x:Name="recentEvents"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    Margin="5,5,0,5"
+                    ItemTemplate="{StaticResource MainPageDataTemplateSelector}"/>
+
+                <ActivityIndicator 
+                    x:Name="feedLoader"
+                    IsRunning="False"
                     HorizontalOptions="Center"
-                    />
-            
+                    VerticalOptions="Center"
+                    Color="LightBlue"/>
+
+
+                <!--</AbsoluteLayout>-->
+                </Grid>
+            </StackLayout>
             <!--<Button 
                 x:Name="navSettingsPage" 
                 Text="Settings" 
                 Clicked="navSettingsPage_Clicked"
                 HorizontalOptions="Center"/>-->
+            
 
-            <ListView
-                
-                IsVisible="True"
-                MinimumWidthRequest="550"
-                ItemTapped="OnItemTapped"
-                BackgroundColor="DarkGray"
-                x:FieldModifier="public"
-                x:Name="recentEvents"
-                HorizontalOptions="CenterAndExpand"
-                VerticalOptions="CenterAndExpand"
-                Margin="5,5,0,5">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout HeightRequest="45">
-                                <Label Margin="2,0,0,0" x:Name="theLabel">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span x:Name="timestampSpan" 
-                                                TextColor="WhiteSmoke" 
-                                                FontSize="14" 
-                                                  Text="{Binding timestamp,Converter={StaticResource UnixToLong}}" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-
-                                            <Span x:Name="text3" 
-                                                  Text=" - "
-                                                  TextColor="WhiteSmoke" 
-                                                  FontSize="14" />
-
-                                            <Span x:Name="eventNameSpan" 
-                                                  Text="{Binding eventName}" 
-                                                  TextColor="WhiteSmoke" 
-                                                  FontSize="14" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-
-                                            <Span x:Name="text2" 
-                                                  Text=" "
-                                                  FontSize="14" />
-
-                                            <Span x:Name="eventStatusSpan2" 
-                                                  Text="{Binding metagame_event_state_name}" 
-                                                  TextColor="CornflowerBlue" 
-                                                  FontSize="14" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                        </FormattedString>
-
-                                    </Label.FormattedText>
-                                </Label>
-                                <Label Margin="2,0,0,0" x:Name="theScores">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-
-                                            <Span x:Name="vsSpan" 
-                                                  Text=" VS: "
-                                                  TextColor="#440F62"
-                                                  FontSize= "12" />
-
-                                            <Span x:Name="vsValueSpan" 
-                                                  Text="{Binding faction_vs}" 
-                                                  TextColor="WhiteSmoke" 
-                                                  FontSize="12" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-
-                                            <Span x:Name="ncSpan" 
-                                                  Text=" NC: " 
-                                                  TextColor="#004B80" 
-                                                  FontSize="12" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-
-                                            <Span x:Name="ncValueSpan" 
-                                                  Text="{Binding faction_nc}" 
-                                                  TextColor="WhiteSmoke" 
-                                                  FontSize="12" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-
-                                            <Span x:Name="trSpan" 
-                                                  Text=" TR: " 
-                                                  TextColor="#9E0B0F" 
-                                                  FontSize="12" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-
-                                            <Span x:Name="trValueSpan" 
-                                                  Text="{Binding faction_tr}" 
-                                                  TextColor="WhiteSmoke" 
-                                                  FontSize="12" 
-                                                  FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-
-            </ListView>
-
-        </StackLayout>
     </Grid>
 </ContentPage>

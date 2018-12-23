@@ -17,5 +17,6 @@ namespace PsApp
         public string metagame_event_state_name { get; set; }
         public string eventName { get; set; }
         public string instance_id { get; set; }
+        public int world_id_int { get; set; }
     }
 }
