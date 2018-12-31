@@ -237,6 +237,11 @@ namespace PsApp
             }
         }
 
+        /// <summary>
+        ///  resolves a visually 
+        /// </summary>
+        /// <param name="check"></param>
+        /// <returns></returns>
         private Events.World.Event MatchEvents(Events.World.MetagameEventEventArgs check)
         {
             Events.World.Event localCheck = null;

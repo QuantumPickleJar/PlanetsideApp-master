@@ -87,7 +87,6 @@ namespace PsApp.Events.World
         {
             return theList;
         }
-        //public Event MatchEvents(MetaGame
     }
 
     public class Event
@@ -98,12 +97,17 @@ namespace PsApp.Events.World
         {
             get
             {
-                return GetContinentName(continent);
+                return GetZoneIdFromName(continent);
             }
         }
         public int event_id { get; set; }
 
-        public int GetContinentName(string name)
+        /// <summary>
+        /// Resolves zone_id from continent name
+        /// </summary>
+        /// <param name="name">Continent associated with an Event</param>
+        /// <returns>Returns zone_id of continent based on the name</returns>
+        public int GetZoneIdFromName(string name)
         {
             if (name == "Indar") return 2;
             if (name == "Hossin") return 4;

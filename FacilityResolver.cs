@@ -14,8 +14,6 @@ namespace PsApp
     /// </summary>
     public class FacilityResolver
     {
-        List<ZoneList> allZones = new List<ZoneList>();
-
         ZoneResult Results;
 
 
@@ -45,16 +43,12 @@ namespace PsApp
         public async Task<ZoneResult> GetListAsync()
         {
             string json;
-
             using (var client = new WebClient())
             {
                 string url = $"https://census.daybreakgames.com/get/ps2:v2/zone/?c:join=map_region^list:1^inject_at:regions^%28&c:tree=start:regions^&c:lang=en&c:limit=10";
-
                 json = await client.DownloadStringTaskAsync(url);
             }
-
-            //get list of all major regions
-
+            
             ZoneResult resultList = Newtonsoft.Json.JsonConvert.DeserializeObject<ZoneResult>(json);
             //resultList2.zone_list
 
@@ -100,11 +94,6 @@ namespace PsApp
                 }
             }
             return "UNKNOWN FACILITY*";
-            //int index;
-            // index = AllRegions.IndexOf(search);
-            // if (index != null)
-            //     return AllRegions.ElementAt(index).facility_name;
-            // else return "no dice";
         }
     }
 }
