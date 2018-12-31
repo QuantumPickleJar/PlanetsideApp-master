@@ -90,12 +90,27 @@ namespace PsApp
             return worldResult;
         }
 
+        private async Task<WorldEventListResult> GetOnlyContinentAlerts()
+        {
+            PlanetsideService pService = new PlanetsideService("trashpanda");
+            Events.WorldEventListResult worldResult = await pService.GetMetagameEVents();
+            //while(worldResult.world_event_list == null)
+            //{
+            //    _isRunning = true;
+            //}
+            //_isRunning = false;
+            return worldResult;
+        }
+
 
         async Task RefreshListAsync()
         {
             subscribedMessages.Clear();
-            WorldEventListResult a = await GetList();
-            PopulateList(FilterList(a.world_event_list));
+            //WorldEventListResult a = await GetList();
+            //if (preference to only receive continent alerts)
+            WorldEventListResult a = await GetOnlyContinentAlerts();
+            //PopulateList(FilterList(a.world_event_list));
+            PopulateList(a.world_event_list);
             //return Task.
         }
 
@@ -344,8 +359,10 @@ namespace PsApp
         async void RefreshListAsyncTaskless()
         {
             subscribedMessages.Clear();
-            WorldEventListResult a = await GetList();
-            PopulateList(FilterList(a.world_event_list));
+            //WorldEventListResult a = await GetList();
+            //if preference to ONLY receive continent alerts is on
+            WorldEventListResult a = await GetOnlyContinentAlerts();
+            PopulateList(a.world_event_list);
         }
 
 

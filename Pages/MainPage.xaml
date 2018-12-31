@@ -43,7 +43,7 @@
                                           FontSize="14" 
                                           TextColor="WhiteSmoke" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="eventStatusSpan2" 
                                                   Text="{Binding metagame_event_state_name}" 
                                                   TextColor="WhiteSmoke" 
@@ -149,7 +149,7 @@
                                           FontSize="14" 
                                           TextColor="WhiteSmoke" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                    
+
                                     <Span x:Name="eventStatusSpan2" 
                                                   Text="{Binding metagame_event_state_name}" 
                                                   TextColor="WhiteSmoke" 
@@ -217,7 +217,7 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="metaTemp">
                 <ViewCell>
                     <StackLayout HeightRequest="45">
@@ -268,7 +268,7 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="nonmetaTemp">
                 <ViewCell>
                     <StackLayout HeightRequest="45">
@@ -331,7 +331,7 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-            
+
             <local:MainPageDataTemplateSelector x:Key="MainPageDataTemplateSelector" 
                                                   metaDataTemplate="{StaticResource metaTemp}"
                                                   nonmetaDataTemplate="{StaticResource nonmetaTemp}"
@@ -354,31 +354,31 @@
                 HorizontalOptions="Center"  
                 Aspect="AspectFit"
                 />
-            
+
             <StackLayout Orientation="Horizontal">
                 <Button
-                    x:Name="navCharacters" 
-                    Text="Search" 
-                    WidthRequest="180"
-                    Clicked="navCharacters_Clicked"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center">
+                        x:Name="navCharacters" 
+                        Text="Search" 
+                        WidthRequest="180"
+                        Clicked="navCharacters_Clicked"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
                     <Button.FontFamily>
                         <OnPlatform Android="PlanetSide2.ttf#Planetside2"
-                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
                     </Button.FontFamily>
                 </Button>
 
                 <Button 
-                    x:Name="navLiveEvent" 
-                    Text="Live"
-                    WidthRequest="180"
-                    Clicked="navLiveEvent_Clicked"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center">
+                        x:Name="navLiveEvent" 
+                        Text="Live"
+                        WidthRequest="180"
+                        Clicked="navLiveEvent_Clicked"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
                     <Button.FontFamily>
                         <OnPlatform Android="PlanetSide2.ttf#Planetside2"
-                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                                        UWP="PlanetSide2.ttf#Planetside2"/>
                     </Button.FontFamily>
                 </Button>
             </StackLayout>
@@ -424,7 +424,7 @@
                                     UWP="PlanetSide2.ttf#Planetside2"/>
                     </Button.FontFamily>
                 </Button>
-                
+
                 <Button 
                     IsEnabled="False"
                     x:Name="myProfBtn" 
@@ -461,33 +461,22 @@
                         TextColor="WhiteSmoke"/>
 
             </StackLayout>
-
-
             <Label 
                 HorizontalOptions="Start"
                 Margin="0,2,0,2"
                 FontFamily="PlanetSide2.ttf#Planetside2"
-                TextColor="WhiteSmoke">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="Events since "/>
-                        <Span x:Name="spanLatest"
-                              Text="{Binding localTime}"/>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-            <AbsoluteLayout HeightRequest="350">
+                TextColor="WhiteSmoke"
+                Text="Events in last 8 hours"/>
+            <StackLayout HeightRequest="350">
                 <ListView
                     IsVisible="True"
                     MinimumWidthRequest="550"
-                    MinimumHeightRequest="300"
                     ItemTapped="OnItemTapped"
                     BackgroundColor="DarkGray"
                     x:FieldModifier="public"
                     x:Name="recentEvents"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="CenterAndExpand"
-                    Margin="5,5,0,5"
+                    HorizontalOptions="Center"
+                    Margin="10,5,10,5"
                     ItemTemplate="{StaticResource MainPageDataTemplateSelector}"/>
                 <ActivityIndicator 
                     x:Name="feedLoader"
@@ -497,15 +486,17 @@
                     Color="LightBlue"/>
 
 
-                </AbsoluteLayout>
-               
             </StackLayout>
-            <!--<Button 
+
+
+
+
+        </StackLayout>
+        <!--<Button 
                 x:Name="navSettingsPage" 
                 Text="Settings" 
                 Clicked="navSettingsPage_Clicked"
                 HorizontalOptions="Center"/>-->
-            
 
     </Grid>
 </ContentPage>

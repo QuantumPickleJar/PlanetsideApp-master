@@ -64,8 +64,6 @@ namespace PsApp
             using (var client = new WebClient())
             {
                 string url = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/character/?character_id={theId}&c:resolve=outfit_member_extended&c:resolve=stat_history&c:resolve=online_status&c:resolve=world&c:join=world";
-
-                
                 var a = Task.Run(() => client.DownloadString(url));
                 json = a.Result;
             }
@@ -78,11 +76,9 @@ namespace PsApp
         public async Task<Gettables.CharacterFull> GetSingleCharacterAsync (long theId)
         {
             string json;
-            
             using (var client = new WebClient())
             {
                 string url = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/character/?character_id={theId}&c:resolve=outfit_member_extended&c:resolve=stat_history&c:resolve=online_status&c:resolve=world&c:join=world";
-
                 json = await client.DownloadStringTaskAsync(url);
             }
 
@@ -90,7 +86,10 @@ namespace PsApp
             return resultList.FirstCharacter;
         }
 
-         
+        /// <summary>
+        /// Download up to 1000 latest events of all types from the Historic Events collection 
+        /// </summary>
+        /// <returns>Task-wrapped Events.WorldEventListResult</returns>
         public async Task<Events.WorldEventListResult> GetRecentEvents()
         {
             string pref = Preferences.Get("globalWorldId", "100", "theWorld");
@@ -98,13 +97,34 @@ namespace PsApp
             string json;
             using (var client = new WebClient())
             {
-                string uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?world_id={pref}after={time}&c:limit=750";
+
+                string uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?world_id={pref}&after={time}&c:limit=1000";
+                if (pref == "100") //if we're debugging
+                    uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?after={time}&c:limit=1000";
                 json = await client.DownloadStringTaskAsync(uri);
             }
             Events.WorldEventListResult recentList = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.WorldEventListResult>(json);
-            //IEnumerable<CompactWorldEvent> query = recentList.Where(recentList =>
-            //recentList.metagame_event_id == "3");
-           
+            return recentList;
+        }
+
+        /// <summary>
+        /// Download up to 1000 latest events of type METAGAME from the Historic Events collection 
+        /// </summary>
+        /// <returns>Task-wrapped Events.WorldEventListResult</returns>
+        public async Task<Events.WorldEventListResult> GetMetagameEVents()
+        {
+            string pref = Preferences.Get("globalWorldId", "100", "theWorld");
+            int time = ((int)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime()).TotalSeconds) - 28800; //28800 is last 8 hours 
+            string json;
+            using (var client = new WebClient())
+            {
+                string uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?world_id={pref}&after={time}&type=METAGAME&c:limit=1000";
+                if (pref == "100") //if we're debugging
+                    uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?after={time}&type=METAGAME&c:limit=1000";
+
+                json = await client.DownloadStringTaskAsync(uri);
+            }
+            Events.WorldEventListResult recentList = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.WorldEventListResult>(json);
             return recentList;
         }
 
@@ -125,11 +145,8 @@ namespace PsApp
             
             using (var clientWebSocket = new ClientWebSocket())
             {
-
-
                 this.ServiceId = "example";
-
-                Uri serverUri = new Uri($"wss://push.planetside2.com/streaming?environment=ps2&service-id=s:example");
+                Uri serverUri = new Uri($"wss://push.planetside2.com/streaming?environment=ps2&service-id=s:trashpanda");
 
                 //Uri serverUri = new Uri($"wss://push.planetside2.com/streaming?environment=ps2&service-id=s:{ServiceId}");
 

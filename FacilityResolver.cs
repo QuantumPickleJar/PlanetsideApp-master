@@ -9,19 +9,20 @@ using PsApp.Gettables;
 
 namespace PsApp
 {
-
-    //zone ids
-    //2 = Indar
-    //4 = Hossin
-    //6 = Amerish
-    //8 = Esamir
-    // class (maybe make into an interface??) to get the name of a facility, given the facilityId from the planetside service
-
+    /// <summary>
+    /// Class that resolves zone names from the zone id
+    /// </summary>
     public class FacilityResolver
     {
         List<ZoneList> allZones = new List<ZoneList>();
+
         ZoneResult Results;
 
+
+        /// <summary>
+        ///  
+        /// </summary>
+        /// <returns></returns>
         public ZoneResult GetList()
         {
             string json;
@@ -36,6 +37,11 @@ namespace PsApp
             return resultList;
         }
 
+        /// <summary>
+        /// [DEPRECATED]
+        /// <para>Method used to download a full list of zones by their Ids and Names</para>
+        /// </summary>
+        /// <returns></returns>
         public async Task<ZoneResult> GetListAsync()
         {
             string json;
@@ -85,7 +91,7 @@ namespace PsApp
                     if (index != -1) break;
                 }
             }
-            //
+            
             if (index != -1)
             {
                 if (Results.zoneList[i].regions[index].facility_name != null)
