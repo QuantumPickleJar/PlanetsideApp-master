@@ -63,7 +63,7 @@ namespace PsApp
 
             using (var client = new WebClient())
             {
-                string url = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/character/?character_id={theId}&c:resolve=outfit_member_extended&c:resolve=stat_history&c:resolve=online_status&c:resolve=world&c:join=world";
+                string url = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/character/?character_id={theId}&c:resolve=stat_history(stat_name,all_time,one_life_max)&c:resolve=online_status&c:resolve=world&c:join=world";
                 var a = Task.Run(() => client.DownloadString(url));
                 json = a.Result;
             }

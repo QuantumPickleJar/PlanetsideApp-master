@@ -115,7 +115,6 @@ namespace PsApp.Events.World
             if (name == "Esamir") return 8;
             else
             {
-
                 Console.WriteLine("INVALID CONTINENT NAME");
                 return 0;
             }

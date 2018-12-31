@@ -5,11 +5,20 @@ using System.Text;
 namespace PsApp.Payloads
 {
     /// <summary>
-    /// {Timestamp} - {eventName} {started/ended} [{server}]
+    /// {Timestamp} - {eventName.continent} {stabilizing/stabilized} [{server}]
     /// <!--use for warpgates-->
     /// </summary>
-    public class FrontpageMetaPayload : FrontpagePayload
-    {
-    }
+    public class FrontpageMetaPayload : FrontpagePayload { }
+    
+    /// <summary>
+    /// {Timestamp} - {eventName.continent} {stabilizing/stabilized} [{server}]
+    /// <!--use for warpgates-->
+    /// </summary>
+    public class FrontpageWarpgateStartPayload : FrontpagePayload{ }
+    /// <summary>
+    /// {Timestamp} - {eventName.continent} {stabilizing/stabilized} [{server}]
+    /// <!--use for warpgates-->
+    /// </summary>
+    public class FrontpageWarpgateEndPayload : FrontpagePayload{ }
 }
 

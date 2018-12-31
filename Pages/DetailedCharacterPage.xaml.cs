@@ -149,12 +149,12 @@ namespace PsApp.Pages
         {
             //Name.SetBinding(Label.TextProperty, MyCharacter.Name.First);
 
-            //spanName.Text = MyCharacter.Name.First;
-            //spanBrVal.Text = MyCharacter.battle_rank.Value.ToString();
-            //spanCurrCerts.Text = MyCharacter.certs.PointsBalance.ToString();
-            //spanSpentCerts.Text = MyCharacter.certs.SpentCerts.ToString();
-            //spanTotCerts.Text = MyCharacter.certs.TotalCerts.ToString();
-            //spanCharId.Text = MyCharacter.character_id.ToString();
+            spanName.Text = MyCharacter.Name.First;
+            spanBrVal.Text = MyCharacter.battle_rank.Value.ToString();
+            spanCurrCerts.Text = MyCharacter.certs.PointsBalance.ToString();
+            spanSpentCerts.Text = MyCharacter.certs.SpentCerts.ToString();
+            spanTotCerts.Text = MyCharacter.certs.TotalCerts.ToString();
+            spanCharId.Text = MyCharacter.character_id.ToString();
             theLoader.IsRunning = false;
             theStack.IsVisible = true;
         }

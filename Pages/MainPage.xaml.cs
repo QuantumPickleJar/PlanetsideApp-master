@@ -195,7 +195,11 @@ namespace PsApp
 
         
 
-        
+        /// <summary>
+        /// DEPRECATED
+        /// <para>Populates the ListView with events from a List<World_Events></para>
+        /// </summary>
+        /// <param name="n">List of World_Event to add </param>
         private void PopulateList(List<Events.World_Event> n)
         {
 
@@ -211,18 +215,44 @@ namespace PsApp
 
                         if (anEvent.event_name.Contains("Warpgate"))
                         {
-                            passMe = new Payloads.FrontpageMetaPayload()
+                            //passMe = new Payloads.FrontpageMetaPayload()
+                            //{
+                            //    metagame_event_id = i.metagame_event_id,
+                            //    timestamp = i.timestamp,
+                            //    eventName = anEvent.event_name,
+                            //    metagame_event_state_name = i.metagame_event_state_name,
+                            //    continent = anEvent.continent,
+                            //    event_type = i.event_type,
+                            //    world_id_int = int.Parse(i.world_id),
+                            //    world_id = i.world_id
+                            //};
+                            if (i.metagame_event_state_name == "started")
                             {
-                                metagame_event_id = i.metagame_event_id,
-                                timestamp = i.timestamp,
-                                eventName = anEvent.event_name,
-                                metagame_event_state_name = i.metagame_event_state_name,
-                                continent = anEvent.continent,
-                                event_type = i.event_type,
-                                world_id_int = int.Parse(i.world_id),
-                                world_id = i.world_id
-                            };
-                        }
+                                passMe = new Payloads.FrontpageWarpgateStartPayload()
+                                {
+                                    metagame_event_id = i.metagame_event_id,
+                                    timestamp = i.timestamp,
+                                    eventName = $"{anEvent.continent} Warpgates",
+                                    continent = anEvent.continent,
+                                    event_type = i.event_type,
+                                    world_id_int = int.Parse(i.world_id),
+                                    world_id = i.world_id
+                                };
+                            }
+                            if (i.metagame_event_state_name == "ended")
+                            {
+                                passMe = new Payloads.FrontpageWarpgateEndPayload()
+                                {
+                                    metagame_event_id = i.metagame_event_id,
+                                    timestamp = i.timestamp,
+                                    eventName = $"{anEvent.continent} Warpgates",
+                                    continent = anEvent.continent,
+                                    event_type = i.event_type,
+                                    world_id_int = int.Parse(i.world_id),
+                                    world_id = i.world_id
+                                };
+                            }
+                        }   
                         //must be an alert
                         else if (anEvent.event_name.Contains(anEvent.continent))
                         {
@@ -246,7 +276,7 @@ namespace PsApp
 
                         else if (anEvent.event_name.Contains("Aerial") && i.metagame_event_state_name == "started")
                         {
-                            passMe = new Payloads.FrontpageNonmetaPayload()
+                            passMe = new Payloads.FrontpageMetaPayload()
                             {
                                 continent = anEvent.continent,                                           /*passMe.continent = anEvent.continent;                            */
                                 eventName = anEvent.event_name,                                          /*passMe.eventName = anEvent.event_name;                           */
@@ -259,9 +289,25 @@ namespace PsApp
                                 event_type = i.event_type
                             };
                         }
-
-                        //else if ((anEvent.event_name.Contains("Gaining") && i.metagame_event_state_name == "started"))
-                        else if (anEvent.event_name.Contains("Power") || anEvent.event_name.Contains("Bio") || anEvent.event_name.Contains("Aerial") || anEvent.event_name.Contains("Tecnological") || anEvent.event_name.Contains("Gaining")) // && i.metagame_event_state_name == "ended")
+                        else if (anEvent.event_name.Contains("Technological")) // && i.metagame_event_state_name == "ended")
+                        {
+                            passMe = new Payloads.FrontpageExtendedPayload()
+                            {
+                                metagame_event_id = i.metagame_event_id,
+                                timestamp = i.timestamp,
+                                //eventName = anEvent.event_name,
+                                eventName = "Tech Adv.",
+                                metagame_event_state_name = i.metagame_event_state_name,
+                                continent = anEvent.continent,
+                                event_type = i.event_type,
+                                world_id_int = int.Parse(i.world_id),
+                                world_id = i.world_id,
+                                faction_nc = (int)float.Parse(i.faction_nc),
+                                faction_vs = (int)float.Parse(i.faction_vs),
+                                faction_tr = (int)float.Parse(i.faction_tr)
+                            };
+                        }
+                        else if (anEvent.event_name.Contains("Power") || anEvent.event_name.Contains("Bio") || anEvent.event_name.Contains("Aerial") || anEvent.event_name.Contains("Gaining")) // && i.metagame_event_state_name == "ended")
                         {
                             passMe = new Payloads.FrontpageScoredPayload()
                             {
@@ -340,21 +386,6 @@ namespace PsApp
                 subscribedMessages.Add(new Payloads.DebugPayload() { message = "Are you on SolTech?" });
             }
         }
-
-        private Thread thread;
-
-        public async Task StartAsync()
-        {
-            // create a new thread
-            thread = new Thread(RefreshListAsyncTaskless);
-            IsLoading = true;
-            thread.Start();
-            // have the new thread call ListenToWebSocketStuff()
-        }
-
-        
-        
-        
 
         async void RefreshListAsyncTaskless()
         {
