@@ -47,7 +47,8 @@ namespace PsApp
 
             using (var client = new WebClient())
             {
-                string url = $"https://census.daybreakgames.com/s:{ServiceId}/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=50&c:sort=name.first_lower";
+                //string url = $"https://census.daybreakgames.com/s:{ServiceId}/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=50&c:sort=name.first_lower";
+                string url = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/character/?name.first_lower=^{lowQuery}&c:limit=50&c:sort=name.first_lower";
 
                 json = await client.DownloadStringTaskAsync(url);
             }
@@ -56,6 +57,40 @@ namespace PsApp
             return resultClass;
         }
 
+        public Gettables.CharacterFull GetSingleCharacter(long theId)
+        {
+            string json;
+
+            using (var client = new WebClient())
+            {
+                string url = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/character/?character_id={theId}&c:resolve=outfit_member_extended&c:resolve=stat_history&c:resolve=online_status&c:resolve=world&c:join=world";
+
+                
+                var a = Task.Run(() => client.DownloadString(url));
+                json = a.Result;
+            }
+
+            Gettables.CharacterDetailList resultList = Newtonsoft.Json.JsonConvert.DeserializeObject<Gettables.CharacterDetailList>(json);
+            //Gettables.CharacterFull result = resultList.CharacterResult[0];
+            return resultList.FirstCharacter;
+        }
+
+        public async Task<Gettables.CharacterFull> GetSingleCharacterAsync (long theId)
+        {
+            string json;
+            
+            using (var client = new WebClient())
+            {
+                string url = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/character/?character_id={theId}&c:resolve=outfit_member_extended&c:resolve=stat_history&c:resolve=online_status&c:resolve=world&c:join=world";
+
+                json = await client.DownloadStringTaskAsync(url);
+            }
+
+            Gettables.CharacterDetailList resultList = Newtonsoft.Json.JsonConvert.DeserializeObject<Gettables.CharacterDetailList>(json);
+            return resultList.FirstCharacter;
+        }
+
+         
         public async Task<Events.WorldEventListResult> GetRecentEvents()
         {
             string pref = Preferences.Get("globalWorldId", "100", "theWorld");

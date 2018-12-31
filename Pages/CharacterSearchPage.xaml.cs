@@ -15,7 +15,6 @@ namespace PsApp
         //PlanetsideService pService  
         //NOTE TO DEBUGGER:
         //SWAP THESE TWO STATEMENTS WHEN API IS WORKING FOR OUR SERVICEID
-        //private string QueryServiceId = "PS2mobile2018query";
         private string QueryServiceId = "example";
 
         public CharacterSearchPage(string serviceId)
@@ -23,10 +22,6 @@ namespace PsApp
             InitializeComponent();
             this.QueryServiceId = serviceId;
 
-            ////if dev property returns true
-            //{
-            //    //set the service ID to example
-            //}
         }
 
         public CharacterSearchPage(string serviceId, PlanetsideService service)
@@ -53,7 +48,15 @@ namespace PsApp
             PopulateListView(cqr);
             //PopulateListViewWithImages(temp);
         }
-        
+
+
+        void OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            Pages.DetailedCharacterPage page = new Pages.DetailedCharacterPage((Character)e.Item);
+            Navigation.PushAsync(page);
+            //Navigation.PushModalAsync(page);
+        }
+
         /**
          * Method to go through each item and set the ImageSource property accoridng to FactionId
          *  maybe disable the results from being visible until this method is complete?
@@ -61,7 +64,6 @@ namespace PsApp
         private void PopulateListView(CharacterQueryResult cqr)
         {
             resultListView.ItemsSource = cqr.Characters;
-
         }
     }
 }

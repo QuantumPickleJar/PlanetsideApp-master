@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PsApp.Pages.DetailedCharacterPage"
+             xmlns:local="clr-namespace:PsApp">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:FactionIdToImageConverter x:Key="factionIdToImage" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Image Source="https://www-cdn.planetside2.com/images/mobile/backgrounds/community-background.jpg?v=2386047961"
+               Aspect="AspectFill"/>
+            <StackLayout >
+                <ActivityIndicator 
+                        x:Name="theLoader"
+                        IsRunning="False"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        Color="LightBlue"/>
+                
+                <StackLayout x:Name="theStack" Margin="5,0,0,2">
+                    <Image Source="{Binding FactionId,Converter={StaticResource factionIdToImage}}" 
+                           WidthRequest="70"
+                           HeightRequest="70"
+                           Aspect="AspectFill"/>
+                    <Label 
+                    x:Name="ID" FontFamily="PlanetSide2.ttf#Planetside2" TextColor="WhiteSmoke">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="ID: "/>
+                                <Span x:Name="spanCharId"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                    <Label 
+                    x:Name="Name" FontFamily="PlanetSide2.ttf#Planetside2" TextColor="WhiteSmoke">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Name "/>
+                                <Span x:Name ="spanName" Text="{Binding Name.First}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label 
+                    x:Name="BattleRank" FontFamily="PlanetSide2.ttf#Planetside2" TextColor="WhiteSmoke">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="BR: "/>
+                                <Span x:Name="spanBrVal" Text="{Binding battle_rank.value}"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label
+                        Text="CERTS"
+                        TextColor="WhiteSmoke"
+                        FontAttributes="Bold"
+                        FontFamily="PlanetSide2.ttf#Planetside2"/>
+
+                    <Label 
+                    x:Name="totCerts" FontFamily="PlanetSide2.ttf#Planetside2" TextColor="WhiteSmoke">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Total: "/>
+                                <Span x:Name="spanTotCerts"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label 
+                    x:Name="currCerts" FontFamily="PlanetSide2.ttf#Planetside2" TextColor="WhiteSmoke">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Current: "/>
+                                <Span x:Name="spanCurrCerts"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                    <Label 
+                    x:Name="Certs" FontFamily="PlanetSide2.ttf#Planetside2" TextColor="WhiteSmoke">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Spent: "/>
+                                <Span x:Name="spanSpentCerts"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

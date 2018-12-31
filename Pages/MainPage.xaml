@@ -39,12 +39,11 @@
                                                   TextColor="WhiteSmoke" 
                                                   FontSize="14" 
                                                   FontFamily="PlanetSide2.ttf#Planetside2"/>
-                                  
-                                    <Span Text=" : "
+                                    <Span Text=" "
                                           FontSize="14" 
                                           TextColor="WhiteSmoke" 
                                           FontFamily="PlanetSide2.ttf#Planetside2"/>
-
+                                    
                                     <Span x:Name="eventStatusSpan2" 
                                                   Text="{Binding metagame_event_state_name}" 
                                                   TextColor="WhiteSmoke" 
@@ -146,7 +145,11 @@
                                                   TextColor="WhiteSmoke" 
                                                   FontSize="14" 
                                                   FontFamily="PlanetSide2.ttf#Planetside2"/>
-
+                                    <Span Text=" "
+                                          FontSize="14" 
+                                          TextColor="WhiteSmoke" 
+                                          FontFamily="PlanetSide2.ttf#Planetside2"/>
+                                    
                                     <Span x:Name="eventStatusSpan2" 
                                                   Text="{Binding metagame_event_state_name}" 
                                                   TextColor="WhiteSmoke" 
@@ -341,37 +344,22 @@
         <Image Source="https://www-cdn.planetside2.com/images/mobile/backgrounds/community-background.jpg?v=2386047961"
                Aspect="AspectFill"/>
 
-        <StackLayout>
+        <StackLayout x:Name="OutermostStack">
 
-           
             <Image
                 x:Name="logo"
-                HeightRequest="250"
-                WidthRequest="250"
+                HeightRequest="100"
+                WidthRequest="100"
                 Source= "planetside2logo.png" 
-                HorizontalOptions="Center"
+                HorizontalOptions="Center"  
+                Aspect="AspectFit"
                 />
-
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-
+            
+            <StackLayout Orientation="Horizontal">
                 <Button
-                    Grid.Row="0"
-                    Grid.Column="0"
                     x:Name="navCharacters" 
                     Text="Search" 
-                    WidthRequest="250"
+                    WidthRequest="180"
                     Clicked="navCharacters_Clicked"
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
@@ -382,11 +370,9 @@
                 </Button>
 
                 <Button 
-                    Grid.Row="0"
-                    Grid.Column="1"
                     x:Name="navLiveEvent" 
                     Text="Live"
-                    WidthRequest="250"
+                    WidthRequest="180"
                     Clicked="navLiveEvent_Clicked"
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
@@ -395,15 +381,14 @@
                                     UWP="PlanetSide2.ttf#Planetside2"/>
                     </Button.FontFamily>
                 </Button>
+            </StackLayout>
 
+            <StackLayout Orientation="Horizontal">
                 <Button
-                    IsEnabled="False"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    x:Name="Searches" 
+                    x:Name="OutfitBtn" 
                     Text="Outfit"
-                    WidthRequest="250"
-                    Clicked="navSearchPage_Clicked"
+                    WidthRequest="180"
+                    Clicked="navOutfit_Clicked"
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
                     <Button.FontFamily>
@@ -413,11 +398,9 @@
                 </Button>
 
                 <Button 
-                    Grid.Row="1"
-                    Grid.Column="1"
                     x:Name="FisuPageButton" 
                     Text="Miscellaneous"
-                    WidthRequest="250"
+                    WidthRequest="180"
                     Clicked="navFisuButton_Clicked"
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
@@ -426,7 +409,36 @@
                                     UWP="PlanetSide2.ttf#Planetside2"/>
                     </Button.FontFamily>
                 </Button>
-            </Grid>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Button 
+                    x:Name="SettingsBtn" 
+                    IsEnabled="False"
+                    Text="Settings"
+                    WidthRequest="180"
+                    Clicked="navSettings_Clicked"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+                
+                <Button 
+                    IsEnabled="False"
+                    x:Name="myProfBtn" 
+                    Text="Profile"
+                    WidthRequest="180"
+                    Clicked="myProfBtn_Clicked"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Button.FontFamily>
+                        <OnPlatform Android="PlanetSide2.ttf#Planetside2"
+                                    UWP="PlanetSide2.ttf#Planetside2"/>
+                    </Button.FontFamily>
+                </Button>
+            </StackLayout>
 
             <StackLayout Orientation="Horizontal">
 
@@ -452,23 +464,20 @@
 
 
             <Label 
-                        HorizontalOptions="Start"
-                        Margin="5,2,0,2"
-                        Text="In past 2 hours..."
-                        FontFamily="PlanetSide2.ttf#Planetside2"
-                        TextColor="WhiteSmoke"/>
-        <!--<AbsoluteLayout>-->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-            <ListView
+                HorizontalOptions="Start"
+                Margin="0,2,0,2"
+                FontFamily="PlanetSide2.ttf#Planetside2"
+                TextColor="WhiteSmoke">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="Events since "/>
+                        <Span x:Name="spanLatest"
+                              Text="{Binding localTime}"/>
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+            <AbsoluteLayout HeightRequest="350">
+                <ListView
                     IsVisible="True"
                     MinimumWidthRequest="550"
                     MinimumHeightRequest="300"
@@ -480,17 +489,16 @@
                     VerticalOptions="CenterAndExpand"
                     Margin="5,5,0,5"
                     ItemTemplate="{StaticResource MainPageDataTemplateSelector}"/>
-
                 <ActivityIndicator 
                     x:Name="feedLoader"
                     IsRunning="False"
-                    HorizontalOptions="Center"
+                    HorizontalOptions="End"
                     VerticalOptions="Center"
                     Color="LightBlue"/>
 
 
-                <!--</AbsoluteLayout>-->
-                </Grid>
+                </AbsoluteLayout>
+               
             </StackLayout>
             <!--<Button 
                 x:Name="navSettingsPage" 

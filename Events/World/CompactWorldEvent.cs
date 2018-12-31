@@ -11,9 +11,9 @@ namespace PsApp
         public string event_type { get; set; }
         public string metagame_event_id { get; set; }
         public string metagame_event_state { get; set; }
-        public int faction_nc { get; set; }
-        public int faction_tr { get; set; }
-        public int faction_vs { get; set; }
+        public float faction_nc { get; set; }
+        public float faction_tr { get; set; }
+        public float faction_vs { get; set; }
         public string metagame_event_state_name { get; set; }
         public string eventName { get; set; }
         public string instance_id { get; set; }

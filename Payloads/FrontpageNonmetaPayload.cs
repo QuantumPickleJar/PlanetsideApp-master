@@ -4,6 +4,9 @@ using System.Text;
 
 namespace PsApp.Payloads
 {
+    /// <summary>
+    /// {Timestamp} - {eventName} {started/ended} on {continent} [{server}]
+    /// </summary>
     public class FrontpageNonmetaPayload : FrontpagePayload
     {
     }

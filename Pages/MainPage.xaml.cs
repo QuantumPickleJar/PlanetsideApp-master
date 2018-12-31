@@ -17,13 +17,23 @@ namespace PsApp
 {
     public partial class MainPage : ContentPage
     {
-
+        public string localTime;
+        public long ts;
         public List<Payloads.FrontpagePayload> AllEvents = new List<Payloads.FrontpagePayload>();
         ObservableCollection<Payloads.FrontpagePayload> subscribedMessages = new ObservableCollection<Payloads.FrontpagePayload>();
         public Events.World.Event[] _events = new Events.World.EventDataclass().GetEvents();
         public SynchronizationContext SynchronizationContext { get; }
 
-
+        public MainPage()
+        {
+            InitializeComponent();
+            BindingContext = new ViewModels.MainPageViewModel();
+            serverPicker.ItemsSource = servers;
+            recentEvents.ItemsSource = subscribedMessages;
+            //subscribedMessages.CollectionChanged += SubscribedMessages_CollectionChanged;
+            serverPicker.SelectedIndexChanged += serverPicker_SelectedIndexChanged;
+            IsLoadingChanged += MainPage_IsRunningChanged;
+        }
 
         public World[] servers = {
                                      new World{theId = 1, theName= "Connery"},
@@ -39,45 +49,87 @@ namespace PsApp
 
         protected override async void OnAppearing()
         {
+
+            if (ts != 0)
+            {
+                var epoch = (DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalSeconds;
+                ts = (long)(epoch - 14400);
+                localTime = ts.ToString();
+            }
+
+            if (Preferences.Get("globalWorldId", "40", "theWorld") != null)
+            {
+                ////set the selected index to the preference 
+                //int n = int.Parse(Preferences.Get("globalWorldId", "40", "theWorld"));
+                //var s = servers.ToList<World>();
+                //int index = s.FindIndex(o => o.theId == n);
+                //s = null;
+                //serverPicker.SelectedItem = servers[index];
+
+                
+                SmoothRefreshList();
+            }
+        }
+
+        /// <summary>
+        /// to call:
+        ///     WorldEventListResult a = await GetList();
+        ///     PopulateList(a.world_event_list);
+        /// </summary>
+        /// <returns></returns>
+        /// 
+        private async Task<WorldEventListResult> GetList()
+        {
+            PlanetsideService pService = new PlanetsideService("trashpanda");
+            Events.WorldEventListResult worldResult = await pService.GetRecentEvents();
+            //while(worldResult.world_event_list == null)
+            //{
+            //    _isRunning = true;
+            //}
+            //_isRunning = false;
+            return worldResult;
+        }
+
+
+        async Task RefreshListAsync()
+        {
+            subscribedMessages.Clear();
+            WorldEventListResult a = await GetList();
+            PopulateList(FilterList(a.world_event_list));
+            //return Task.
+        }
+
+
+        async void SmoothRefreshList()
+        {
             try
             {
-                if (Preferences.Get("globalWorldId", "40", "theWorld") != null)
-                {
-                    //var debug = new Payloads.DebugPayload() { message = "Loading..." };
-                    //subscribedMessages.Add(debug);
-                    //WorldEventListResult a = await GetList();
-                    AnimatedRefreshList();
-                }
+
+                subscribedMessages.Clear();
+                recentEvents.IsVisible = false;
+                refreshFeedBtn.IsEnabled = false;
+                feedLoader.IsRunning = true;
+                //IsLoading = true
+                //await RefreshListAsyncTaskless();
+                await Task.Run(() => RefreshListAsync());
+                //IsLoading = false;
+                serverPicker.Unfocus();
+                recentEvents.IsVisible = true;
+                refreshFeedBtn.IsEnabled = true;
+                feedLoader.IsRunning = false;
             }
             catch (WebException e)
             {
                 string s = e.Message;
                 subscribedMessages.Add(new Payloads.DebugPayload() { message = "Network error.  Are you connected to the internet?" });
-                subscribedMessages.Add(new Payloads.DebugPayload() { message = s });
 
             }
-        }
-
-
-
-        public MainPage()
-        {
-            InitializeComponent();
-            //navCharacters.IsEnabled = false;
-            //navCont.IsEnabled = false;
-            //navFisu.IsEnabled = false;
-            serverPicker.ItemsSource = servers;
-            recentEvents.ItemsSource = subscribedMessages;
-            //subscribedMessages.CollectionChanged += SubscribedMessages_CollectionChanged;
-            serverPicker.SelectedIndexChanged += serverPicker_SelectedIndexChanged;
-            IsLoadingChanged += MainPage_IsRunningChanged;
         }
 
         private void MainPage_IsRunningChanged(object sender, EventArgs e)
         {
             if (IsLoading == true)
             {
-                recentEvents.IsEnabled = false;
                 recentEvents.IsVisible = false;
                 feedLoader.IsRunning = true;
             }
@@ -95,7 +147,7 @@ namespace PsApp
             // has been set to null, do not 'process' tapped event
             ((ListView)sender).SelectedItem = null; // de-select the row    
         }
-
+        
         private Events.World.Event MatchEvents(World_Event world_Event)
         {
             Events.World.Event localCheck = null;
@@ -113,13 +165,9 @@ namespace PsApp
             }
             else
             {
-                //Console.WriteLine("\n\n-----ERROR PARSING EVENT INFORMATION FROM LOCAL DATABASE-------\n\n");
                 return null;
             }
         }
-
-
-
 
         private void SubscribedMessages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -130,180 +178,153 @@ namespace PsApp
             //}
         }
 
-        async void navCharacters_Clicked(object sender, EventArgs e)
-        {
-            //if (selectedWorld != 0)
-            {
-                CharacterSearchPage charSearch = new CharacterSearchPage("PS2mobile2018query");
-                await Navigation.PushAsync(charSearch);
-            }
-        }
+        
 
-        async void navLiveEvent_Clicked(object sender, EventArgs e)
-        {
-            FeedPageSelect feedPageSelect = new FeedPageSelect();
-            await Navigation.PushAsync(feedPageSelect);
-        }
-
-        async void navSettingsPage_Clicked(object sender, EventArgs e)
-        {
-            //SettingsPage settingsPage = new SettingsPage();
-            //await Navigation.PushAsync(settingsPage);
-        }
-        async void navSearchPage_Clicked(object sender, EventArgs e)
-        {
-            //SettingsPage settingsPage = new SettingsPage();
-            //await Navigation.PushAsync(settingsPage);
-            var notifServ = DependencyService.Resolve<INotificationService>();
-            await Task.Run(() => notifServ.NotifyBigAsync("test title", "message message"));
-        }
-
+        
         private void PopulateList(List<Events.World_Event> n)
         {
+
             foreach (var i in n)
             {
+                
                 Payloads.FrontpagePayload passMe = new Payloads.FrontpagePayload();
                 var anEvent = MatchEvents(i);
                 if (anEvent == null) return;
-                if (i.event_type == "MetagameEvent")
-                {
-
-                    if((anEvent.event_name.Contains("Aerial") || anEvent.event_name.Contains("Power") || anEvent.event_name.Contains("Dome")) && i.metagame_event_state_name=="started")
+               
+                    if (i.event_type == "MetagameEvent")
                     {
-                        passMe = new Payloads.FrontpageNonmetaPayload()
+
+                        if (anEvent.event_name.Contains("Warpgate"))
                         {
-                            continent = anEvent.continent,
-                            eventName = anEvent.event_name,
-                            timestamp = i.timestamp,
-                            world_id = i.world_id,
-                            world_id_int = int.Parse(i.world_id),
-                            metagame_event_state_name = i.metagame_event_state_name,
-                            metagame_event_id = i.metagame_event_id,
-                            instance_id = i.instance_id,
-                            event_type = i.event_type
-                        };
-                        
-                    }
-
-                    else if ((anEvent.event_name.Contains("Gaining") && i.metagame_event_state_name == "started"))
-                    {
-                        passMe = new Payloads.FrontpageMetaPayload()
-                        {                                                                                    /*passMe.continent = anEvent.continent;                            */
-                            continent = anEvent.continent,                                                   /*passMe.eventName = anEvent.event_name;                           */
-                            eventName = anEvent.event_name,                                                  /*passMe.timestamp = i.timestamp;                                  */
-                            timestamp = i.timestamp,                                                         /*passMe.world_id = i.world_id;                                    */
-                            world_id = i.world_id,
-                            world_id_int = int.Parse(i.world_id),                                            /*passMe.metagame_event_state_name = i.metagame_event_state_name;  */
-                            metagame_event_state_name = i.metagame_event_state_name,                         /*passMe.metagame_event_id = i.metagame_event_id;                  */
-                            metagame_event_id = i.metagame_event_id,                                         /*passMe.instance_id = i.instance_id;*/
-                            instance_id = i.instance_id,                                                         /*passMe.event_type = i.event_type;                                */
-                            event_type = i.event_type
-                        };
-
-                    }
-
-                    else if ((anEvent.event_name.Contains("Gaining") || anEvent.event_name.Contains("Power") || anEvent.event_name.Contains("Aerial") || anEvent.event_name.Contains("Dome")) 
-                        && i.metagame_event_state_name == "ended")
-                    {
-                        passMe = new Payloads.FrontpageScoredPayload()
+                            passMe = new Payloads.FrontpageMetaPayload()
+                            {
+                                metagame_event_id = i.metagame_event_id,
+                                timestamp = i.timestamp,
+                                eventName = anEvent.event_name,
+                                metagame_event_state_name = i.metagame_event_state_name,
+                                continent = anEvent.continent,
+                                event_type = i.event_type,
+                                world_id_int = int.Parse(i.world_id),
+                                world_id = i.world_id
+                            };
+                        }
+                        //must be an alert
+                        else if (anEvent.event_name.Contains(anEvent.continent))
                         {
-                            continent = anEvent.continent,                                           /*passMe.continent = anEvent.continent;                            */
-                            eventName = anEvent.event_name,                                          /*passMe.eventName = anEvent.event_name;                           */
-                            faction_nc = int.Parse(i.faction_nc),                                    /*passMe.timestamp = i.timestamp;                                  */
-                            faction_tr = int.Parse(i.faction_tr),                                    /*passMe.world_id = i.world_id;                                    */
-                            faction_vs = int.Parse(i.faction_vs),                                    /*passMe.metagame_event_state_name = i.metagame_event_state_name;  */
-                            timestamp = i.timestamp,                                                 /*passMe.metagame_event_id = i.metagame_event_id;                  */
-                            world_id = i.world_id,                                                   /*passMe.instance_id = i.instance_id;*/
-                            metagame_event_state_name = i.metagame_event_state_name,                     /*passMe.event_type = i.event_type;                                */
-                            metagame_event_id = i.metagame_event_id,
-                            instance_id = i.instance_id,
-                            world_id_int = int.Parse(i.world_id),
-                            event_type = i.event_type
-                        };
-                    }
-                    else if (anEvent.event_name.Contains("Warpgate") || anEvent.event_name.Contains(anEvent.continent) && passMe.instance_id == null )
-                    { 
-                        passMe = new Payloads.FrontpageContPayload();
+                            passMe = new Payloads.FrontpageContPayload()
+                            {
+                                metagame_event_id = i.metagame_event_id,
+                                timestamp = i.timestamp,
+                                eventName = anEvent.event_name,
+                                metagame_event_state_name = i.metagame_event_state_name,
+                                continent = anEvent.continent,
+                                event_type = i.event_type,
+                                world_id_int = int.Parse(i.world_id),
+                                world_id = i.world_id,
+                                faction_nc = float.Parse(i.faction_nc),
+                                faction_vs = float.Parse(i.faction_vs),
+                                faction_tr = float.Parse(i.faction_tr)
+
+                            };
+
+                        }
+
+                        else if (anEvent.event_name.Contains("Aerial") && i.metagame_event_state_name == "started")
+                        {
+                            passMe = new Payloads.FrontpageNonmetaPayload()
+                            {
+                                continent = anEvent.continent,                                           /*passMe.continent = anEvent.continent;                            */
+                                eventName = anEvent.event_name,                                          /*passMe.eventName = anEvent.event_name;                           */
+                                timestamp = i.timestamp,                                                 /*passMe.metagame_event_id = i.metagame_event_id;                  */
+                                world_id = i.world_id,                                                   /*passMe.instance_id = i.instance_id;*/
+                                metagame_event_state_name = i.metagame_event_state_name,                     /*passMe.event_type = i.event_type;                                */
+                                metagame_event_id = i.metagame_event_id,
+                                instance_id = i.instance_id,
+                                world_id_int = int.Parse(i.world_id),
+                                event_type = i.event_type
+                            };
+                        }
+
+                        //else if ((anEvent.event_name.Contains("Gaining") && i.metagame_event_state_name == "started"))
+                        else if (anEvent.event_name.Contains("Power") || anEvent.event_name.Contains("Bio") || anEvent.event_name.Contains("Aerial") || anEvent.event_name.Contains("Tecnological") || anEvent.event_name.Contains("Gaining")) // && i.metagame_event_state_name == "ended")
+                        {
+                            passMe = new Payloads.FrontpageScoredPayload()
+                            {
+                                metagame_event_id = i.metagame_event_id,
+                                timestamp = i.timestamp,
+                                eventName = anEvent.event_name,
+                                metagame_event_state_name = i.metagame_event_state_name,
+                                continent = anEvent.continent,
+                                event_type = i.event_type,
+                                world_id_int = int.Parse(i.world_id),
+                                world_id = i.world_id,
+                                faction_nc = (int)float.Parse(i.faction_nc),
+                                faction_vs = (int)float.Parse(i.faction_vs),
+                                faction_tr = (int)float.Parse(i.faction_tr)
+                            };
+                        }
+                        else
+                        {
                         try
-                        {
-                            passMe.world_id_int = int.Parse(i.world_id);
-                            passMe.continent = anEvent.continent;                                         //{
-                            passMe.eventName = anEvent.event_name;                                         //    continent = anEvent.continent,
-                            passMe.timestamp = i.timestamp;                                                //    eventName = anEvent.event_name,
-                            passMe.world_id = i.world_id;                                                  //    timestamp = i.timestamp,
-                            passMe.metagame_event_state_name = i.metagame_event_state_name;                //    world_id = i.world_id,
-                            passMe.metagame_event_id = i.metagame_event_id;                                //    metagame_event_state_name = i.metagame_event_state_name,
-                            passMe.instance_id = i.instance_id;                                            //    metagame_event_id = i.metagame_event_id,
-                            passMe.event_type = i.event_type;                                               //    instance_id = i.instance_id,
-                                                                                                            //    event_type = i.event_type                                                    
-                                                                                                            //};
-                        }
-                        catch (NullReferenceException e)
-                        {
-                            subscribedMessages.Add(new Payloads.DebugPayload() { message = "Error creating meta_event_payload" });
-                            Console.WriteLine("\n [][][][][][]Exception caught in first If-loop[][][][][][]\n" + e.InnerException.TargetSite.ToString() + "\n" + e.Message + "\n [][]END[][][][]][]\n");
-                        }
-                    }
-                    else if (passMe.instance_id == null && (!(anEvent.event_name.Contains(anEvent.continent))) && i.metagame_event_state_name == "ended")
-                    {
-                        passMe = new Payloads.FrontpageNonmetaPayload();
-                        passMe.world_id_int = int.Parse(i.world_id);
-                        passMe.continent = anEvent.continent;
-                        passMe.eventName = anEvent.event_name;
-                        passMe.faction_nc = int.Parse(i.faction_nc);
-                        passMe.faction_tr = int.Parse(i.faction_tr);
-                        passMe.faction_vs = int.Parse(i.faction_vs);
-                        passMe.timestamp = i.timestamp;
-                        passMe.world_id = i.world_id;
-                        passMe.metagame_event_id = i.metagame_event_id;
-                        passMe.metagame_event_state_name = i.metagame_event_state_name;
-                    }
-                    else
-                    {
-                       
+                        { 
                             passMe = new Payloads.FrontpageScoredPayload()
                             {
                                 world_id_int = int.Parse(i.world_id),
-                                continent = anEvent.continent,                            /*passMe.continent = anEvent.continent;                          */ 
-                               eventName = anEvent.event_name,                           /*passMe.eventName = anEvent.event_name;                         */ 
-                               faction_nc = int.Parse(i.faction_nc),                     /*passMe.faction_nc = (int)double.Parse(i.faction_nc);           */         
-                               faction_tr = int.Parse(i.faction_tr),                     /*passMe.faction_tr = (int)double.Parse(i.faction_tr);           */         
-                               faction_vs = int.Parse(i.faction_vs),                     /*passMe.faction_vs = (int)double.Parse(i.faction_vs);           */         
-                               timestamp = i.timestamp,                                  /*passMe.timestamp = i.timestamp;                                */ 
-                               world_id = i.world_id,                                    /*passMe.world_id = i.world_id;                                  */ 
-                               metagame_event_state_name = i.metagame_event_state_name,  /*passMe.metagame_event_id = i.metagame_event_id;                */ 
-                               metagame_event_id = i.metagame_event_id,                  /*passMe.metagame_event_state_name = i.metagame_event_state_name;*/ 
-                               instance_id = i.instance_id,                              /*passMe.instance_id = i.instance_id;*/
-                               event_type = i.event_type
+                                continent = anEvent.continent,                            /*passMe.continent = anEvent.continent;                          */
+                                eventName = anEvent.event_name,                           /*passMe.eventName = anEvent.event_name;                         */
+                                faction_nc = (int)float.Parse(i.faction_nc),                     /*passMe.faction_nc = (int)double.Parse(i.faction_nc);           */
+                                faction_tr = (int)float.Parse(i.faction_tr),                     /*passMe.faction_tr = (int)double.Parse(i.faction_tr);           */
+                                faction_vs = (int)float.Parse(i.faction_vs),                     /*passMe.faction_vs = (int)double.Parse(i.faction_vs);           */
+                                timestamp = i.timestamp,                                  /*passMe.timestamp = i.timestamp;                                */
+                                world_id = i.world_id,                                    /*passMe.world_id = i.world_id;                                  */
+                                metagame_event_state_name = i.metagame_event_state_name,  /*passMe.metagame_event_id = i.metagame_event_id;                */
+                                metagame_event_id = i.metagame_event_id,                  /*passMe.metagame_event_state_name = i.metagame_event_state_name;*/
+                                instance_id = i.instance_id,                              /*passMe.instance_id = i.instance_id;*/
+                                event_type = i.event_type
                             };
-                    }
-
-                    //if (passMe.eventName.Contains("Hossin") || passMe.eventName.Contains("Indar") || passMe.eventName.Contains("Amerish") || passMe.eventName.Contains("Esamir") || passMe.world_id == Preferences.Get("globalWorldId", "17", "theWorld")
-                        
-                    
-                        if (((subscribedMessages.Count >= 1) && subscribedMessages[subscribedMessages.Count - 1].timestamp != passMe.timestamp)
-                            || subscribedMessages.Count == 0)
-                        {
-                            bool _isPresent = false;
-                            foreach (var item in subscribedMessages)
-                            {
-                                if (item.instance_id == passMe.instance_id &&
-                                    item.metagame_event_state_name == passMe.metagame_event_state_name)
-                                    _isPresent = true;
-                            }
-                            //remove loading messages 
-
-                            if (!_isPresent && (passMe.world_id == Preferences.Get("globalWorldId", "17", "theWorld") || "100" == Preferences.Get("globalWorldId", "17", "theWorld"))) subscribedMessages.Add(passMe);
-                            passMe = null;
-                        anEvent = null;
                         }
-                    
+                        catch (Exception e)
+                        {
+                            passMe = new Payloads.DebugPayload()
+                            {
+                                message = "There was an error parsing event information." +
+                                "\nPlease take a screenshot of this and send it to me on discord.\n" +
+                                $"TS: {i.timestamp.ToString()}  ID: {i.metagame_event_id}"
+                            };
+                        }
+                    }
                 }
+               
+
+                if (subscribedMessages.Count == 0 || ((subscribedMessages.Count >= 1) && subscribedMessages[subscribedMessages.Count - 1].timestamp != passMe.timestamp))
+                {
+                    bool _isPresent = false;
+                    foreach (var item in subscribedMessages)
+                    {
+                        if (item.timestamp == passMe.timestamp &&
+                            item.metagame_event_state_name == passMe.metagame_event_state_name)
+                        {
+                            _isPresent = true;
+                        }
+                    }
+                    //remove loading messages 
+
+                    if (!_isPresent && 
+                        (passMe.world_id == Preferences.Get("globalWorldId", "17", "theWorld") 
+                        || "100" == Preferences.Get("globalWorldId", "17", "theWorld")))
+                            subscribedMessages.Add(passMe);
+                            passMe = null;
+                            anEvent = null;
+                }
+                    
+            }
+
+            if (subscribedMessages.Count == 0)
+            {
+                subscribedMessages.Add(new Payloads.DebugPayload() { message = "No events in the past 14400 seconds." });
+                subscribedMessages.Add(new Payloads.DebugPayload() { message = "Are you on SolTech?" });
             }
         }
-
-
-
 
         private Thread thread;
 
@@ -314,41 +335,11 @@ namespace PsApp
             IsLoading = true;
             thread.Start();
             // have the new thread call ListenToWebSocketStuff()
-
         }
 
-
-
-
-        //fallback method
-        async Task RefreshListAsync()
-        {
-
-            subscribedMessages.Clear();
-            WorldEventListResult a = await GetList();
-            PopulateList(FilterList(a.world_event_list));
-            //return Task.
-        }
-
-        async void RefreshList()
-        {
-            subscribedMessages.Clear();
-            WorldEventListResult a = await GetList();
-            PopulateList(FilterList(a.world_event_list));
-        }
-
-        async void AnimatedRefreshList()
-        {
-            subscribedMessages.Clear();
-            recentEvents.IsVisible = false;
-            feedLoader.IsRunning = true;
-            //IsLoading = true;
-            await Task.Run(() => RefreshListAsync());
-            //IsLoading = false;
-
-            recentEvents.IsVisible = true;
-            feedLoader.IsRunning = false;
-        }
+        
+        
+        
 
         async void RefreshListAsyncTaskless()
         {
@@ -358,17 +349,19 @@ namespace PsApp
         }
 
 
-        async void serverPicker_SelectedIndexChanged(object sender, EventArgs e)
+        void serverPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
             int i = servers[serverPicker.SelectedIndex].theId;
             Preferences.Set("globalWorldId", i.ToString(), "theWorld");
-            //Task.Factory.StartNew(async () => (await RefreshList()));
-            AnimatedRefreshList();
-            //await Task.Run(() => RefreshListAsyncTaskless());
+            SmoothRefreshList();   
         }
 
         private List<World_Event> FilterList(List<World_Event> world_event_list)
         {
+            var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            localTime = epoch.AddSeconds(ts).ToLocalTime().ToLongTimeString();
+            //spanLatest.SetBinding(Span.TextProperty, ts,c);
+            
             var filteredList = new List<World_Event>();
             foreach (var item in world_event_list.Where(listItem => listItem.event_type == "MetagameEvent"))
             {
@@ -378,19 +371,7 @@ namespace PsApp
             return filteredList;
         }
 
-        /// <summary>
-        /// to call:
-        ///     WorldEventListResult a = await GetList();
-        ///     PopulateList(a.world_event_list);
-        /// </summary>
-        /// <returns></returns>
-        private async Task<WorldEventListResult> GetList()
-        {
-            PlanetsideService pService = new PlanetsideService("trashpanda");
-            Events.WorldEventListResult worldResult = await pService.GetRecentEvents();
-            return worldResult;
-        }
-
+        
         private void navCont_Clicked(object sender, EventArgs e)
         {
 
@@ -404,13 +385,36 @@ namespace PsApp
 
         private async void refreshFeed_Clicked(object sender, EventArgs e)
         {
-            AnimatedRefreshList();
+            SmoothRefreshList();
             //await Task.Run(async () => await RefreshList()); //this throws exception 
 
             //Task.Factory.StartNew(async()=>await RefreshList());
         }
+        async void navCharacters_Clicked(object sender, EventArgs e)
+        {
+            //if (selectedWorld != 0)
+            {
+                CharacterSearchPage charSearch = new CharacterSearchPage("PS2mobile2018query");
+                await Navigation.PushAsync(charSearch);
+            }
+        }
 
 
+        async void navLiveEvent_Clicked(object sender, EventArgs e)
+        {
+            FeedPageSelect feedPageSelect = new FeedPageSelect();
+            await Navigation.PushAsync(feedPageSelect);
+        }
+        async void navSettings_Clicked(object sender, EventArgs e)
+        {
+            //SettingsPage settingsPage = new SettingsPage();
+            //await Navigation.PushAsync(settingsPage);
+        }
+        async void navOutfit_Clicked(object sender, EventArgs e)
+        {
+            SettingsPage settingsPage = new SettingsPage();
+            await Navigation.PushAsync(settingsPage);
+        }
 
 
         public event EventHandler IsLoadingChanged;
@@ -439,5 +443,9 @@ namespace PsApp
             public string theName { get; set; }
         }
 
+        private void myProfBtn_Clicked(object sender, EventArgs e)
+        {
+
+        }
     }
 }

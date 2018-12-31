@@ -10,6 +10,9 @@ namespace PsApp
         [JsonProperty("name")]
         public Name Name { get; set; }
 
+        [JsonProperty("character_id")]
+        public long CharId { get; set; }
+
         [JsonProperty("faction_id")]
         public int FactionId
         {
