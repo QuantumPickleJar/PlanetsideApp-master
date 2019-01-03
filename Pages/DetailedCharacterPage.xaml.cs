@@ -30,9 +30,6 @@ namespace PsApp.Pages
             UpdateUI();
         }
 
-
-
-
         public DetailedCharacterPage(Character theChar)
         {
             BindingContext = new DetailedCharacterPageViewModel();

@@ -123,6 +123,9 @@ namespace PsApp
                     uri = $"https://census.daybreakgames.com/s:trashpanda/get/ps2:v2/world_event/?after={time}&type=METAGAME&c:limit=1000";
 
                 json = await client.DownloadStringTaskAsync(uri);
+                //json = client.DownloadStringTaskAsync(uri).Result;
+
+                //json = client.DownloadString(uri);
             }
             Events.WorldEventListResult recentList = Newtonsoft.Json.JsonConvert.DeserializeObject<Events.WorldEventListResult>(json);
             return recentList;

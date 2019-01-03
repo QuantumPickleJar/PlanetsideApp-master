@@ -14,7 +14,7 @@ namespace PsApp
         { 
             InitializeComponent();
             MainPage = new NavigationPage(new MainPage());
-            
+            //MessagingCenter.Subscribe<Download>
         }
         
         protected override void OnStart()
@@ -26,6 +26,7 @@ namespace PsApp
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+
 
             //start a timer 
 
